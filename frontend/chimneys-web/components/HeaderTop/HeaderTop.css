@@ -1,0 +1,27 @@
+.headerTop {
+    background-color: #333333;
+    padding: 10px 0;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerTopList {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0 20px;
+    margin: 0;
+}
+
+.headerTopList li {
+    font-size: 14px;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.headerTopList li:hover {
+    color: #FF6B6B;
+    text-decoration: none;
+}

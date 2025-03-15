@@ -10,17 +10,17 @@ export default async function Home() {
 
   return (
       <div>
-        <h1>🏪 Магазин</h1>
-        <ul>
-          {products.map((product) => (
-              <li key={product._id}>
-                <Link href={`/product/${product._id}`}>
-                  {product.name} - ${product.price}
-                </Link>
-              </li>
-          ))}
-        </ul>
-        <Link href="/admin">Перейти до адмінки</Link>
+        {/*<h1>🏪 Магазин</h1>*/}
+        {/*<ul>*/}
+        {/*  {products.map((product) => (*/}
+        {/*      <li key={product._id}>*/}
+        {/*        <Link href={`/product/${product._id}`}>*/}
+        {/*          {product.name} - ${product.price}*/}
+        {/*        </Link>*/}
+        {/*      </li>*/}
+        {/*  ))}*/}
+        {/*</ul>*/}
+        {/*<Link href="/admin">Перейти до адмінки</Link>*/}
       </div>
   );
 }
