@@ -5,10 +5,11 @@ import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
 import { FaHeart, FaShoppingCart, FaUser } from "react-icons/fa";
 import Link from "next/link";
 import AuthModal from "@/components/AuthModal/AutoModal";
-import {useState} from "react";
+import {useRef, useState} from "react";
 
 export default function HeaderMain() {
     const [isAuthOpen, setAuthOpen] = useState(false);
+    const ref = useRef();
 
     return (
         <div className="headerMain">
@@ -47,13 +48,13 @@ export default function HeaderMain() {
             </div>
             <div className="headerActions">
                 {/*<Link href="/about" style={{ textDecoration: "none", color: "inherit" }}>*/}
-                    <button onClick={() => setAuthOpen(true)}>
+                    <div onClick={() => setAuthOpen(true)}>
                         <div className="login">
                             <FaUser/>
                             <span>Увійти</span>
                         </div>
                         <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
-                    </button>
+                    </div>
                 {/*</Link>*/}
                 <div className="goods">
                     <Link href="/favorites"><FaHeart/></Link>

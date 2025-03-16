@@ -1,5 +1,6 @@
 import React from "react";
 import "./CategoriesGrid.css";
+import Link from "next/link";
 
 const categories = [
     { name: "Дача, сад та город", img: "/images/garden.png" },
@@ -18,10 +19,12 @@ const CategoriesGrid = () => {
     return (
         <div className="categories-grid">
             {categories.map((category, index) => (
-                <div className="category-card" key={index}>
-                    <img src={category.img} alt={category.name} />
-                    <p>{category.name}</p>
-                </div>
+                <Link href={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`} key={category.name}>
+                    <div className="category-card" key={index}>
+                        <img src={category.img} alt={category.name}/>
+                        <p>{category.name}</p>
+                    </div>
+                </Link>
             ))}
         </div>
     );
