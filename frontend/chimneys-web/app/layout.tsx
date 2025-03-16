@@ -21,10 +21,7 @@ export default function RootLayout({children}) {
         <body style={styles.body}>
         <HeaderTop/>
         <HeaderMain/>
-        <div className="contentWrapper" style={styles.contentWrapper}>
-            <BannerSection/>
-            <CategoriesGrid/>
-        </div>
+
         {children}
         <Footer/>
         </body>

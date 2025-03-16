@@ -13,11 +13,6 @@ export default function HeaderTop() {
                     <li>Сертифікати</li>
                 </ul>
             </div>
-            <div className="headerRight">
-                <ul className="headerTopList">
-                    <li>Вхід</li>
-                </ul>
-            </div>
         </div>
     );
 }
