@@ -1,61 +1,132 @@
 import slugify from "slugify";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+import multer from "multer";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
 
-export const createCategory = async (req, res) => {
-    try {
-        const { categoryName, subCategories } = req.body;
-        const categorySlug = slugify(categoryName, {
-            lower: true,
-            strict: true
-        })
-        const catExists = await Category.exists( {slug: categorySlug} );
-        if (catExists) return res.status(400).json({msg: "This category already exists"})
+dotenv.config();
 
-        const newCategory = new Category( {
-            name: categoryName,
-            slug: categorySlug,
-            subCategories: subCategories,
-        })
+// Налаштування Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-        await newCategory.save()
-            .then( async () => {
-                const allCategories = await Category.find();
-                res.status(200).json(allCategories);
-            })
+// Налаштування Multer
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-    } catch (err) {
-        return res.status(500).json({msg: err.message})
-    }
-}
+// Контролер створення категорії
+export const createCategory = [
+    upload.single("categoryImage"),
+    async (req, res) => {
+        try {
+            const { categoryName, subCategories } = req.body;
+            const categorySlug = slugify(categoryName, { lower: true, strict: true });
 
+            const catExists = await Category.exists({ slug: categorySlug });
+            if (catExists) return res.status(400).json({ msg: "This category already exists" });
+
+            let imagePath = "";
+            let cloudinaryPublicId = "";
+
+            if (req.file) {
+                try {
+                    const result = await cloudinary.uploader.upload_stream(
+                        { resource_type: "image", folder: "categories" },
+                        (error, result) => {
+                            if (error) throw error;
+                            imagePath = result.secure_url;
+                            cloudinaryPublicId = result.public_id;
+                            return result;
+                        }
+                    ).end(req.file.buffer);
+
+
+                } catch (error) {
+                    console.error("Error uploading image to Cloudinary:", error);
+                    return res.status(500).json({ msg: "Error uploading image" });
+                }
+            }
+
+            const newCategory = new Category({
+                name: categoryName,
+                slug: categorySlug,
+                subCategories,
+                image: imagePath,
+                cloudinaryPublicId,
+            });
+
+            await newCategory.save();
+            const allCategories = await Category.find();
+            res.status(200).json(allCategories);
+        } catch (err) {
+            return res.status(500).json({ msg: err.message });
+        }
+    },
+];
+
+// Отримання всіх категорій
 export const getCategories = async (req, res) => {
     try {
         const allCategories = await Category.find();
         res.status(200).json(allCategories);
     } catch (err) {
-        return res.status(500).json({msg: err.message})
+        return res.status(500).json({ msg: err.message });
     }
-}
+};
 
+// Видалення категорії
 export const removeCategory = async (req, res) => {
     const category_id = req.params.id;
     try {
-        await Product.deleteMany({category: category_id });
-        await Category.findByIdAndDelete(category_id);
-        res.status(200).json({msg: "Category and of its products successfully deleted"});
-    } catch (error) {
-        return res.status(500).json({msg: error.message})
-    }
-}
+        const category = await Category.findById(category_id);
+        if (category.cloudinaryPublicId) {
+            await cloudinary.uploader.destroy(category.cloudinaryPublicId);
+        }
 
-export const editCategory = async (req, res) => {
-    const { categoryId,  categoryName } = req.body;
-    try {
-        await Category.findByIdAndUpdate (categoryId, {name: categoryName});
-        res.status(200).json({message: "Category successfully updated"});
+        await Product.deleteMany({ category: category_id });
+        await Category.findByIdAndDelete(category_id);
+        res.status(200).json({ msg: "Category and its products successfully deleted" });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({msg: error.message})
+        return res.status(500).json({ msg: error.message });
     }
-}
+};
+
+// Редагування категорії
+export const editCategory = [
+    upload.single("categoryImage"),
+    async (req, res) => {
+        const { categoryId, categoryName, oldCloudinaryPublicId, oldImagePath } = req.body;
+        try {
+            const categorySlug = slugify(categoryName, { lower: true, strict: true });
+
+            let updatedData = { name: categoryName, slug: categorySlug };
+
+            if (req.file) {
+                const result = await cloudinary.uploader.upload_stream(
+                    { resource_type: "image", folder: "categories" },
+                    (error, result) => {
+                        if (error) throw error;
+                        updatedData.image = result.secure_url;
+                        updatedData.cloudinaryPublicId = result.public_id;
+                        return result;
+                    }
+                ).end(req.file.buffer);
+
+                if (oldCloudinaryPublicId) await cloudinary.uploader.destroy(oldCloudinaryPublicId);
+            } else {
+                updatedData.image = oldImagePath;
+                updatedData.cloudinaryPublicId = oldCloudinaryPublicId;
+            }
+
+            await Category.findByIdAndUpdate(categoryId, updatedData);
+            res.status(200).json({ message: "Category successfully updated" });
+        } catch (error) {
+            console.error("Error updating category:", error);
+            return res.status(500).json({ msg: error.message });
+        }
+    },
+];
