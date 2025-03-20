@@ -19,12 +19,6 @@ const subCategorySchema = new mongoose.Schema(
                 ref: "SubSubCategory",
             }
         ],
-        products: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Products"
-            }
-        ],
         img: {
             type: String
         },
