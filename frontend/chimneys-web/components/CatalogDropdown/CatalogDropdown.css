@@ -10,9 +10,9 @@
     align-items: center;
     width: 200px;
     padding: 10px 20px;
-    background-color: #ff4757;
+    background-color: #0056b3;
     border: none;
-    color: #222;
+    color: #F8F9FA;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -20,8 +20,9 @@
 }
 
 .catalog-button:hover {
-    transform: scale(1.01);
-    background-color: #ff4757;
+    transform: translateX(5px);
+;
+    background-color: #016de5;
 }
 
 .catalog-button span {

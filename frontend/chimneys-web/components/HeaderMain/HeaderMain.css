@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background: #F5F5F5;
+    background: #F8F9FA;
 }
 
 .wrapperInfo {
@@ -31,14 +31,14 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    color: #333;
+    color: #212529;
     transition: color 0.3s ease;
 }
 
 .login svg {
     font-size: 24px;
     margin-bottom: 5px;
-    color: #555;
+    color: #212529;
     transition: color 0.3s ease;
 }
 
@@ -55,16 +55,15 @@
 
 .goods svg {
     font-size: 24px;
-    color: #555;
+    color: #212529;
     transition: transform 0.2s ease;
     cursor: pointer;
 }
 
 .goods svg:hover {
     transform: scale(1.1);
-    color: #ff4757;
+    color: #007bff;
 }
-
 
 .address, .contacts, .schedule {
     display: grid;
@@ -72,13 +71,14 @@
 }
 
 .logoDiv {
-    background-color: #333333;
+    background-color: #212529;
+    color: #F8F9FA;
     width: 100%;
     text-align: center;
     transition: transform 0.2s ease-in;
 }
 .logoDiv:hover{
-    transform: scale(1.01);
+    transform: translateX(5px);
     cursor: pointer;
 }
 
@@ -86,6 +86,11 @@ h3 {
     color: white;
     padding: 5px 25px;
 }
+
+.contacts span, .address span, .schedule span {
+    color: #212529;
+}
+
 
 .headerMainList {
     list-style: none;
@@ -119,10 +124,17 @@ h3 {
     align-items: center;
     margin: 10px 0;
     width: 100%;
-    background: #f4f4f4;
+    background: #E9ECEF;
+    border: 2px solid #ccc;
     border-radius: 25px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.headerSearchBar:focus-within {
+    border-color: #007BFF;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
 .headerSearchBar input {
@@ -138,5 +150,14 @@ h3 {
     border: none;
     border-left: #0a0a0a solid 1px;
     cursor: pointer;
-    margin-right: 10px;
+    padding: 10px 15px;
+    background: transparent;
+    font-size: 18px;
+    transition: all 0.3s ease-in-out;
+}
+
+.searchButton:hover {
+    background: #007BFF;
+    color: white;
+    border-left: #0056b3 solid 1px;
 }

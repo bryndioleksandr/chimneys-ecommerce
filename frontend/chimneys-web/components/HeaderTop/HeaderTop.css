@@ -1,5 +1,5 @@
 .headerTop {
-    background-color: #333333;
+    background-color: #343A40;
     padding: 10px 0;
     display:flex;
     justify-content: space-between;
@@ -16,12 +16,12 @@
 
 .headerTopList li {
     font-size: 14px;
-    color: #FFFFFF;
+    color: #F8F9FA;
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
 .headerTopList li:hover {
-    color: #FF6B6B;
+    color: #007BFF;
     text-decoration: none;
 }

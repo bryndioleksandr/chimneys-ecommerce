@@ -1,10 +1,13 @@
 import cors from 'cors';
 import express from 'express';
+import dotenv from 'dotenv';
 import connectToDB from "./models/dbConnection.js";
 import router from './routes/router.js';
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,6 +27,7 @@ app.use(router);
 
 const startServer = async () => {
     try {
+        console.log("Allowed origins: ", allowedOrigins);
         await connectToDB();
         const PORT = process.env.PORT || 5501;
         app.listen(PORT, () => {

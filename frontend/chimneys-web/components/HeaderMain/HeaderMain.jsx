@@ -2,7 +2,7 @@
 
 import "./HeaderMain.css"
 import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
-import { FaHeart, FaShoppingCart, FaUser } from "react-icons/fa";
+import { FaHeart, FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import AuthModal from "@/components/AuthModal/AutoModal";
 import {useRef, useState} from "react";
@@ -30,7 +30,7 @@ export default function HeaderMain() {
                 <div className="wrapperInfo">
                     <div className="address">
                         <span>Тернопіль</span>
-                        <span>вул. Симона Петлюри 3</span>
+                        <span>вул. Прикладна 11</span>
                     </div>
                     <div className="contacts">
                         <span>(012) 34-567-89</span>
@@ -43,7 +43,7 @@ export default function HeaderMain() {
                 </div>
                 <div className="headerSearchBar">
                 <input placeholder={"Пошук товарів"} type="text"/>
-                    <button className="searchButton">🔍</button>
+                    <div className="searchButton"><FaSearch/></div>
                 </div>
             </div>
             <div className="headerActions">

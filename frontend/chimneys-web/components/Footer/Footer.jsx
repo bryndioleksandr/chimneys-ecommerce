@@ -40,8 +40,8 @@ export default function Footer() {
                     <h4>Контакти</h4>
                     <ul>
                         <li>+38 (098) 123-45-67</li>
-                        <li>info@shop.com</li>
-                        <li>м. Київ, вул. Прикладна, 10</li>
+                        <li>qwerty123@gmail.com</li>
+                        <li>м. Тернопіль, вул. Прикладна, 11</li>
                     </ul>
                 </div>
 

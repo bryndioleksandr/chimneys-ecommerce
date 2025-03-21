@@ -7,7 +7,7 @@ import Head from "next/head";
 import "../styles/globals.css";
 
 export const metadata = {
-    title: "Магазин на Next.js + Node.js",
+    title: "Next + Node ecommerce",
     description: "Інтернет-магазин",
 };
 
@@ -36,7 +36,7 @@ const styles = {
     body: {
         margin: "0",
         padding: "0",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#F8F9FA",
 },
     contentWrapper: {
         width: "100%",

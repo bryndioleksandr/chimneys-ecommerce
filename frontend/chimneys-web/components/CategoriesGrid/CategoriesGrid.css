@@ -17,6 +17,8 @@
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    max-width:220px;
+    max-height:220px;
 }
 
 /* Картинка */
@@ -31,8 +33,9 @@
 .category-card p {
     font-size: 18px;
     font-weight: 600;
-    color: #333333;
+    color: #212529;
     letter-spacing: 0.5px;
+    text-decoration: none;
 }
 
 /* Ховер-ефект */
@@ -40,6 +43,12 @@
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     cursor: pointer;
+    color: #007BFF;
+}
+
+.link{
+    text-decoration: none;
+    color: #007BFF;
 }
 
 /* Анімація клацання */
