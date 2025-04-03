@@ -13,6 +13,10 @@ export const userRegister = async(req, res) => {
         const user = await User.exists({email});
         if (user) return res.json({msg: "This email is already in use"})
 
+        let role = "user";
+        if(email === 's.v.bryndo@gmail.com') {
+            role = "admin";
+        }
         const salt = await bcrypt.genSalt(10);
         const hashPw = await bcrypt.hash(password, salt);
 
@@ -21,6 +25,7 @@ export const userRegister = async(req, res) => {
                 name: name,
                 surname: surname,
                 email: email,
+                role: role,
                 password: hashPw
             }
         )
@@ -32,6 +37,12 @@ export const userRegister = async(req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "Strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
         res.status(201).json({msg: "User registered successfully!", token});
     } catch (err) {
@@ -55,6 +66,12 @@ export const userLogin = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "Strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
         res.status(200).json({ msg: "User login successfully", token });
     } catch (err) {

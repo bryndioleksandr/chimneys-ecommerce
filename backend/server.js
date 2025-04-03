@@ -6,6 +6,7 @@ import router from './routes/router.js';
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -23,6 +24,9 @@ app.use(cors({
 }));
 app.use(express.static(path.join(__dirname, '../front')));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(router);
 
 const startServer = async () => {
