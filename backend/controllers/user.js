@@ -6,6 +6,14 @@ import jwt from "jsonwebtoken";
 
 dotenv.config();
 
+const createAccessToken = (user) => {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+}
+
+const createRefreshToken = (user) => {
+    return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'})
+}
+
 export const userRegister = async(req, res) => {
     try {
         const {name, surname, email, password} = req.body;
@@ -32,24 +40,48 @@ export const userRegister = async(req, res) => {
 
         await newUser.save();
 
-        const token = jwt.sign(
-            { id: newUser._id, role: newUser.role },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-        );
+        const accessToken = createAccessToken({_id: newUser._id});
+        const refreshToken = createRefreshToken({_id: newUser._id});
+        res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'lax' });
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            sameSite: "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
-
-        res.status(201).json({msg: "User registered successfully!", token});
+        res.status(201).json({msg: "User registered successfully!" + accessToken + " and " + refreshToken});
     } catch (err) {
         return res.status(500).json({ msg: err.message });
     }
 }
 
+export const refreshToken = async (req, res) => {
+    try {
+        const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken)  return res.status(401).json({ msg: "Помилка оновлення токена. Refreshtoken відсутній" });
+
+        new Promise((resolve, reject) => {
+            jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+                if (err) { reject(err);} else {resolve(decoded);}
+            });
+        })
+            .then(decoded => {
+                const userId = decoded._id;
+
+                const accessToken = jwt.sign({ _id: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+
+                res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+                res.status(200).json({ msg: 'Token updated successful' });
+
+            })
+            .catch(err => {
+                res.status(401).json({ message: 'Invalid access token' });
+            });
+
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    } catch (error) {
+        console.error('Помилка перевірки або оновлення токена:', error);
+        res.status(401).json({ msg: 'Недійсний оновлювальний токен' });
+    }
+}
 
 export const userLogin = async (req, res) => {
     try {
@@ -61,19 +93,12 @@ export const userLogin = async (req, res) => {
         const isMatchPassword = await bcrypt.compare(password, user.password);
         if (!isMatchPassword) return res.status(400).json({ msg: "Invalid password" });
 
-        const token = jwt.sign(
-            { id: user._id, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-        );
+        const accessToken = createAccessToken({_id: user._id});
+        const refreshToken = createRefreshToken({_id: user._id});
+        res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'lax' });
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            sameSite: "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
-
-        res.status(200).json({ msg: "User login successfully", token });
+        res.status(200).json({ msg: "User login successfully" + accessToken + " and " + refreshToken });
     } catch (err) {
         res.status(500).json({ msg: err.message });
     }

@@ -22,6 +22,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
+
 app.use(express.static(path.join(__dirname, '../front')));
 
 app.use(express.json());

@@ -5,12 +5,26 @@ import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
 import { FaHeart, FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import AuthModal from "@/components/AuthModal/AutoModal";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import {getUser} from "@/app/utils/auth";
 
 export default function HeaderMain() {
     const [isAuthOpen, setAuthOpen] = useState(false);
     const ref = useRef();
+    const [user, setUser] = useState(null);
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const data = await getUser();
+            if (data) {
+                console.log('data is:', data);
+                setUser(data);
+            }
+        };
+
+        fetchUser();
+    }, []);
+    console.log('user is:', user);
     return (
         <div className="headerMain">
             <div className="wrapperLeft">

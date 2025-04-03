@@ -5,14 +5,14 @@ dotenv.config();
 
 export const verifyToken = (req, res, next) => {
     // const token1 = req.headers.authorization?.split(" ")[1];
-    const token = req.cookies.token;
+    const token = req.cookies.accessToken;
     console.log('token with cookies is:', token);
     if (!token) {
         return res.status(401).json({ msg: "No token, authorization denied" });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         req.user = decoded;
         next();
     } catch (err) {

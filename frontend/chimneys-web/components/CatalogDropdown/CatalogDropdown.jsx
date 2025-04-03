@@ -26,7 +26,7 @@ const CatalogDropdown = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await axios.get("http://localhost:5501/category/categories");
+            const response = await axios.get("http://localhost:5501/category/categories", {withCredentials: true});
             setCategories(response.data);
         };
 
