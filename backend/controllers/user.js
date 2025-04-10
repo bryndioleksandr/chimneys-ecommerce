@@ -45,7 +45,29 @@ export const userRegister = async(req, res) => {
         res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
         res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'lax' });
 
-        res.status(201).json({msg: "User registered successfully!" + accessToken + " and " + refreshToken});
+        console.log("Відповідь з сервера:", {
+            message: "User registered successfully!",
+            accessToken,
+            refreshToken,
+            user: {
+                id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role
+            }
+        });
+
+        res.status(201).json({
+            message: "User registered successfully!",
+            user: {
+                id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role,
+                accessToken,
+                refreshToken,
+            }
+        });
     } catch (err) {
         return res.status(500).json({ msg: err.message });
     }
@@ -98,7 +120,17 @@ export const userLogin = async (req, res) => {
         res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
         res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'lax' });
 
-        res.status(200).json({ msg: "User login successfully" + accessToken + " and " + refreshToken });
+        res.status(200).json({
+            message: "User login successfully!",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                accessToken,
+                refreshToken,
+            }
+        });
     } catch (err) {
         res.status(500).json({ msg: err.message });
     }
