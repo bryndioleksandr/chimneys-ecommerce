@@ -2,11 +2,19 @@
 
 import { useEffect, useState, useRef } from "react";
 import "./AuthModal.css";
-import {setUser, getUser} from "@/app/config";
+import {setUser, getUser} from "@/config/config";
+import {loginUser, registerUser} from "@/services/auth";
+import useEscapeKey from "@/hooks/useEscapeClose";
+import useOutsideClick from "@/hooks/useOutsideClick";
+import { useDispatch } from "@/redux/store";
+import { dispUser } from '@/redux/slices/user';
 
 const AuthModal = ({ isOpen, onClose }) => {
     const [isLogin, setIsLogin] = useState(true);
+    const dispatch = useDispatch();
     const modalRef = useRef(null);
+    useOutsideClick(modalRef, onClose, isOpen);
+    useEscapeKey(onClose, isOpen);
 
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
@@ -14,102 +22,77 @@ const AuthModal = ({ isOpen, onClose }) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
-                onClose();
-            }
-        };
+    // useEffect(() => {
+    //     const handleClickOutside = (event) => {
+    //         if (modalRef.current && !modalRef.current.contains(event.target)) {
+    //             onClose();
+    //         }
+    //     };
+    //
+    //     if (isOpen) {
+    //         document.addEventListener("mousedown", handleClickOutside);
+    //     }
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // }, [isOpen]);
+    //
+    // useEffect(() => {
+    //     const handleKeyDown = (event) => {
+    //         if (event.key === "Escape") {
+    //             onClose();
+    //         }
+    //     };
+    //
+    //     if (isOpen) {
+    //         document.addEventListener("keydown", handleKeyDown);
+    //     }
+    //     return () => {
+    //         document.removeEventListener("keydown", handleKeyDown);
+    //     };
+    // }, [isOpen]);
 
-        if (isOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
+    const resetForm = () => {
+        setName("");
+        setSurname("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+    };
+
+    useEffect(() => {
+        if (!isOpen) {
+            resetForm();
         }
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
     }, [isOpen]);
 
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === "Escape") {
-                onClose();
-            }
-        };
-
-        if (isOpen) {
-            document.addEventListener("keydown", handleKeyDown);
-        }
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [isOpen]);
-
-    const handleRegister = async() => {
-        if(password !== confirmPassword) {
+    const handleRegister = async () => {
+        if (password !== confirmPassword) {
             alert("Passwords do not match!");
             return;
         }
-        try{
-            const response = await fetch('http://localhost:5501/user/register', {
-                method: "POST",
-                headers:{
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                mode: "cors",
-                body: JSON.stringify({name, surname, email, password})
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                alert("Помилка: " + errorData.message);
-                return;
-            }
-
-            const responseData = await response.json();
-            const {accessToken, refreshToken, user} = responseData;
-            console.log(responseData);
-            console.log(accessToken);
-            console.log('user data:', user);
-            await setUser(user);
-            const userOur = await getUser();
-            console.log('user is', userOur);
-            alert("Реєстрація успішна");
-            onClose();
-
-        } catch(err){
-            console.error('Error:', err);
-        }
-    }
-
-    const handleLogin = async() => {
         try {
-            const response = await fetch('http://localhost:5501/user/login', {
-                method: "POST",
-                headers:{
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                mode: "cors",
-                body: JSON.stringify({email, password})
-            })
-            if (!response.ok) {
-                console.error('Here is error with login man');
-                return;
-            }
-            const responseData = await response.json();
-            const {accessToken, refreshToken, user} = responseData;
-            console.log(responseData);
-            console.log(accessToken);
-            console.log('user data:', user);
-            await setUser(user);
-            const userOur = await getUser();
-            console.log('user is', userOur);
+            const data = await registerUser({ name, surname, email, password });
+            await setUser(data.user);
+            dispatch(dispUser(data.user));
+            onClose();
+        } catch (err) {
+            console.error("Register error", err);
         }
-        catch (err){
-            console.error('Error:', err);
+    };
+
+    const handleLogin = async () => {
+        try {
+            const data = await loginUser(email, password);
+            console.log('here is user data:', data);
+            await setUser(data.user);
+            dispatch(dispUser(data.user));
+            onClose();
+        } catch (err) {
+            console.error("Login error", err);
         }
-    }
+    };
+
     if (!isOpen) return null;
 
     return (

@@ -5,11 +5,7 @@ import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
 import Footer from "@/components/Footer/Footer";
 import Head from "next/head";
 import "../styles/globals.css";
-
-export const metadata = {
-    title: "Next + Node ecommerce",
-    description: "Інтернет-магазин",
-};
+import ClientProvider from "@/app/ClientProvider";
 
 // @ts-ignore
 export default function RootLayout({children}) {
@@ -18,13 +14,14 @@ export default function RootLayout({children}) {
         <head>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"/>
         </head>
-        <body style={styles.body}>
-        <HeaderTop/>
-        <HeaderMain/>
-
-        {children}
-        <Footer/>
-        </body>
+            <body style={styles.body}>
+            <ClientProvider>
+                <HeaderTop/>
+                <HeaderMain/>
+                {children}
+                <Footer/>
+            </ClientProvider>
+            </body>
         </html>
     );
 }
@@ -37,7 +34,7 @@ const styles = {
         margin: "0",
         padding: "0",
         backgroundColor: "#F8F9FA",
-},
+    },
     contentWrapper: {
         width: "100%",
         maxWidth: "1200px",

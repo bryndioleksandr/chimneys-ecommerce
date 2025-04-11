@@ -7,24 +7,21 @@ import Product from "../models/product.js";
 
 dotenv.config();
 
-// Налаштування Cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Налаштування Multer
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Контролер створення категорії
 export const createCategory = [
     upload.single("categoryImage"),
     async (req, res) => {
         try {
-            const { categoryName, subCategories } = req.body;
-            const categorySlug = slugify(categoryName, { lower: true, strict: true });
+            const { name } = req.body;
+            const categorySlug = slugify(name, { lower: true, strict: true });
 
             const catExists = await Category.exists({ slug: categorySlug });
             if (catExists) return res.status(400).json({ msg: "This category already exists" });
@@ -52,9 +49,8 @@ export const createCategory = [
             }
 
             const newCategory = new Category({
-                name: categoryName,
+                name: name,
                 slug: categorySlug,
-                subCategories,
                 image: imagePath,
                 cloudinaryPublicId,
             });

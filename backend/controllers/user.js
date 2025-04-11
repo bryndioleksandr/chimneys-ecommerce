@@ -136,3 +136,14 @@ export const userLogin = async (req, res) => {
     }
 };
 
+export const userLogout = async (req, res) => {
+    try {
+        res.clearCookie('accessToken', {sameSite: "none", secure: true});
+        res.clearCookie('refreshToken', {sameSite: "none", secure: true});
+        res.status(200).json({ msg: 'Logout completed' });
+    } catch (err) {
+        return res.status(500).json({msg: err.message})
+    }
+}
+
+

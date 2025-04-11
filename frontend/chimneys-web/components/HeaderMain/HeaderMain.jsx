@@ -1,16 +1,33 @@
-"use client"
+'use client';
 
-import "./HeaderMain.css"
-import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
+import { useEffect, useState } from "react";
+import "./HeaderMain.css";
 import { FaHeart, FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
 import Link from "next/link";
-import AuthModal from "@/components/AuthModal/AutoModal";
-import {useEffect, useRef, useState} from "react";
+import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
+import AuthModal from "@/components/AuthModal/AuthModal";
+import { useSelector, useDispatch } from "@/redux/store";
+import {logoutUser} from "@/services/auth";
+import { logout } from "@/redux/slices/user";
 
 export default function HeaderMain() {
     const [isAuthOpen, setAuthOpen] = useState(false);
-    const ref = useRef();
-
+    const [role, setRole] = useState(null);
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.user);
+    useEffect(() => {
+        if (!user) return;
+        const savedRole = user.role;
+        if (savedRole) {
+            setRole(savedRole);
+        }
+    }, [user]);
+    const handleLogout = async() => {
+        await logoutUser();
+        dispatch(logout());
+        console.log('logout');
+        setRole(null);
+    }
     return (
         <div className="headerMain">
             <div className="wrapperLeft">
@@ -22,7 +39,7 @@ export default function HeaderMain() {
                     </Link>
                 </div>
                 <div className="categories">
-                    <CatalogDropdown/>
+                    <CatalogDropdown />
                 </div>
             </div>
 
@@ -42,25 +59,36 @@ export default function HeaderMain() {
                     </div>
                 </div>
                 <div className="headerSearchBar">
-                <input placeholder={"Пошук товарів"} type="text"/>
-                    <div className="searchButton"><FaSearch/></div>
+                    <input placeholder={"Пошук товарів"} type="text" />
+                    <div className="searchButton"><FaSearch /></div>
                 </div>
             </div>
+
             <div className="headerActions">
-                {/*<Link href="/about" style={{ textDecoration: "none", color: "inherit" }}>*/}
+                {role === "user" ? (
+                    <>
+                    <Link href="/admin">
+                        <div className="login">
+                            <FaUser />
+                            <span>{user.name}</span>
+                        </div>
+                    </Link>
+                    <button onClick={handleLogout}>Logout</button>
+                    </>
+                ) : (
                     <div onClick={() => setAuthOpen(true)}>
                         <div className="login">
-                            <FaUser/>
+                            <FaUser />
                             <span>Увійти</span>
                         </div>
                         <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
                     </div>
-                {/*</Link>*/}
+                )}
                 <div className="goods">
-                    <Link href="/favorites"><FaHeart/></Link>
-                    <Link href="/cart"><FaShoppingCart/></Link>
+                    <Link href="/favorites"><FaHeart /></Link>
+                    <Link href="/cart"><FaShoppingCart /></Link>
                 </div>
             </div>
         </div>
-    )
+    );
 }
