@@ -1,48 +1,65 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-//import "../subcategory.css";
+import { searchSubSubCategories } from "../../../../services/subsubcategory";
+import "../../category.css";
 
-const mockData = {
-    mebli: {
-        krisla: [{ id: 1, name: "Офісне крісло", price: 1200 }],
-        stoly: [{ id: 2, name: "Письмовий стіл", price: 2500 }],
-    },
-    tehnika: {
-        telefony: [{ id: 3, name: "Смартфон", price: 10000 }],
-        pilososy: [{ id: 4, name: "Пилосос LG", price: 4000 }],
-    },
-};
-
-const SubcategoryPage = () => {
-    const { categoryName, subcategoryName } = useParams();
-    const [products, setProducts] = useState([]);
+const SubSubCategoryPage = () => {
+    const { categoryName, subCategoryName } = useParams();
+    const router = useRouter();
+    const [subSubCategories, setSubSubCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    console.log('params cat is: ', categoryName);
+    console.log('params sub are:', subCategoryName);
 
     useEffect(() => {
-        if (categoryName && subcategoryName && mockData[categoryName]?.[subcategoryName]) {
-            setProducts(mockData[categoryName][subcategoryName]);
-        } else {
-            setProducts([]);
-        }
-    }, [categoryName, subcategoryName]);
+        const fetchSubcategory = async () => {
+            if (subCategoryName) {
+                setLoading(true);
+                setError(null);
+                try {
+                    const data = await searchSubSubCategories(subCategoryName);
+                    setSubSubCategories(data);
+                    console.log('response:', data);
+                } catch (err) {
+                    setError("Не вдалося завантажити підкатегорії.");
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchSubcategory();
+    }, [subCategoryName]);
+
+    const handleSubSubClick = (subSub) => {
+        router.push(`/category/${categoryName}/${subCategoryName}/${subSub.name.toLowerCase().replace(/\s+/g, '-')}`);
+    };
 
     return (
-        <div className="containerSubcat">
-            <h1>Підкатегорія: {subcategoryName}</h1>
+        <div className='containerCat'>
+            <h1>Підкатегорія: {subCategoryName}</h1>
+            {loading && <p>Завантаження...</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <ul>
-                {products.length > 0 ? (
-                    products.map((product) => (
-                        <li key={product.id}>
-                            {product.name} - {product.price} грн
+                {subSubCategories.length > 0 ? (
+                    subSubCategories.map((item) => (
+                        <li
+                            key={item._id}
+                            onClick={() => handleSubSubClick(item)}
+                            style={{ cursor: "pointer" }}
+                        >
+                            {item.name}
                         </li>
                     ))
                 ) : (
-                    <p>Товарів не знайдено</p>
+                    <p>Підпідкатегорій не знайдено</p>
                 )}
             </ul>
         </div>
     );
 };
 
-export default SubcategoryPage;
+export default SubSubCategoryPage;

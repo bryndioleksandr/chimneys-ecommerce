@@ -1,55 +1,67 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { searchSubCategories } from "../../../services/subcategory";
 import "../category.css";
-
-const mockData = {
-    mebli: {
-        stoly: [{ id: 1, name: "Дерев'яний стіл", price: 3200 }],
-        divany: [{ id: 2, name: "Кутовий диван", price: 8500 }]
-    },
-    odyag: {
-        kurtki: [{ id: 3, name: "Зимова куртка", price: 2800 }],
-        shtany: [{ id: 4, name: "Джинси", price: 1200 }]
-    },
-    tehnika: {
-        telefony: [{ id: 5, name: "Смартфон", price: 15000 }],
-        pilososy: [{ id: 6, name: "Пилосос", price: 4200 }]
-    }
-};
+import Link from "next/link";
 
 const CategoryPage = () => {
     const params = useParams();
     const router = useRouter();
-    const { categoryId } = params;
+    const { categoryName } = params;
     const [subcategories, setSubcategories] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const categoryId = categoryName;
+    console.log('category id is: ', categoryId);
+    console.log('params are: ', params);
 
     useEffect(() => {
-        if (categoryId && mockData[categoryId]) {
-            setSubcategories(Object.keys(mockData[categoryId]));
-        } else {
-            setSubcategories([]);
-        }
+        const fetchSubcategories = async () => {
+            if (categoryId) {
+                setLoading(true);
+                setError(null);
+                try {
+                    const data = await searchSubCategories(categoryId);
+                    setSubcategories(data);
+                    console.log('response:', data);
+                } catch (err) {
+                    setError("Не вдалося завантажити підкатегорії.");
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchSubcategories();
     }, [categoryId]);
 
     const handleSubcategoryClick = (subcategory) => {
-        router.push(`/category/${categoryId}/${subcategory}`);
+        router.push(`/category/${categoryId}/${subcategory.name}`);
     };
 
     return (
         <div className="containerCat">
             <h1>Категорія: {categoryId}</h1>
+            {loading && <p>Завантаження...</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <ul>
                 {subcategories.length > 0 ? (
                     subcategories.map((subcategory) => (
+                        <Link
+                            className="subcategory-item"
+                            href={`/category/${categoryId}/${subcategory.name.toLowerCase().replace(/\s+/g, "-")}`}
+                            key={subcategory.name}
+                        >
                         <li
-                            key={subcategory}
+                            key={subcategory._id}
                             onClick={() => handleSubcategoryClick(subcategory)}
                             className="subcategory-item"
                         >
-                            {subcategory}
+                            {subcategory.name}
                         </li>
+                        </Link>
                     ))
                 ) : (
                     <p>Підкатегорій не знайдено</p>

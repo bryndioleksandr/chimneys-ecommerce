@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import slugify from "slugify";
 import SubSubCategory from "../models/subSubCategory.js";
 import SubCategory from "../models/subCategory.js";
+import Category from "../models/category.js";
 
 dotenv.config();
 
@@ -114,5 +115,21 @@ export const removeSubSubCategory = async (req, res) => {
         res.status(200).json({ msg: "Subsubcategory successfully deleted" });
     } catch (error) {
         return res.status(500).json({ msg: error.message });
+    }
+};
+
+export const findSubSubCategoryByName  = async (req, res) => {
+    try {
+        const { name } = req.query;
+        if (!name) return res.status(400).json({ msg: "Name is required" });
+
+        const subCategory = await SubCategory.findOne({ name: { $regex: new RegExp(name, "i") } });
+        if (!subCategory) return res.status(404).json({ msg: "SubCategory not found" });
+
+        const subCategories = await SubSubCategory.find({ subCategory: subCategory._id }).populate("subCategory");
+
+        res.status(200).json(subCategories);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
     }
 };

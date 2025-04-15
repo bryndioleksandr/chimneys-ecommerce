@@ -1,27 +1,49 @@
-import React from "react";
+"use client"
+
+import React, { useEffect, useState } from "react";
 import "./CategoriesGrid.css";
 import Link from "next/link";
-
-const categories = [
-    { name: "Основні елементи, труби", img: "/images/garden.png" },
-    { name: "Овальні і прямокутні", img: "/images/clothes.png" },
-    { name: "Закінчення димоходу", img: "/images/furniture.png" },
-    { name: "Кріплення і опори, тощо", img: "/images/interior.png" },
-    { name: "Прохідні елементи", img: "/images/chemicals.png" },
-    { name: "Спец елементи", img: "/images/appliances.png" },
-    { name: "Чистка і сервіс", img: "/images/construction.png" },
-    { name: "Для камінів, саун", img: "/images/plumbing.png" },
-    { name: "Дефлектори", img: "/images/car.png" },
-    { name: "Коліна, трійники", img: "/images/lighting.png" },
-];
+import { fetchCategories } from "@/services/category";
 
 const CategoriesGrid = () => {
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const data = await fetchCategories();
+                setCategories(data);
+            } catch (err) {
+                setError("Не вдалося завантажити категорії.");
+                console.error("Error fetching categories:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadCategories();
+    }, []);
+
+    if (loading) {
+        return <p>Завантаження категорій...</p>;
+    }
+
+    if (error) {
+        return <p style={{ color: "red" }}>{error}</p>;
+    }
+
     return (
         <div className="categories-grid">
             {categories.map((category, index) => (
-                <Link className="link" href={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`} key={category.name}>
+                <Link
+                    className="link"
+                    href={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`}
+                    key={category.name}
+                >
                     <div className="category-card" key={index}>
-                        <img src={category.img} />
+                        <img src={category.img} alt={category.name} />
                         <p>{category.name}</p>
                     </div>
                 </Link>
