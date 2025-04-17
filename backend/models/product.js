@@ -15,8 +15,8 @@ const ProductSchema = new mongoose.Schema({
         subCategory: {type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory'},
         subSubCategory: {type: mongoose.Schema.Types.ObjectId, ref: 'SubSubCategory'},
         steelGrade: { type: String }, // Марка сталі (наприклад, AISI 304, 321)
-        thickness: { type: Number, required: true }, // Товщина сталі в мм
-        diameter: { type: Number, required: true }, // Діаметр труби в мм
+        thickness: { type: Number, required: false }, // Товщина сталі в мм
+        diameter: { type: Number, required: false }, // Діаметр труби в мм
         length: { type: Number }, // Довжина в мм (якщо актуально)
         weight: { type: Number }, // Вага виробу в кг (за потреби)
 

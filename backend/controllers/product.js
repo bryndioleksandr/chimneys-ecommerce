@@ -12,17 +12,18 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Налаштування multer
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Створення продукту
 export const createProduct = async (req, res) => {
     try {
         upload.array("productImages", 5)(req, res, async (err) => {
             if (err) return res.status(400).json({ msg: "Error uploading files" });
 
+            if (!req.body.subCategory) req.body.subCategory = null;
+            if (!req.body.subSubCategory) req.body.subSubCategory = null;
             const productData = req.body;
+            console.log('product data is:', productData);
             let uploadedImages = [];
 
             if (req.files && req.files.length > 0) {
@@ -55,7 +56,6 @@ export const createProduct = async (req, res) => {
     }
 };
 
-// Отримання всіх продуктів
 export const getProducts = async (req, res) => {
     try {
         const products = await Product.find().populate("category subCategory subSubCategory");
@@ -65,7 +65,6 @@ export const getProducts = async (req, res) => {
     }
 };
 
-// Оновлення продукту
 export const updateProduct = async (req, res) => {
     try {
         const { productId } = req.params;
@@ -80,7 +79,6 @@ export const updateProduct = async (req, res) => {
     }
 };
 
-// Видалення продукту
 export const deleteProduct = async (req, res) => {
     try {
         const { productId } = req.params;
