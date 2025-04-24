@@ -91,7 +91,18 @@ export const removeCategory = async (req, res) => {
     }
 };
 
-// Редагування категорії
+export const searchByName = async (req, res) => {
+    try {
+        console.log('params cateogry:', req.params);
+        const category = await Category.find({ slug: req.params.name});
+        console.log('onecat back:', category);
+        res.json(category);
+    }
+    catch(error) {
+        return res.status(500).json({ msg: error.message });
+    }
+}
+
 export const editCategory = [
     upload.single("categoryImage"),
     async (req, res) => {

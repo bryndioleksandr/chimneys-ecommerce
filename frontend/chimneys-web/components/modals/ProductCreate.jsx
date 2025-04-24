@@ -130,7 +130,7 @@ const ProductForm = () => {
                     ))}
                 </select>
                 <input
-                    type="text"
+                    type="file"
                     placeholder="URL зображення"
                     value={img}
                     onChange={(e) => setImg(e.target.value)}

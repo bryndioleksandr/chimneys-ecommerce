@@ -27,3 +27,27 @@ export const createCategory = async (categoryData) => {
         throw error;
     }
 };
+
+export const searchCategoryByName = async (name) => {
+    try {
+        const response = await fetch(`${API_BASE}/category/by-name/${name}`);
+        console.log('res onecat:', response);
+        if (!response.ok) throw new Error('Failed to fetch category');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching category:', error);
+        throw error;
+    }
+}
+
+export const searchCategoryProducts = async (categoryId) => {
+    try {
+        const response = await fetch(`${API_BASE}/products/by-category/${categoryId}`);
+        console.log('res prod:', response);
+        if (!response.ok) throw new Error('Failed to fetch products');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error;
+    }
+}

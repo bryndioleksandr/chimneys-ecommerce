@@ -42,3 +42,14 @@ export const searchSubSubCategories = async (name) => {
         throw err;
     }
 };
+
+export const searchSubSubCategoryProducts = async (subSubCategoryId) => {
+    try {
+        const response = await fetch(`${API_BASE}/products/by-subsubcategory/${subSubCategoryId}`);
+        if (!response.ok) throw new Error('Failed to fetch products');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error;
+    }
+}

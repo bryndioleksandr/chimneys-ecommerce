@@ -2,6 +2,7 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 import Product from "../models/product.js";
+import slugify from "slugify";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ export const createProduct = async (req, res) => {
             if (!req.body.subCategory) req.body.subCategory = null;
             if (!req.body.subSubCategory) req.body.subSubCategory = null;
             const productData = req.body;
+            productData.slug = slugify(productData.name, { lower: true });
             console.log('product data is:', productData);
             let uploadedImages = [];
 
@@ -56,6 +58,17 @@ export const createProduct = async (req, res) => {
     }
 };
 
+export const getProductBySlug = async (req, res) => {
+    try {
+        const product = await Product.findOne({ name: req.params.slug }).populate("category subCategory subSubCategory");
+        if (!product) return res.status(404).json({ msg: "Product not found" });
+        res.status(200).json(product);
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
+    }
+};
+
+
 export const getProducts = async (req, res) => {
     try {
         const products = await Product.find().populate("category subCategory subSubCategory");
@@ -87,5 +100,36 @@ export const deleteProduct = async (req, res) => {
         res.status(200).json({ msg: "Product deleted successfully" });
     } catch (err) {
         return res.status(500).json({ msg: err.message });
+    }
+};
+
+export const searchByCategory = async (req, res) => {
+    try {
+        console.log('params:', req.params);
+        const products = await Product.find({ category: req.params.categoryid, subCategory: null, subSubCategory: null });
+        console.log('received products:', products);
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+export const searchBySubCategory = async (req, res) => {
+    try {
+        console.log('params:', req.params);
+        const products = await Product.find({ subCategory: req.params.subCategoryId, subSubCategory: null });
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+export const searchBySubSubCategory = async (req, res) => {
+    try {
+        console.log('params:', req.params);
+        const products = await Product.find({ subSubCategory: req.params.subSubCategoryId });
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
     }
 };

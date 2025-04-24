@@ -122,7 +122,6 @@ export const findSubCategoryByName  = async (req, res) => {
         if (!category) return res.status(404).json({ msg: "Category not found" });
 
         const subCategories = await SubCategory.find({ category: category._id }).populate("category");
-        console.log('subcategories are:', subCategories);
         res.status(200).json(subCategories);
     } catch (err) {
         return res.status(500).json({ msg: err.message });
