@@ -1,0 +1,79 @@
+.productContainer {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px 200px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.productContainer:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.productImage {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+.productInfo h1 {
+    color: #212529;
+    font-size: 28px;
+}
+
+.productPrice {
+    font-size: 22px;
+    color: #28a745;
+    font-weight: 600;
+}
+
+.buyButton {
+    background-color: #007bff;
+    color: #fff;
+    transition: background 0.3s ease;
+    padding: 10px 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.buyButton:hover {
+    background-color: #0056b3;
+}
+
+.wishlistButton {
+    background-color: #dee2e6;
+    color: #212529;
+    transition: background 0.3s ease;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.wishlistButton:hover {
+    background-color: #ced4da;
+}
+
+.productMeta {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.sectionTitle {
+    font-size: 20px;
+    color: #343a40;
+    margin-bottom: 6px;
+}
+
+.characteristicsList li {
+    padding-left: 4px;
+    color: #495057;
+    line-height: 1.6;
+}
+
+.reviewsBlock {
+    background-color: #f1f3f5;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+}

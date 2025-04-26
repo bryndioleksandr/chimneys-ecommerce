@@ -1,16 +1,19 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { searchSubCategories } from "../../../services/subcategory";
+import {useParams, useRouter} from "next/navigation";
+import React, {useEffect, useState} from "react";
+import {searchSubCategories} from "../../../services/subcategory";
 import {searchCategoryByName, searchCategoryProducts} from "../../../services/category";
+import StarRating from "../../../components/StarRating/StarRating";
+import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "../category.css";
 import Link from "next/link";
+import ProductCard from "../../../components/ProductCard/ProductCard";
 
 const CategoryPage = () => {
     const params = useParams();
     const router = useRouter();
-    const { categoryName } = params;
+    const {categoryName} = params;
     const [subcategories, setSubcategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -51,7 +54,7 @@ const CategoryPage = () => {
         <div className="containerCat">
             <h1>Категорія: {categoryId}</h1>
             {loading && <p>Завантаження...</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p style={{color: "red"}}>{error}</p>}
             <ul>
                 {subcategories.length > 0 ? (
                     subcategories.map((subcategory) => (
@@ -60,13 +63,13 @@ const CategoryPage = () => {
                             href={`/category/${categoryId}/${subcategory.name.toLowerCase().replace(/\s+/g, "-")}`}
                             key={subcategory.name}
                         >
-                        <li
-                            key={subcategory._id}
-                            onClick={() => handleSubcategoryClick(subcategory)}
-                            className="subcategory-item"
-                        >
-                            {subcategory.name}
-                        </li>
+                            <li
+                                key={subcategory._id}
+                                onClick={() => handleSubcategoryClick(subcategory)}
+                                className="subcategory-item"
+                            >
+                                {subcategory.name}
+                            </li>
                         </Link>
                     ))
                 ) : (
@@ -75,26 +78,16 @@ const CategoryPage = () => {
             </ul>
             <div>
                 <h2>Products:</h2>
-                <ul>
+                <ul className="product-list">
                     {products.length > 0 ? (
                         products.map((product) => (
-                            <Link
-                                className="product-item"
-                                href={`/product/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
-                                key={product.name}
-                            >
-                            <li
-                                key={product._id}
-                                className="product-item"
-                            >
-                                {product.name}: {product.price}$
-                            </li>
-                            </Link>
+                            <ProductCard key={product._id} product={product} />
                         ))
                     ) : (
-                        <p>There are no products with this category;(</p>
+                        <p>There are no products with this category ;(</p>
                     )}
                 </ul>
+
             </div>
         </div>
     );

@@ -15,6 +15,8 @@ export default function HeaderMain() {
     const [role, setRole] = useState(null);
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
+    const cart = useSelector((state) => state.cart);
+    console.log('cart is:', cart);
     useEffect(() => {
         if (!user) return;
         const savedRole = user.role;
@@ -86,7 +88,17 @@ export default function HeaderMain() {
                 )}
                 <div className="goods">
                     <Link href="/favorites"><FaHeart /></Link>
-                    <Link href="/cart"><FaShoppingCart /></Link>
+                    <Link href="/cart">
+                        <div className="cart">
+                            <FaShoppingCart/>
+                            {cart.totalQuantity > 0 && (
+                                <div className="cart-badge">
+                                    <span>{cart.totalQuantity}</span>
+                                    <span>{cart.totalPrice} грн</span>
+                                </div>
+                            )}
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
