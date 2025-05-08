@@ -23,6 +23,18 @@ export const searchSubCategories = async (name) => {
     }
 };
 
+export const searchSubCategoriesBySlug = async (slug) => {
+    try {
+        const response = await fetch(`http://localhost:5501/subcategory/search-slug?slug=${slug}`);
+        console.log('response from search:', response);
+        if (!response.ok) throw new Error("Search failed");
+        return await response.json();
+    } catch (err) {
+        console.error("Search error:", err);
+        throw err;
+    }
+};
+
 
 export const createSubCategory = async (subCategoryData) => {
     try {

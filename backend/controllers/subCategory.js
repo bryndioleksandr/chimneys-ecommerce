@@ -127,3 +127,22 @@ export const findSubCategoryByName  = async (req, res) => {
         return res.status(500).json({ msg: err.message });
     }
 };
+
+export const findSubCategoryBySlug  = async (req, res) => {
+    try {
+        const { slug } = req.query;
+        if (!slug) return res.status(400).json({ msg: "slug is required" });
+        console.log('slug find subcat: ', slug);
+
+        const category = await Category.findOne({ slug: slug });
+        if (!category) return res.status(404).json({ msg: "Category not found" });
+        console.log('sub cat from cat', category);
+
+        console.log('_id isisis', category._id);
+        const subCategories = await SubCategory.find({ category: category._id }).populate("category");
+        console.log('result find is:', subCategories);
+        res.status(200).json(subCategories);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+};

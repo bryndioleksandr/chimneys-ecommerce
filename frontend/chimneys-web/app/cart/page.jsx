@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import "./cart.css";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
     const [cartItems, setCartItems] = useState([]);
 
+    const router = useRouter();
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
         setCartItems(storedCart);
@@ -14,7 +16,7 @@ export default function CartPage() {
     const updateQuantity = (_id, change) => {
         setCartItems((prevItems) => {
             const updatedItems = prevItems.map((item) =>
-                item._id === _id ? { ...item, quantity: Math.max(1, item.quantity + change) } : item
+                item._id === _id ? {...item, quantity: Math.max(1, item.quantity + change)} : item
             );
             localStorage.setItem("cart", JSON.stringify(updatedItems));
             return updatedItems;
@@ -31,25 +33,32 @@ export default function CartPage() {
 
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
+    const handleCheckout = () => {
+        if (cartItems.length === 0) {
+            alert("Кошик порожній");
+            return;
+        }
+        router.push("/order");
+    };
     return (
         <section className="shopping-cart">
             <div className="container">
                 <div className="card">
                     <h1 className="title">Кошик</h1>
                     <p className="items-count">{cartItems.length} товар(ів)</p>
-                    <hr />
+                    <hr/>
 
                     {cartItems.length > 0 ? (
                         cartItems.map((item) => (
                             <div key={item._id} className="cart-item">
-                                <img src={item.image} alt={item.name} className="item-image" />
+                                <img src={item.image} alt={item.name} className="item-image"/>
                                 <div className="item-details">
                                     <p className="item-category">{item.category}</p>
                                     <h6 className="item-name">{item.name}</h6>
                                 </div>
                                 <div className="quantity-controls">
                                     <button className="btn" onClick={() => updateQuantity(item._id, -1)}>-</button>
-                                    <input type="number" value={item.quantity} readOnly className="quantity-input" />
+                                    <input type="number" value={item.quantity} readOnly className="quantity-input"/>
                                     <button className="btn" onClick={() => updateQuantity(item._id, 1)}>+</button>
                                 </div>
                                 <p className="item-price">{item.price * item.quantity} грн</p>
@@ -60,10 +69,10 @@ export default function CartPage() {
                         <p>Кошик порожній</p>
                     )}
 
-                    <hr />
+                    <hr/>
                     <div className="summary">
                         <h3>Підсумок</h3>
-                        <hr />
+                        <hr/>
                         <div className="summary-item">
                             <p>Товари: {cartItems.length}</p>
                             <p>{totalPrice} грн</p>
@@ -74,13 +83,15 @@ export default function CartPage() {
                             <option value="2">Експрес-доставка - 100 грн</option>
                         </select>
                         <label>Купон</label>
-                        <input type="text" placeholder="Введіть код знижки" className="discount-code" />
-                        <hr />
+                        <input type="text" placeholder="Введіть код знижки" className="discount-code"/>
+                        <hr/>
                         <div className="summary-item total">
                             <p>Загальна сума</p>
                             <p>{totalPrice} грн</p>
                         </div>
-                        <button className="checkout-btn">Оформити замовлення</button>
+                        <button className="checkout-btn" onClick={handleCheckout}>
+                            Оформити замовлення
+                        </button>
                     </div>
                 </div>
             </div>

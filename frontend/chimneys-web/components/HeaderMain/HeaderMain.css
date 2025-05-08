@@ -161,3 +161,39 @@ h3 {
     color: white;
     border-left: #0056b3 solid 1px;
 }
+
+.headerSearchBarContainer {
+    position: relative;
+    width: 100%;
+}
+
+.headerSearchBar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.searchResults {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 3;
+    max-height: 300px;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+
+.searchResultItem {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.searchResultItem:hover {
+    background-color: #f9f9f9;
+}
+

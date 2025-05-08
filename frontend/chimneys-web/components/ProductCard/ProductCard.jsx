@@ -6,18 +6,24 @@ import StarRating from "../StarRating/StarRating";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "./ProductCard.css";
 import {addToCart} from "../../services/cartService";
+import { addItemToCart } from "../../redux/slices/cart";
+import { useDispatch } from "../../redux/store";
 
-const handleAddToCart = (product) => {
-    addToCart(product);
-    alert('Товар додано до кошика!'+ product.name);
-};
+
+
 
 const ProductCard = ({ product }) => {
+    const dispatch = useDispatch();
+    const handleAddToCart = (product) => {
+        addToCart(product);
+        dispatch(addItemToCart(product));
+        alert('Товар додано до кошика!'+ product.name);
+    };
     return (
         <li className="product-item" key={product._id}>
             <Link
                 className="product-link"
-                href={`/product/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
+                href={`/product/${product.slug}`}
             >
                 <div className="productCardContainer">
                     <img src={product.images[0]} alt={product.name}/>

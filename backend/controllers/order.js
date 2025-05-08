@@ -72,3 +72,13 @@ export const deleteOrder = async (req, res) => {
         res.status(500).json({ msg: err.message });
     }
 };
+
+export const getOrdersByUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const orders = await Order.find({ user: userId }).populate("products.product");
+        res.status(200).json(orders);
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
+    }
+};

@@ -39,7 +39,7 @@ const CategoriesGrid = () => {
             {categories.map((category, index) => (
                 <Link
                     className="link"
-                    href={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`}
+                    href={`/category/${category.slug}`}
                     key={category.name}
                 >
                     <div className="category-card" key={index}>

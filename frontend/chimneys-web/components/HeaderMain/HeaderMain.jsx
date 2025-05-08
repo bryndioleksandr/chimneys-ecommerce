@@ -13,6 +13,8 @@ import { logout } from "@/redux/slices/user";
 export default function HeaderMain() {
     const [isAuthOpen, setAuthOpen] = useState(false);
     const [role, setRole] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
     const cart = useSelector((state) => state.cart);
@@ -30,6 +32,29 @@ export default function HeaderMain() {
         console.log('logout');
         setRole(null);
     }
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            setSearchResults([]);
+            return;
+        }
+
+        const delayDebounce = setTimeout(() => {
+            handleSearch();
+        }, 500);
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchQuery]);
+    const handleSearch = async () => {
+        if (!searchQuery.trim()) return;
+        try {
+            const res = await fetch(`http://localhost:5501/products/search?query=${searchQuery}`);
+            const data = await res.json();
+            console.log('data is:', data);
+            setSearchResults(data);
+        } catch (error) {
+            console.error("Search error:", error);
+        }
+    };
     return (
         <div className="headerMain">
             <div className="wrapperLeft">
@@ -60,30 +85,51 @@ export default function HeaderMain() {
                         <span><b>Вихідні:</b> 01:10-24:00</span>
                     </div>
                 </div>
-                <div className="headerSearchBar">
-                    <input placeholder={"Пошук товарів"} type="text" />
-                    <div className="searchButton"><FaSearch /></div>
+                <div className="headerSearchBarContainer">
+                    <div className="headerSearchBar">
+                        <input
+                            placeholder={"Пошук товарів"}
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <div className="searchButton" onClick={handleSearch}>
+                            <FaSearch/>
+                        </div>
+                    </div>
+                    {searchResults.length > 0 && (
+                        <div className="searchResults">
+                            {searchResults.map((product) => (
+                                <Link key={product._id}
+                                      href={`/product/${product.slug}`}>
+                                    <div className="searchResultItem">
+                                        {product.name}
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
             <div className="headerActions">
                 {role === "user" ? (
                     <>
-                    <Link href="/admin">
-                        <div className="login">
-                            <FaUser />
-                            <span>{user.name}</span>
-                        </div>
-                    </Link>
-                    <button onClick={handleLogout}>Logout</button>
+                        <Link href="/admin">
+                            <div className="login">
+                                <FaUser/>
+                                <span>{user.name}</span>
+                            </div>
+                        </Link>
+                        <button onClick={handleLogout}>Logout</button>
                     </>
                 ) : (
                     <div onClick={() => setAuthOpen(true)}>
                         <div className="login">
-                            <FaUser />
+                            <FaUser/>
                             <span>Увійти</span>
                         </div>
-                        <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
+                        <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)}/>
                     </div>
                 )}
                 <div className="goods">

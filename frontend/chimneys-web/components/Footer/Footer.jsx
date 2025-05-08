@@ -8,8 +8,8 @@ const mapContainerStyle = {
 };
 
 const center = {
-    lat: 50.4501, // Широта (latitude)
-    lng: 30.5234, // Довгота (longitude)
+    lat: 50.4501,
+    lng: 30.5234,
 };
 
 export default function Footer() {

@@ -1,0 +1,23 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+.order-list {
+    list-style: none;
+    padding: 0;
+}
+.order-list li {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+.order-list li:hover {
+    background-color: #f7f7f7;
+}
+.order-details {
+    margin-top: 20px;
+    background-color: #fafafa;
+    padding: 16px;
+    border-radius: 8px;
+}

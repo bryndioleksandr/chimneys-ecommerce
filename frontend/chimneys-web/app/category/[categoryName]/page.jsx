@@ -2,8 +2,8 @@
 
 import {useParams, useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
-import {searchSubCategories} from "../../../services/subcategory";
-import {searchCategoryByName, searchCategoryProducts} from "../../../services/category";
+import {searchSubCategories, searchSubCategoriesBySlug} from "../../../services/subcategory";
+import {searchCategoryByName, searchCategoryProducts, searchCategoryBySlug } from "../../../services/category";
 import StarRating from "../../../components/StarRating/StarRating";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "../category.css";
@@ -20,16 +20,17 @@ const CategoryPage = () => {
     const [error, setError] = useState(null);
     const categoryId = categoryName;
 
+    console.log('params cat:', params);
     useEffect(() => {
         const fetchSubcategories = async () => {
-            const currentCategory = await searchCategoryByName(categoryId);
+            const currentCategory = await searchCategoryBySlug(categoryId);
             console.log('current category:', currentCategory);
             console.log('_id:', currentCategory[0]._id);
             if (categoryId) {
                 setLoading(true);
                 setError(null);
                 try {
-                    const data = await searchSubCategories(categoryId);
+                    const data = await searchSubCategoriesBySlug(categoryId);
                     const productData = await searchCategoryProducts(currentCategory[0]._id);
                     console.log('response products category:', productData);
                     setProducts(productData);

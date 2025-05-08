@@ -64,7 +64,6 @@ export const createCategory = [
     },
 ];
 
-// Отримання всіх категорій
 export const getCategories = async (req, res) => {
     try {
         const allCategories = await Category.find();
@@ -74,7 +73,6 @@ export const getCategories = async (req, res) => {
     }
 };
 
-// Видалення категорії
 export const removeCategory = async (req, res) => {
     const category_id = req.params.id;
     try {
@@ -95,6 +93,17 @@ export const searchByName = async (req, res) => {
     try {
         console.log('params cateogry:', req.params);
         const category = await Category.find({ slug: req.params.name});
+        console.log('onecat back:', category);
+        res.json(category);
+    }
+    catch(error) {
+        return res.status(500).json({ msg: error.message });
+    }
+}
+
+export const searchBySlug = async (req, res) => {
+    try {
+        const category = await Category.find({ slug: req.params.slug});
         console.log('onecat back:', category);
         res.json(category);
     }

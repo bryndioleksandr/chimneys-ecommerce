@@ -58,9 +58,22 @@ export const createProduct = async (req, res) => {
     }
 };
 
+export const searchProducts = async (req, res) => {
+    try {
+        const { query } = req.query;
+        const products = await Product.find({
+            name: { $regex: query, $options: "i" }
+        });
+        console.log('results search are:', products);
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
+    }
+};
+
 export const getProductBySlug = async (req, res) => {
     try {
-        const product = await Product.findOne({ name: req.params.slug }).populate("category subCategory subSubCategory");
+        const product = await Product.findOne({ slug: req.params.slug }).populate("category subCategory subSubCategory");
         if (!product) return res.status(404).json({ msg: "Product not found" });
         res.status(200).json(product);
     } catch (err) {

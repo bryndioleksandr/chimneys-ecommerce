@@ -4,7 +4,7 @@ import {
     getProducts,
     searchByCategory,
     searchBySubCategory,
-    searchBySubSubCategory
+    searchBySubSubCategory, searchProducts
 } from "../controllers/product.js";
 
 const productRouter = express.Router();
@@ -15,6 +15,6 @@ productRouter.get('/by-category/:categoryid', searchByCategory);
 productRouter.get('/by-subcategory/:subcategoryid', searchBySubCategory);
 productRouter.get('/by-subsubcategory/:subsubcategoryid', searchBySubSubCategory);
 productRouter.get('/by-slug/:slug', getProductBySlug);
-
+productRouter.get('/search', searchProducts);
 
 export default productRouter;

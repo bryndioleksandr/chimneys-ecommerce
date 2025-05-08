@@ -25,7 +25,6 @@ const cartSlice = createSlice({
             state.totalQuantity += newItem.quantity;
             state.totalPrice += newItem.price * newItem.quantity;
 
-            // Зберігаємо оновлений кошик в localStorage
             if (typeof window !== 'undefined') {
                 localStorage.setItem('cart', JSON.stringify(state.items));
             }
@@ -40,7 +39,6 @@ const cartSlice = createSlice({
                 state.totalPrice -= item.price * item.quantity;
                 state.items.splice(itemIndex, 1);
 
-                // Оновлюємо localStorage після видалення товару
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('cart', JSON.stringify(state.items));
                 }
@@ -58,7 +56,6 @@ const cartSlice = createSlice({
                 state.totalQuantity += quantity;
                 state.totalPrice += item.price * quantity;
 
-                // Оновлюємо localStorage після зміни кількості товару
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('cart', JSON.stringify(state.items));
                 }
@@ -69,7 +66,6 @@ const cartSlice = createSlice({
             state.totalQuantity = 0;
             state.totalPrice = 0;
 
-            // Очищаємо localStorage
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('cart');
             }
