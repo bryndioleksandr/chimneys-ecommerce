@@ -1,0 +1,28 @@
+.all-orders {
+    padding: 40px 20px;
+    background: #f9f9f9;
+    min-height: 100vh;
+}
+
+.all-orders .container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.all-orders h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.order-card {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.order-card p {
+    margin: 6px 0;
+}
