@@ -35,7 +35,7 @@ const SubSubCategoryPage = () => {
     }, [subCategoryName]);
 
     const handleSubSubClick = (subSub) => {
-        router.push(`/category/${categoryName}/${subCategoryName}/${subSub.name.toLowerCase().replace(/\s+/g, '-')}`);
+        router.push(`/category/${categoryName}/${subCategoryName}/${subSub.slug}`);
     };
 
     return (

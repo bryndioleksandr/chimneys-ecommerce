@@ -1,0 +1,26 @@
+.info-page {
+    padding: 40px 20px;
+    background: #f8f9fa;
+    min-height: 60vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #555;
+}

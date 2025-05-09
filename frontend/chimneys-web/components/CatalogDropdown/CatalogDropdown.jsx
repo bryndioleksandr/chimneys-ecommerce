@@ -3,22 +3,10 @@ import {useState, useEffect, useRef} from "react";
 import {FaBars, FaTimes} from "react-icons/fa";
 import "./CatalogDropdown.css";
 import axios from 'axios';
-
-const categories = [
-    "Основні елементи, труби",
-    "Овальні і прямокутні",
-    "Закінчення димоходу",
-    "Кріплення і опори, тощо",
-    "Прохідні елементи",
-    "Спец елементи",
-    "Чистка і сервіс",
-    "Для камінів, саун",
-    "Дефлектори",
-    "Коліна, трійники",
-];
+import Link from "next/link";
 
 const CatalogDropdown = () => {
-    const [categoriess, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -34,8 +22,8 @@ const CatalogDropdown = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Categories from back:", categoriess);
-    }, [categoriess]);
+        console.log("Categories from back:", categories);
+    }, [categories]);
 
 
     useEffect(() => {
@@ -62,8 +50,10 @@ const CatalogDropdown = () => {
             {isOpen && (
                 <ul className="catalog-dropdown">
                     {categories.map((category, index) => (
-                        <li key={index} onClick={() => alert(`Вибрано: ${category}`)}>
-                            {category}
+                        <li key={index + 1} onClick={() => setIsOpen(false)}>
+                            <Link href={`/category/${category.slug}`}>
+                                {category.name}
+                            </Link>
                         </li>
                     ))}
                 </ul>

@@ -61,7 +61,7 @@ const CategoryPage = () => {
                     subcategories.map((subcategory) => (
                         <Link
                             className="subcategory-item"
-                            href={`/category/${categoryId}/${subcategory.name.toLowerCase().replace(/\s+/g, "-")}`}
+                            href={`/category/${categoryId}/${subcategory.slug}`}
                             key={subcategory.name}
                         >
                             <li

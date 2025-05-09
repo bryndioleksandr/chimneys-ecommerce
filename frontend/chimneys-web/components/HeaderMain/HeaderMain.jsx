@@ -9,16 +9,38 @@ import AuthModal from "@/components/AuthModal/AuthModal";
 import { useSelector, useDispatch } from "@/redux/store";
 import {logoutUser} from "@/services/auth";
 import { logout } from "@/redux/slices/user";
+import { fetchCategories } from "@/services/category";
 
 export default function HeaderMain() {
     const [isAuthOpen, setAuthOpen] = useState(false);
     const [role, setRole] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const dispatch = useDispatch();
+
     const user = useSelector((state) => state.user.user);
     const cart = useSelector((state) => state.cart);
     console.log('cart is:', cart);
+    useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const data = await fetchCategories();
+                setCategories(data);
+            } catch (err) {
+                setError("Не вдалося завантажити категорії.");
+                console.error("Error fetching categories:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadCategories();
+    }, []);
+
     useEffect(() => {
         if (!user) return;
         const savedRole = user.role;
@@ -26,12 +48,14 @@ export default function HeaderMain() {
             setRole(savedRole);
         }
     }, [user]);
+
     const handleLogout = async() => {
         await logoutUser();
         dispatch(logout());
         console.log('logout');
         setRole(null);
     }
+
     useEffect(() => {
         if (!searchQuery.trim()) {
             setSearchResults([]);

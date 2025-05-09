@@ -12,7 +12,6 @@ export default function FavoritesPage() {
         setFavorites(storedFavorites);
     }, []);
 
-    // Видалення товару зі списку бажань
     const removeFromFavorites = (id) => {
         const updatedFavorites = favorites.filter((item) => item.id !== id);
         setFavorites(updatedFavorites);
