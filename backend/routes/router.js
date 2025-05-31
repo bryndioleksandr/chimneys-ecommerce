@@ -7,6 +7,7 @@ import userRouter from "./user.js";
 import authRouter from "./auth.js";
 import orderRouter from "./order.js";
 import filtersRouter from "./filters.js";
+import reviewRouter from "./review.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -19,5 +20,6 @@ router.use('/user', userRouter);
 router.use('/auth', authRouter);
 router.use('/order', orderRouter);
 router.use('/filters', filtersRouter);
+router.use('/reviews', reviewRouter);
 
 export default router;

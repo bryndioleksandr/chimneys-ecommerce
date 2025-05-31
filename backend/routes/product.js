@@ -4,7 +4,7 @@ import {
     getProducts,
     searchByCategory,
     searchBySubCategory,
-    searchBySubSubCategory, searchProducts
+    searchBySubSubCategory, searchProducts, updateRating, updateReviews
 } from "../controllers/product.js";
 
 const productRouter = express.Router();
@@ -16,5 +16,7 @@ productRouter.get('/by-subcategory/:subcategoryid', searchBySubCategory);
 productRouter.get('/by-subsubcategory/:subsubcategoryid', searchBySubSubCategory);
 productRouter.get('/by-slug/:slug', getProductBySlug);
 productRouter.get('/search', searchProducts);
+productRouter.patch('/update-rating/:productId/:rating', updateRating);
+productRouter.patch('/update-reviews/:productId', updateReviews);
 
 export default productRouter;

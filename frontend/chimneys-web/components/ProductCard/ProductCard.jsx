@@ -30,7 +30,7 @@ const ProductCard = ({ product }) => {
                     <p className="productCardName">{product.name}</p>
                     <div className="productCard-review-stock">
                         <div className="card-reviews-div">
-                            <StarRating rating={4.8} />
+                            <StarRating rating={product.rating} />
                             <span className="count-reviews">({product.reviews?.length || 0})</span>
                         </div>
                         <span className="card-in-stock">В наявності: {product.stock}</span>

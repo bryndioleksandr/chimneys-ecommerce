@@ -3,11 +3,11 @@ import Product from "../models/product.js";
 
 export const createReview = async (req, res) => {
     try {
-        const { product, rating, comment } = req.body;
-        const userId = req.user.id;
+        const { name, email, product, rating, comment } = req.body;
 
         const newReview = new Review({
-            user: userId,
+            name,
+            email,
             product,
             rating,
             comment
@@ -25,7 +25,7 @@ export const createReview = async (req, res) => {
 export const getReviewsByProduct = async (req, res) => {
     try {
         const { productId } = req.params;
-        const reviews = await Review.find({ product: productId }).populate("user", "name");
+        const reviews = await Review.find({ product: productId }).populate( "name");
         res.status(200).json(reviews);
     } catch (err) {
         res.status(500).json({ msg: err.message });

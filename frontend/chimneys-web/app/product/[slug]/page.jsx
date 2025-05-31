@@ -2,12 +2,19 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import "react-image-gallery/styles/css/image-gallery.css";
 import './style.css';
+import ImageGallery from 'react-image-gallery';
+import ReviewForm from "../../../components/modals/ReviewCreate";
+import StarRating from "../../../components/StarRating/StarRating";
 
 const ProductPage = () => {
     const { slug } = useParams();
     const [product, setProduct] = useState(null);
+    const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showReviewForm, setShowReviewForm] = useState(false);
+
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -27,19 +34,37 @@ const ProductPage = () => {
         if (slug) fetchProduct();
     }, [slug]);
 
+    useEffect(() => {
+        const fetchReviews = async () => {
+            if (!product?._id) return;
+            try {
+                const res = await fetch(`http://localhost:5501/reviews/product-reviews/${product._id}`);
+                const data = await res.json();
+                console.log("reviews data:", data);
+                setReviews(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error("Помилка при завантаженні відгуків:", err);
+            }
+        };
+
+        fetchReviews();
+    }, [product]);
+
     if (loading) return <p>Завантаження...</p>;
     if (!product) return <p>Товар не знайдено</p>;
+
+
+    const images = product.images?.map(url => ({
+        original: url,
+        thumbnail: url,
+    })) || [];
 
     return (
         <div className="container mx-auto px-4 py-8 productContainer">
             <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1">
-                    {product.images?.length > 0 ? (
-                        <img
-                            src={product.images[0]}
-                            alt={product.name}
-                            className="w-full max-w-md productImage"
-                        />
+                    {images.length > 0 ? (
+                        <ImageGallery items={images} showPlayButton={false} showFullscreenButton={true}/>
                     ) : (
                         <div className="bg-gray-200 h-64 w-full max-w-md rounded"/>
                     )}
@@ -49,7 +74,9 @@ const ProductPage = () => {
                     <h1 className="font-bold">{product.name}</h1>
                     <p className="productPrice">{product.price} грн</p>
                     <div className="flex gap-4">
-                        <button className="buyButton px-4 py-2 rounded">Купити</button>
+                        <button className="buyButton px-4 py-2 npm install react-image-gallery
+">Купити
+                        </button>
                         <button className="wishlistButton px-4 py-2 rounded">Додати до вішлисту</button>
                     </div>
                     <p className="productMeta">Код товару: {product.productCode}</p>
@@ -77,9 +104,37 @@ const ProductPage = () => {
             </div>
 
             <div className="reviewsBlock">
-                <h2 className="text-xl font-bold mb-2">Відгуки</h2>
-                <p className="text-gray-600 italic">Відгуки поки що відсутні. Будьте першим!</p>
+                <h2 className="reviewsTitle">Відгуки</h2>
+
+                {reviews.length === 0 ? (
+                    <p className="noReviewsText">Відгуки поки що відсутні. Будьте першим!</p>
+                ) : (
+                    <div className="reviewsList">
+                        {reviews.map((review, index) => (
+                            <div key={index} className="reviewCard">
+                                <div className="reviewHeader">
+                                    <strong>{review.name}</strong>
+                                    <StarRating rating={review.rating} totalStars={5}/>
+                                </div>
+                                <p>{review.comment}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
+
+            <button
+                className="leaveReviewButton px-4 py-2 mt-4"
+                onClick={() => setShowReviewForm(prev => !prev)}
+            >
+                {showReviewForm ? 'Сховати форму відгуку' : 'Залишити відгук'}
+            </button>
+
+            {showReviewForm && (
+                <div className="reviewFormWrapper mt-4">
+                    <ReviewForm product={product._id} review={reviews} />
+                </div>
+            )}
         </div>
 
     );

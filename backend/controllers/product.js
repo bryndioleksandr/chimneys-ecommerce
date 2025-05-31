@@ -106,6 +106,44 @@ export const updateProduct = async (req, res) => {
     }
 };
 
+export const updateRating = async (req, res) => {
+    try {
+        const { productId, rating } = req.params;
+
+        const product = await Product.findById(productId);
+        if (!product) return res.status(404).json({ msg: "Product not found" });
+
+        product.rating = parseFloat(rating);
+        await product.save();
+
+        return res.status(200).json({ msg: "Rating updated", rating: product.rating });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: "Server error" });
+    }
+};
+
+export const updateReviews = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { reviews } = req.body;
+
+        const product = await Product.findById(productId);
+        if (!product) return res.status(404).json({ msg: "Product not found" });
+
+        product.reviews = reviews;
+        await product.save();
+
+        return res.status(200).json({ msg: "Reviews updated", reviews: product.reviews });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: "Server error" });
+    }
+};
+
+
 export const deleteProduct = async (req, res) => {
     try {
         const { productId } = req.params;
@@ -147,5 +185,6 @@ export const searchBySubSubCategory = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
 
 
