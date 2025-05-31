@@ -15,7 +15,7 @@ import { useDispatch } from "../../redux/store";
 const ProductCard = ({ product }) => {
     const dispatch = useDispatch();
     const handleAddToCart = (product) => {
-        addToCart(product);
+        // addToCart(product);
         dispatch(addItemToCart(product));
         alert('Товар додано до кошика!'+ product.name);
     };

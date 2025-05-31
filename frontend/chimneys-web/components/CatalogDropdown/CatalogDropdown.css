@@ -3,7 +3,6 @@
     display: inline-block;
 }
 
-/* Кнопка */
 .catalog-button {
     display: flex;
     justify-content: space-between;
@@ -35,7 +34,6 @@
     transition: transform 0.2s ease-in-out;
 }
 
-/* Випадаючий список */
 .catalog-dropdown {
     position: absolute;
     top: 100%;
@@ -52,7 +50,8 @@
     animation: dropdown-fade 0.3s ease-in-out;
 }
 
-.catalog-dropdown li {
+.catalog-dropdown li, a {
+    text-decoration: none;
     padding: 10px;
     cursor: pointer;
     color: #333;
@@ -63,7 +62,6 @@
     background-color: #f4f4f4;
 }
 
-/* Анімація випадання */
 @keyframes dropdown-fade {
     from {
         opacity: 0;

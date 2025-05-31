@@ -4,11 +4,25 @@ import React, { useEffect, useState } from "react";
 import "./CategoriesGrid.css";
 import Link from "next/link";
 import { fetchCategories } from "@/services/category";
+import { useDispatch } from 'react-redux';
+import { addItemToCart } from '@/redux/slices/cart';
 
 const CategoriesGrid = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+            const parsedItems = JSON.parse(storedCart);
+            console.log('all parsed items are: ', parsedItems);
+            parsedItems.forEach((item) => {
+                dispatch(addItemToCart(item));
+            });
+        }
+    }, []);
 
     useEffect(() => {
         const loadCategories = async () => {

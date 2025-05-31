@@ -10,18 +10,30 @@ export default function CartPage() {
     const router = useRouter();
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCartItems(storedCart);
+        const sanitizedCart = storedCart.map((item) => ({
+            ...item,
+            quantity: Number(item.quantity) > 0 ? Number(item.quantity) : 1,
+        }));
+        setCartItems(sanitizedCart);
     }, []);
 
     const updateQuantity = (_id, change) => {
         setCartItems((prevItems) => {
-            const updatedItems = prevItems.map((item) =>
-                item._id === _id ? {...item, quantity: Math.max(1, item.quantity + change)} : item
-            );
+            const updatedItems = prevItems.map((item) => {
+                if (item._id === _id) {
+                    const currentQty = Number(item.quantity) || 1;
+                    return {
+                        ...item,
+                        quantity: Math.max(1, currentQty + change),
+                    };
+                }
+                return item;
+            });
             localStorage.setItem("cart", JSON.stringify(updatedItems));
             return updatedItems;
         });
     };
+
 
     const removeItem = (_id) => {
         setCartItems((prevItems) => {

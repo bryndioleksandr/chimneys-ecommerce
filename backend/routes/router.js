@@ -6,6 +6,7 @@ import subSubCategoryRouter from "./subSubCategory.js";
 import userRouter from "./user.js";
 import authRouter from "./auth.js";
 import orderRouter from "./order.js";
+import filtersRouter from "./filters.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -17,5 +18,6 @@ router.use('/subsubcategory', subSubCategoryRouter);
 router.use('/user', userRouter);
 router.use('/auth', authRouter);
 router.use('/order', orderRouter);
+router.use('/filters', filtersRouter);
 
 export default router;

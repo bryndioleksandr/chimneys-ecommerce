@@ -31,6 +31,7 @@ const styles = {
         fontFamily: "Inter",
     },
     body: {
+        height: "100%",
         margin: "0",
         padding: "0",
         backgroundColor: "#F8F9FA",

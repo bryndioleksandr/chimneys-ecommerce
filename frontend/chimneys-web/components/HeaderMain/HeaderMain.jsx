@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./HeaderMain.css";
 import { FaHeart, FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
 import Link from "next/link";
@@ -21,6 +21,8 @@ export default function HeaderMain() {
     const [error, setError] = useState(null);
 
     const dispatch = useDispatch();
+    const searchRef = useRef(null);
+
 
     const user = useSelector((state) => state.user.user);
     const cart = useSelector((state) => state.cart);
@@ -55,6 +57,20 @@ export default function HeaderMain() {
         console.log('logout');
         setRole(null);
     }
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setSearchResults([]);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
 
     useEffect(() => {
         if (!searchQuery.trim()) {
@@ -109,7 +125,7 @@ export default function HeaderMain() {
                         <span><b>Вихідні:</b> 01:10-24:00</span>
                     </div>
                 </div>
-                <div className="headerSearchBarContainer">
+                <div className="headerSearchBarContainer" ref={searchRef}>
                     <div className="headerSearchBar">
                         <input
                             placeholder={"Пошук товарів"}
@@ -121,12 +137,16 @@ export default function HeaderMain() {
                             <FaSearch/>
                         </div>
                     </div>
+
                     {searchResults.length > 0 && (
                         <div className="searchResults">
                             {searchResults.map((product) => (
-                                <Link key={product._id}
-                                      href={`/product/${product.slug}`}>
-                                    <div className="searchResultItem">
+                                <Link key={product._id} href={`/product/${product.slug}`}>
+                                    <div className="searchResultItem"
+                                         onClick={() => {
+                                        setSearchResults([]);
+                                        setSearchQuery("");
+                                    }}>
                                         {product.name}
                                     </div>
                                 </Link>
@@ -134,6 +154,7 @@ export default function HeaderMain() {
                         </div>
                     )}
                 </div>
+
             </div>
 
             <div className="headerActions">
@@ -163,7 +184,7 @@ export default function HeaderMain() {
                             <FaShoppingCart/>
                             {cart.totalQuantity > 0 && (
                                 <div className="cart-badge">
-                                    <span>{cart.totalQuantity}</span>
+                                    <span>{cart.totalQuantity} товари: </span>
                                     <span>{cart.totalPrice} грн</span>
                                 </div>
                             )}
