@@ -17,12 +17,14 @@ const upload = multer({ storage });
 
 export const createProduct = async (req, res) => {
     try {
-        upload.array("productImages", 5)(req, res, async (err) => {
+        upload.array("images", 5)(req, res, async (err) => {
             if (err) return res.status(400).json({ msg: "Error uploading files" });
 
             if (!req.body.subCategory) req.body.subCategory = null;
             if (!req.body.subSubCategory) req.body.subSubCategory = null;
             const productData = req.body;
+            console.log('images received:', req.body.images);
+            console.log('files received:', req.files);
             productData.slug = slugify(productData.name, { lower: true });
             console.log('product data is:', productData);
             let uploadedImages = [];

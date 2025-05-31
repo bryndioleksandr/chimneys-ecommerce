@@ -5,7 +5,7 @@ import "./CategoriesGrid.css";
 import Link from "next/link";
 import { fetchCategories } from "@/services/category";
 import { useDispatch } from 'react-redux';
-import { addItemToCart } from '@/redux/slices/cart';
+import {addItemToCart, loadCartFromStorage} from '@/redux/slices/cart';
 
 const CategoriesGrid = () => {
     const [categories, setCategories] = useState([]);
@@ -18,9 +18,7 @@ const CategoriesGrid = () => {
         if (storedCart) {
             const parsedItems = JSON.parse(storedCart);
             console.log('all parsed items are: ', parsedItems);
-            parsedItems.forEach((item) => {
-                dispatch(addItemToCart(item));
-            });
+            loadCartFromStorage(parsedItems);
         }
     }, []);
 

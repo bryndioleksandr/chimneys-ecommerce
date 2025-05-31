@@ -10,7 +10,8 @@ const ProductForm = () => {
     const [category, setCategory] = useState('');
     const [subCategory, setSubCategory] = useState('');
     const [subSubCategory, setSubSubCategory] = useState('');
-    const [img, setImg] = useState('');
+    // const [img, setImg] = useState('');
+    const [images, setImages] = useState([]);
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
     const [subSubCategories, setSubSubCategories] = useState([]);
@@ -18,24 +19,32 @@ const ProductForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append("productCode", productCode);
+        formData.append("name", name);
+        formData.append("price", price);
+        formData.append("category", category);
+        formData.append("subCategory", subCategory || "");
+        formData.append("subSubCategory", subSubCategory || "");
+
+        for (let i = 0; i < images.length; i++) {
+            formData.append("images", images[i]);
+        }
+
         try {
-            const response = await axios.post('http://localhost:5501/products/product', {
-                productCode,
-                name,
-                price,
-                category,
-                subCategory,
-                subSubCategory,
-                img,
+            const response = await axios.post('http://localhost:5501/products/product', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             alert('Товар доданий!');
-            console.log('response: ', response);
+            console.log('response:', response);
         } catch (error) {
             console.error('Помилка при додаванні товару:', error);
-            console.log('error is:', error);
             alert('Помилка при додаванні товару');
         }
     };
+
 
     useEffect(() => {
         axios.get('http://localhost:5501/category/categories')
@@ -131,9 +140,9 @@ const ProductForm = () => {
                 </select>
                 <input
                     type="file"
-                    placeholder="URL зображення"
-                    value={img}
-                    onChange={(e) => setImg(e.target.value)}
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => setImages([...e.target.files])}
                 />
                 <button type="submit">Додати товар</button>
             </form>

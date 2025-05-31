@@ -71,9 +71,14 @@ const cartSlice = createSlice({
                 localStorage.removeItem('cart');
             }
         },
+        loadCartFromStorage: (state, action) => {
+            state.items = action.payload;
+            state.totalQuantity = action.payload.reduce((sum, item) => sum + item.quantity, 0);
+            state.totalPrice = action.payload.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        },
     },
 });
 
-export const { addItemToCart, removeItemFromCart, updateItemQuantity, clearCart } = cartSlice.actions;
+export const { addItemToCart, removeItemFromCart, updateItemQuantity, clearCart, loadCartFromStorage } = cartSlice.actions;
 
 export default cartSlice.reducer;
