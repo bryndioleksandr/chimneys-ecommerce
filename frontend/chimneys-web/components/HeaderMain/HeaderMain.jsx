@@ -144,10 +144,15 @@ export default function HeaderMain() {
                                 <Link key={product._id} href={`/product/${product.slug}`}>
                                     <div className="searchResultItem"
                                          onClick={() => {
-                                        setSearchResults([]);
-                                        setSearchQuery("");
-                                    }}>
-                                        {product.name}
+                                             setSearchResults([]);
+                                             setSearchQuery("");
+                                         }}>
+                                        {product.name}:
+                                        <img src={product.images[0]} alt={product.name} style={{
+                                            width: "60px",
+                                            height: "60px",
+                                            objectFit: "cover",
+                                        }}/>
                                     </div>
                                 </Link>
                             ))}
@@ -181,14 +186,17 @@ export default function HeaderMain() {
                     <Link href="/favorites"><FaHeart /></Link>
                     <Link href="/cart">
                         <div className="cart">
-                            <FaShoppingCart/>
-                            {cart.totalQuantity > 0 && (
-                                <div className="cart-badge">
-                                    <span>{cart.totalQuantity} товари: </span>
-                                    <span>{cart.totalPrice} грн</span>
-                                </div>
+                            <div className="icon-with-badge">
+                                <FaShoppingCart className="cart-icon"/>
+                                {cart.totalQuantity > 0 && (
+                                    <span className="badge">{cart.totalQuantity}</span>
+                                )}
+                            </div>
+                            {cart.totalPrice > 0 && (
+                                <span className="total-price">{cart.totalPrice} грн</span>
                             )}
                         </div>
+
                     </Link>
                 </div>
             </div>

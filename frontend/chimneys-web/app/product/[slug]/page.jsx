@@ -74,8 +74,7 @@ const ProductPage = () => {
                     <h1 className="font-bold">{product.name}</h1>
                     <p className="productPrice">{product.price} грн</p>
                     <div className="flex gap-4">
-                        <button className="buyButton px-4 py-2 npm install react-image-gallery
-">Купити
+                        <button className="buyButton px-4 py-2">Купити
                         </button>
                         <button className="wishlistButton px-4 py-2 rounded">Додати до вішлисту</button>
                     </div>

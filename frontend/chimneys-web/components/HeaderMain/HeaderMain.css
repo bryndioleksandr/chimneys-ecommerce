@@ -188,12 +188,59 @@ h3 {
 }
 
 .searchResultItem {
-    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     cursor: pointer;
+    padding: 0 15px;
     border-bottom: 1px solid #f0f0f0;
 }
 
 .searchResultItem:hover {
     background-color: #f9f9f9;
+}
+
+.cart {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.icon-with-badge {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-icon {
+    font-size: 28px;
+    color: #212529;
+    transition: transform 0.2s ease;
+}
+
+.cart-icon:hover {
+    transform: scale(1.1);
+    color: #007bff;
+}
+
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 2px;
+    border-radius: 50%;
+    line-height: 1;
+    min-width: 18px;
+    text-align: center;
+}
+
+.total-price {
+    font-size: 14px;
+    font-weight: 500;
+    color: #212529;
 }
 

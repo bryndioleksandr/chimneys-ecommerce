@@ -18,7 +18,7 @@ const CategoriesGrid = () => {
         if (storedCart) {
             const parsedItems = JSON.parse(storedCart);
             console.log('all parsed items are: ', parsedItems);
-            loadCartFromStorage(parsedItems);
+            dispatch(loadCartFromStorage(parsedItems));
         }
     }, []);
 

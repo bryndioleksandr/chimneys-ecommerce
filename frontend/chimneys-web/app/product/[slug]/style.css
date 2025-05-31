@@ -1,7 +1,10 @@
+/* Загальний контейнер сторінки */
 .productContainer {
+    max-width: 1200px;
+    margin: 0 auto;
     background-color: #ffffff;
-    border-radius: 10px;
-    padding: 20px 200px;
+    border-radius: 12px;
+    padding: 24px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.3s ease;
 }
@@ -10,21 +13,25 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
+/* Зображення продукту */
 .productImage {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     object-fit: cover;
 }
 
+/* Інформація про продукт */
 .productInfo h1 {
     color: #212529;
     font-size: 28px;
+    margin-bottom: 10px;
 }
 
 .productPrice {
-    font-size: 22px;
+    font-size: 24px;
     color: #28a745;
     font-weight: 600;
+    margin-bottom: 12px;
 }
 
 .buyButton {
@@ -32,9 +39,11 @@
     color: #fff;
     transition: background 0.3s ease;
     padding: 10px 20px;
-    margin-right: 5px;
+    margin-right: 8px;
+    border-radius: 6px;
     cursor: pointer;
     border: none;
+    font-weight: 500;
 }
 
 .buyButton:hover {
@@ -46,8 +55,10 @@
     color: #212529;
     transition: background 0.3s ease;
     padding: 10px 20px;
+    border-radius: 6px;
     border: none;
     cursor: pointer;
+    font-weight: 500;
 }
 
 .wishlistButton:hover {
@@ -57,23 +68,94 @@
 .productMeta {
     color: #6c757d;
     font-size: 14px;
+    margin-top: 10px;
 }
 
+/* Заголовки секцій */
 .sectionTitle {
     font-size: 20px;
     color: #343a40;
+    font-weight: 600;
     margin-bottom: 6px;
 }
 
+/* Список характеристик */
 .characteristicsList li {
     padding-left: 4px;
     color: #495057;
     line-height: 1.6;
 }
 
+/* Відгуки */
 .reviewsBlock {
-    background-color: #f1f3f5;
+    background-color: #f8f9fa;
     border-radius: 10px;
-    padding: 15px;
-    margin-top: 20px;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.reviewsTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 16px;
+}
+
+.noReviewsText {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.reviewsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.reviewCard {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+.reviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #212529;
+}
+
+/* Кнопка "Залишити відгук" */
+.leaveReviewButton {
+    background-color: #ffc107;
+    color: #212529;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.leaveReviewButton:hover {
+    background-color: #e0a800;
+}
+
+/* Форма відгуку */
+.reviewFormWrapper {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.image-gallery {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+button{
+    cursor: pointer;
 }

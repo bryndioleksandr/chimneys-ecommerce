@@ -63,9 +63,12 @@ export default function CartPage() {
                     {cartItems.length > 0 ? (
                         cartItems.map((item) => (
                             <div key={item._id} className="cart-item">
-                                <img src={item.image} alt={item.name} className="item-image"/>
+                                <img src={item.images[0]} alt={item.name} style={{
+
+                                    objectFit: "cover"}}
+                                     className="item-image"/>
                                 <div className="item-details">
-                                    <p className="item-category">{item.category}</p>
+                                    <p className="item-category">{item.category.name}</p>
                                     <h6 className="item-name">{item.name}</h6>
                                 </div>
                                 <div className="quantity-controls">

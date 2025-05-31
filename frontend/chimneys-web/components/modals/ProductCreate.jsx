@@ -4,7 +4,7 @@ import {searchSubCategories} from "../../services/subcategory";
 import {searchSubSubCategories} from "../../services/subsubcategory";
 
 const ProductForm = () => {
-    const [productCode, setProductCode] = useState('');
+   // const [productCode, setProductCode] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
@@ -16,9 +16,31 @@ const ProductForm = () => {
     const [subCategories, setSubCategories] = useState([]);
     const [subSubCategories, setSubSubCategories] = useState([]);
 
+    const [description, setDescription] = useState('');
+    const [discount, setDiscount] = useState('');
+    const [steelGrade, setSteelGrade] = useState('');
+    const [thickness, setThickness] = useState('');
+    const [diameter, setDiameter] = useState('');
+    const [length, setLength] = useState('');
+    const [weight, setWeight] = useState('');
+    const [angle, setAngle] = useState('');
+    const [revision, setRevision] = useState(false);
+    const [hasMesh, setHasMesh] = useState(false);
+    const [insulationThickness, setInsulationThickness] = useState('');
+    const [stock, setStock] = useState('');
+
+
+    const generateProductCode = () => {
+        const now = new Date();
+        const datePart = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const randomPart = Math.floor(100000 + Math.random() * 900000);
+        return `DMR-TER-${datePart}-${randomPart}`;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const productCode = generateProductCode();
         const formData = new FormData();
         formData.append("productCode", productCode);
         formData.append("name", name);
@@ -26,6 +48,20 @@ const ProductForm = () => {
         formData.append("category", category);
         formData.append("subCategory", subCategory || "");
         formData.append("subSubCategory", subSubCategory || "");
+
+        formData.append("description", description);
+        formData.append("discount", discount);
+        formData.append("steelGrade", steelGrade);
+        formData.append("thickness", thickness);
+        formData.append("diameter", diameter);
+        formData.append("length", length);
+        formData.append("weight", weight);
+        formData.append("angle", angle);
+        formData.append("revision", revision);
+        formData.append("hasMesh", hasMesh);
+        formData.append("insulationThickness", insulationThickness);
+        formData.append("stock", stock);
+
 
         for (let i = 0; i < images.length; i++) {
             formData.append("images", images[i]);
@@ -61,13 +97,6 @@ const ProductForm = () => {
         <div className="form-container">
             <h2>Створити товар</h2>
             <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Код товару"
-                    value={productCode}
-                    onChange={(e) => setProductCode(e.target.value)}
-                    required
-                />
                 <input
                     type="text"
                     placeholder="Назва товару"
@@ -138,6 +167,85 @@ const ProductForm = () => {
                         <option key={subSubCat._id} value={subSubCat._id}>{subSubCat.name}</option>
                     ))}
                 </select>
+                <textarea
+                    placeholder="Опис"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Знижка (%)"
+                    value={discount}
+                    onChange={(e) => setDiscount(e.target.value)}
+                />
+
+                <input
+                    type="text"
+                    placeholder="Марка сталі (наприклад AISI 304)"
+                    value={steelGrade}
+                    onChange={(e) => setSteelGrade(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Товщина (мм)"
+                    value={thickness}
+                    onChange={(e) => setThickness(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Діаметр (мм)"
+                    value={diameter}
+                    onChange={(e) => setDiameter(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Довжина (мм)"
+                    value={length}
+                    onChange={(e) => setLength(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Вага (кг)"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                />
+
+                <select value={angle} onChange={(e) => setAngle(Number(e.target.value))}>
+                    <option value="">Кут (для колін/тройників)</option>
+                    <option value={30}>30°</option>
+                    <option value={45}>45°</option>
+                    <option value={60}>60°</option>
+                    <option value={90}>90°</option>
+                </select>
+
+                <label>
+                    <input type="checkbox" checked={revision} onChange={(e) => setRevision(e.target.checked)}/>
+                    Ревізія
+                </label>
+
+                <label>
+                    <input type="checkbox" checked={hasMesh} onChange={(e) => setHasMesh(e.target.checked)}/>
+                    Наявність сітки
+                </label>
+
+                <input
+                    type="number"
+                    placeholder="Товщина утеплювача (мм)"
+                    value={insulationThickness}
+                    onChange={(e) => setInsulationThickness(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="В наявності (шт.)"
+                    value={stock}
+                    onChange={(e) => setStock(e.target.value)}
+                />
                 <input
                     type="file"
                     accept="image/*"
