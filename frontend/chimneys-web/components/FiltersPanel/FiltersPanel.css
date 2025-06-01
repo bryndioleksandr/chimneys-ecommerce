@@ -53,3 +53,65 @@
 .filters-panel button:hover {
     background-color: #005bb5;
 }
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-header {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.25rem 0;
+    user-select: none;
+}
+
+.filter-options {
+    margin-left: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.filter-option {
+    margin-bottom: 0.25rem;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.price-filter {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.price-inputs {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.price-inputs input {
+    width: 100%;
+    max-width: 100px;
+    padding: 4px 6px;
+}
+
+.price-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.price-sliders input[type="range"] {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+

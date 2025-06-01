@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-    createProduct, getProductBySlug,
+    createProduct, getFilteredProducts, getProductBySlug,
     getProducts,
     searchByCategory,
     searchBySubCategory,
@@ -18,5 +18,6 @@ productRouter.get('/by-slug/:slug', getProductBySlug);
 productRouter.get('/search', searchProducts);
 productRouter.patch('/update-rating/:productId/:rating', updateRating);
 productRouter.patch('/update-reviews/:productId', updateReviews);
+productRouter.get('/filtered-products', getFilteredProducts);
 
 export default productRouter;

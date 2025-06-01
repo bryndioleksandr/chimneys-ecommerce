@@ -19,6 +19,7 @@ const CategoryPage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [filters, setFilters] = useState({});
     const categoryId = categoryName;
 
     console.log('params cat:', params);
@@ -43,6 +44,7 @@ const CategoryPage = () => {
                     const productData = await searchCategoryProducts(currentCategory[0]._id);
                     const filtersData = await getFiltersByCategory(currentCategory[0]._id);
                     console.log('filters received are: ', filtersData);
+                    setFilters(filtersData);
                     console.log('response products category:', productData);
                     setProducts(productData);
                     setSubcategories(data);
@@ -65,7 +67,7 @@ const CategoryPage = () => {
     return (
         <div className="category-page-wrapper">
             <aside className="sidebar-panel">
-                <FiltersPanel />
+                <FiltersPanel filters={filters} />
             </aside>
 
             <main className="content-section">
@@ -90,7 +92,7 @@ const CategoryPage = () => {
                             </Link>
                         ))
                     ) : (
-                        <p>Підкатегорій не знайдено</p>
+                        <p></p>
                     )}
                 </ul>
 

@@ -1,7 +1,6 @@
 import Product from '../models/Product.js';
 
 export const getFiltersByCategory = async (req, res) => {
-    console.log('controller filters works well');
     const { id: categoryId } = req.params;
     console.log('cate id from req is', categoryId);
     // if (!subCategoryId) subCategoryId = null;
@@ -25,7 +24,9 @@ export const getFiltersByCategory = async (req, res) => {
                 hasMesh: product.hasMesh,
                 insulationThickness: product.insulationThickness,
                 length: product.length,
-                weight: product.weight
+                weight: product.weight,
+                price: product.price,
+                stock: product.stock,
             };
 
             for (const [key, value] of Object.entries(fixedFields)) {
