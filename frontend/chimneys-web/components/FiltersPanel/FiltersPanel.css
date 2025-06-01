@@ -38,7 +38,7 @@
     outline: none;
 }
 
-.filters-panel button {
+.apply-btn{
     margin-top: 10px;
     padding: 10px;
     background-color: #0070f3;
@@ -50,7 +50,7 @@
     transition: background-color 0.3s ease;
 }
 
-.filters-panel button:hover {
+.apply-btn:hover {
     background-color: #005bb5;
 }
 
@@ -112,6 +112,28 @@ input[type="checkbox"] {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.reset-button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #eee;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.reset-button:hover {
+    background-color: #ddd;
 }
 
 

@@ -189,3 +189,36 @@
 .subcategory-item:hover {
     background-color: #ddd;
 }
+
+.sort-options-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.sort-label {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.sort-options button {
+    background-color: #f2f2f2;
+    border: none;
+    padding: 6px 12px;
+    margin-right: 6px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.sort-options button:hover {
+    background-color: #e0e0e0;
+}
+
+.sort-options button.active {
+    background-color: #0070f3;
+    color: white;
+}

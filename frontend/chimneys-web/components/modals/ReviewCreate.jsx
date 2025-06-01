@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Rating from "../ReviewStars/ReviewStars";
+import "./style.css"
 
 const ReviewForm = ({product}) => {
     const [name, setName] = useState('');
@@ -68,7 +69,8 @@ const ReviewForm = ({product}) => {
                     onChange={(e) => setComment(e.target.value)}
                     required
                 ></textarea>
-                <Rating value={rating} onChange={(val) => setRating(val)} />
+                <label>Оцінка:</label>
+                <Rating margin={15} value={rating} onChange={(val) => setRating(val)} />
                 <button type="submit">Підтвердити</button>
             </form>
         </div>

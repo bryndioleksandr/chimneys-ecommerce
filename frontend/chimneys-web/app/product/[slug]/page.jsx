@@ -131,7 +131,7 @@ const ProductPage = () => {
 
             {showReviewForm && (
                 <div className="reviewFormWrapper mt-4">
-                    <ReviewForm product={product._id} review={reviews} />
+                    <ReviewForm product={product._id} />
                 </div>
             )}
         </div>

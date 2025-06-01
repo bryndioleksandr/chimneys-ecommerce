@@ -5,7 +5,7 @@ const orderRouter = express.Router();
 const jsonParser = express.json();
 
 orderRouter.post("/make", createOrder);
-orderRouter.get("/user", getOrdersByUser);
+orderRouter.get("/user/:userId", getOrdersByUser);
 orderRouter.get("/all-orders", getOrders);
 
 export default orderRouter;

@@ -30,13 +30,17 @@ const ProductCard = ({ product }) => {
                     <p className="productCardName">{product.name}</p>
                     <div className="productCard-review-stock">
                         <div className="card-reviews-div">
-                            <StarRating rating={product.rating} />
+                            <StarRating rating={product.rating}/>
                             <span className="count-reviews">({product.reviews?.length || 0})</span>
                         </div>
-                        <span className="card-in-stock">В наявності: {product.stock}</span>
+                        {product.stock !== 0 ? (
+                            <span className="card-in-stock">В наявності: {product.stock}</span>
+                        ) : (
+                            <span className="card-in-stock" style={{ color: 'red' }}>Немає в наявності</span>
+                        )}
                     </div>
                     <div className="card-favorites">
-                        <FaHeart/>
+                    <FaHeart/>
                         <span className="card-heart">До вішлісту</span>
                     </div>
                     <div className="card-price-cart">

@@ -10,9 +10,13 @@ export default function MyOrdersPage() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const userId = localStorage.getItem("user");
-                const res = await axios.get(`http://localhost:5501/order/user/${userId}`);
-                setOrders(res.data);
+                const userRaw = localStorage.getItem("user");
+                if (userRaw) {
+                    const user = JSON.parse(userRaw);
+                    const userId = user.id;
+                    const res = await axios.get(`http://localhost:5501/order/user/${userId}`);
+                    setOrders(res.data);
+                }
             } catch (err) {
                 console.error("Помилка при завантаженні замовлень", err);
             }
@@ -49,9 +53,19 @@ export default function MyOrdersPage() {
                         {selectedOrder.products.map((item, index) => (
                             <li key={index}>
                                 {item.product?.name || "Товар"} — {item.quantity} × {item.product?.price || "?"} грн
+                                <img
+                                    src={item.product?.images[0]}
+                                    alt={item.product?.name}
+                                    style={{
+                                        width: "60px",
+                                        height: "60px",
+                                        objectFit: "cover",
+                                    }}
+                                />
                             </li>
                         ))}
                     </ul>
+
 
                     <button onClick={() => setSelectedOrder(null)}>Закрити</button>
                 </div>

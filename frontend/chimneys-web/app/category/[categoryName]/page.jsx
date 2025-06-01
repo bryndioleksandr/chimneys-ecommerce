@@ -20,9 +20,33 @@ const CategoryPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [filters, setFilters] = useState({});
+    const [sortOption, setSortOption] = useState("default");
+
     const categoryId = categoryName;
 
     console.log('params cat:', params);
+
+    const getSortedProducts = () => {
+        let sortedProducts = [...products];
+
+        switch (sortOption) {
+            case "price-asc":
+                sortedProducts.sort((a, b) => a.price - b.price);
+                break;
+            case "price-desc":
+                sortedProducts.sort((a, b) => b.price - a.price);
+                break;
+            case "rating-desc":
+                sortedProducts.sort((a, b) => b.rating - a.rating);
+                break;
+            case "newest":
+                sortedProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                break;
+            default:
+                break;
+        }
+        return sortedProducts;
+    };
 
     const getFiltersByCategory = async (categoryId) => {
         const res = await fetch(`http://localhost:5501/filters/${categoryId}`);
@@ -67,7 +91,7 @@ const CategoryPage = () => {
     return (
         <div className="category-page-wrapper">
             <aside className="sidebar-panel">
-                <FiltersPanel filters={filters} />
+                <FiltersPanel filters={filters} onFilter={setProducts}/>
             </aside>
 
             <main className="content-section">
@@ -97,11 +121,46 @@ const CategoryPage = () => {
                 </ul>
 
                 <div>
-                    <h2>Товари:</h2>
+                    <div className="sort-options-container">
+                        <span className="sort-label">Сортувати:</span>
+                        <div className="sort-options">
+                            <button
+                                className={sortOption === "default" ? "active" : ""}
+                                onClick={() => setSortOption("default")}
+                            >
+                                За замовчуванням
+                            </button>
+                            <button
+                                className={sortOption === "price-asc" ? "active" : ""}
+                                onClick={() => setSortOption("price-asc")}
+                            >
+                                Від найдешевших
+                            </button>
+                            <button
+                                className={sortOption === "price-desc" ? "active" : ""}
+                                onClick={() => setSortOption("price-desc")}
+                            >
+                                Від найдорожчих
+                            </button>
+                            <button
+                                className={sortOption === "rating-desc" ? "active" : ""}
+                                onClick={() => setSortOption("rating-desc")}
+                            >
+                                Найпопулярніші
+                            </button>
+                            <button
+                                className={sortOption === "newest" ? "active" : ""}
+                                onClick={() => setSortOption("newest")}
+                            >
+                                Новинки
+                            </button>
+                        </div>
+                    </div>
+
                     <ul className="product-list">
                         {products.length > 0 ? (
-                            products.map((product) => (
-                                <ProductCard key={product._id} product={product} />
+                            getSortedProducts().map((product) => (
+                                <ProductCard key={product._id} product={product}/>
                             ))
                         ) : (
                             <p>Товарів не знайдено ;(</p>

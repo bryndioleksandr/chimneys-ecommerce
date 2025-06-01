@@ -188,10 +188,20 @@ export const searchBySubSubCategory = async (req, res) => {
 
 export const getFilteredProducts = async (req, res) => {
     const { diameter, steelGrade, price, thickness, weight } = req.query;
-    let { hasMesh, revision } = req.query;
+    let { hasMesh, revision, stock } = req.query;
     const filters = {};
-    if(hasMesh === undefined) hasMesh = false;
-    if(revision === undefined) revision = false;
+    // if(hasMesh === undefined) hasMesh = false;
+    // if(revision === undefined) revision = false;
+    const stockValues = Array.isArray(stock) ? stock : [stock];
+
+    const includeInStock = stockValues.includes("true");
+    const includeOutOfStock = stockValues.includes("false");
+
+    if (includeInStock && !includeOutOfStock) {
+        filters.stock = { $gt: 0 };
+    } else if (!includeInStock && includeOutOfStock) {
+        filters.stock = { $lte: 0 };
+    }
     if (diameter) {
         filters.diameter = Array.isArray(diameter) ? diameter.map(Number) : [Number(diameter)];
     }
@@ -212,7 +222,9 @@ export const getFilteredProducts = async (req, res) => {
     if (weight){
         filters.weight = Array.isArray(weight) ? weight : [weight];
     }
+    if(hasMesh)
     filters.hasMesh = hasMesh;
+    if(revision)
     filters.revision = revision;
     console.log('final filters in backend:', filters);
     const products = await Product.find(filters);

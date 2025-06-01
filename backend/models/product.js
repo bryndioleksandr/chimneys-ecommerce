@@ -15,17 +15,17 @@ const ProductSchema = new mongoose.Schema({
         category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
         subCategory: {type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory'},
         subSubCategory: {type: mongoose.Schema.Types.ObjectId, ref: 'SubSubCategory'},
-        steelGrade: { type: String }, // Марка сталі (наприклад, AISI 304, 321)
+        steelGrade: { type: String, required: false  }, // Марка сталі (наприклад, AISI 304, 321)
         thickness: { type: Number, required: false }, // Товщина сталі в мм
         diameter: { type: Number, required: false }, // Діаметр труби в мм
-        length: { type: Number }, // Довжина в мм (якщо актуально)
-        weight: { type: Number }, // Вага виробу в кг (за потреби)
+        length: { type: Number, required: false  }, // Довжина в мм (якщо актуально)
+        weight: { type: Number, required: false  }, // Вага виробу в кг (за потреби)
 
         // Додаткові характеристики (для певних типів товарів)
         angle: { type: Number, enum: [30, 45, 60, 90], default: null }, // Кут (для колін, трійників)
         revision: { type: Boolean, default: false }, // Ревізія (так/ні)
         hasMesh: { type: Boolean, default: false }, // наявність сітки (для дефлекторів)
-        insulationThickness: { type: Number }, // товщина утеплювача (для двостінних виробів)
+        insulationThickness: { type: Number, required: false  }, // товщина утеплювача (для двостінних виробів)
         customAttributes: { type: Map, of: String }, // додаткові параметри у форматі ключ-значення
         stock: {type: Number, default: 0},
         rating: {type: Number, default: 0},

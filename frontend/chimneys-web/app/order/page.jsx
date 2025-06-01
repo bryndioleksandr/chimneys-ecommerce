@@ -15,7 +15,8 @@ export default function CreateOrderPage() {
         deliveryWay: "pickup",
     });
 
-    const userId = localStorage.getItem("user") || null;
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const userId = user.id;
     const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     useEffect(() => {
@@ -36,6 +37,10 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
+            console.log('userid', userId);
+            console.log('formdata:', formData);
+            console.log('prod:', products);
+            console.log('total price:', totalPrice);
             await axios.post("http://localhost:5501/order/make", {
                 user: userId,
                 ...formData,
@@ -48,6 +53,7 @@ export default function CreateOrderPage() {
             alert("Замовлення оформлено!");
             window.location.href = "/";
         } catch (err) {
+            console.log('error in create order is:', err);
             console.error(err);
             alert("Помилка при оформленні замовлення");
         }

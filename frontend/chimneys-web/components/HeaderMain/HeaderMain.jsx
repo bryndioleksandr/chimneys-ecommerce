@@ -172,6 +172,7 @@ export default function HeaderMain() {
                             </div>
                         </Link>
                         <button onClick={handleLogout}>Logout</button>
+                        <Link href="/my-orders">Мої замовлення</Link>
                     </>
                 ) : (
                     <div onClick={() => setAuthOpen(true)}>

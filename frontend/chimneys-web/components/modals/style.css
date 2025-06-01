@@ -16,7 +16,7 @@
 }
 
 .form-container input,
-.form-container select {
+.form-container select{
     display: block;
     width: 100%;
     padding: 10px;
@@ -26,6 +26,14 @@
     font-size: 16px;
 }
 
+
+.form-container label{
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding:10px;
+    font-size: 16px;
+}
 .form-container select {
     background: #f1f1f1;
 }
