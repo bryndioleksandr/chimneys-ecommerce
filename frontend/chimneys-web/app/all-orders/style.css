@@ -1,28 +1,78 @@
 .all-orders {
-    padding: 40px 20px;
-    background: #f9f9f9;
-    min-height: 100vh;
+    padding: 40px 0;
+    background-color: #f9f9f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.all-orders .container {
-    max-width: 800px;
-    margin: auto;
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-.all-orders h1 {
+h1 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    font-size: 32px;
+    color: #333;
 }
 
 .order-card {
-    background: white;
+    background-color: #fff;
     border: 1px solid #ddd;
+    border-radius: 16px;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .order-card p {
-    margin: 6px 0;
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.order-card strong {
+    color: #444;
+}
+
+.status-control {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.status-control label {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.status-control select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f4f4f4;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.status-control button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.2s ease;
+}
+
+.status-control button:hover {
+    background-color: #0056b3;
 }

@@ -2,7 +2,6 @@ import Product from '../models/Product.js';
 
 export const getFiltersByCategory = async (req, res) => {
     const { id: categoryId } = req.params;
-    console.log('cate id from req is', categoryId);
     // if (!subCategoryId) subCategoryId = null;
     // if (!subSubCategoryId) subSubCategoryId = null;
     try {
@@ -37,7 +36,6 @@ export const getFiltersByCategory = async (req, res) => {
                     filtersMap[key].add(value);
                 }
             }
-            console.log('filters map:', filtersMap);
 
             if (product.customAttributes) {
                 for (const [key, value] of product.customAttributes.entries()) {
@@ -52,7 +50,6 @@ export const getFiltersByCategory = async (req, res) => {
         const filters = {};
         for (const [key, valueSet] of Object.entries(filtersMap)) {
             filters[key] = Array.from(valueSet);
-            console.log('value set is:', valueSet);
         }
 
         res.json({ filters });
