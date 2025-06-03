@@ -1,45 +1,120 @@
 .order-form {
-    background: #f7f7f7;
-    padding: 40px 20px;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    padding: 50px 20px;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .order-form .container {
-    max-width: 500px;
-    background: #fff;
-    border-radius: 10px;
-    padding: 30px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    max-width: 600px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px 30px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .order-form h1 {
-    margin-bottom: 20px;
-    font-size: 1.8rem;
+    margin-bottom: 25px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
 }
 
 .order-form form input,
-.order-form form select {
+.order-form form select,
+.order-form form .css-13cymwt-control,
+.order-form form .css-1s2u09g-control {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border: 1px solid #d1d1d1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background-color: #fafafa;
+}
+
+.order-form form input:focus,
+.order-form form select:focus,
+.order-form form .css-13cymwt-control:focus,
+.order-form form .css-1s2u09g-control:focus {
+    border-color: #4f8df9;
+    box-shadow: 0 0 0 3px rgba(79, 141, 249, 0.2);
+    outline: none;
+}
+
+.order-form select {
+    background-color: #fff;
 }
 
 .order-form button {
     width: 100%;
-    padding: 12px;
-    background: #333;
-    color: #fff;
+    padding: 14px;
+    background: #4f8df9;
+    color: #ffffff;
     border: none;
-    border-radius: 5px;
-    font-size: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     cursor: pointer;
+    transition: background 0.3s ease-in-out;
 }
 
 .order-form button:hover {
-    background: #555;
+    background: #3b76d1;
+}
+
+.order-form p {
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #444;
+    margin: 20px 0;
+}
+
+.order-form form .css-1s2u09g-control,
+.order-form form .css-13cymwt-control {
+    border-radius: 8px;
+    border-color: #d1d1d1;
+    box-shadow: none;
+    min-height: 44px;
+    background-color: #fafafa;
+}
+
+.order-form form .css-1s2u09g-control:hover,
+.order-form form .css-13cymwt-control:hover {
+    border-color: #4f8df9;
+}
+
+.order-form form input,
+.order-form form select,
+.order-form form .react-select__control {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border: 1px solid #d1d1d1;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fafafa;
+    box-sizing: border-box;
+}
+
+/* Підгонка висоти select під input */
+.order-form form .react-select__control {
+    min-height: 44px;
+}
+
+/* Focus & hover ефекти */
+.order-form form input:focus,
+.order-form form select:focus,
+.order-form form .react-select__control--is-focused {
+    border-color: #4f8df9;
+    box-shadow: 0 0 0 3px rgba(79, 141, 249, 0.2);
+    outline: none;
 }
