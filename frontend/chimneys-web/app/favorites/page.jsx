@@ -4,6 +4,7 @@ import React, {useState, useEffect} from "react";
 import "./favorites.css";
 import axios from "axios";
 import {useSelector} from "react-redux";
+import Link from "next/link";
 
 export default function FavoritesPage() {
     const [favorites, setFavorites] = useState([]);
@@ -41,10 +42,7 @@ export default function FavoritesPage() {
 
     const removeFromFavorites = async (productId) => {
         try {
-            const res = await axios.delete(`http://localhost:5501/favorites/${userId}`, {
-                data: {productId},
-                headers: {"Content-Type": "application/json"}
-            });
+            const res = await axios.delete(`http://localhost:5501/favorites/${userId}/${productId}`);
             if (res.status === 200) {
                 setFavorites((prev) => prev.filter((item) => item._id !== productId));
             } else {
@@ -70,13 +68,21 @@ export default function FavoritesPage() {
                     {favorites.length > 0 ? (
                         favorites.map((item) => (
                             <div key={item._id} className="favorite-item">
-                                <img src={item.images[0]} alt={item.name} className="item-image"/>
-                                <div className="item-details">
-                                    <p className="item-category">{item.category}</p>
-                                    <h6 className="item-name">{item.name}</h6>
-                                </div>
-                                <p className="item-price">{item.price} грн</p>
-                                <button className="remove-item" onClick={() => removeFromFavorites(item._id)}>×</button>
+                                <Link className="product-link" href={`/product/${item.slug}`}>
+                                    <img src={item.images[0]} alt={item.name} className="item-image"/>
+                                    <div className="item-details">
+                                        <p className="item-category">{item.category.name}</p>
+                                        <h6 className="item-name">{item.name}</h6>
+                                    </div>
+                                    <p className="item-price">{item.price} грн</p>
+                                </Link>
+                                <button
+                                    className="remove-item"
+                                    onClick={() => removeFromFavorites(item._id)}
+                                    aria-label={`Видалити ${item.name} з улюблених`}
+                                >
+                                    ×
+                                </button>
                             </div>
                         ))
                     ) : (

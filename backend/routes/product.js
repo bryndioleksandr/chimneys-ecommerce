@@ -1,10 +1,10 @@
 import express from 'express';
 import {
-    createProduct, getFilteredProducts, getProductBySlug,
+    createProduct, deleteProduct, getFilteredProducts, getProductBySlug,
     getProducts,
     searchByCategory,
     searchBySubCategory,
-    searchBySubSubCategory, searchProducts, updateRating, updateReviews
+    searchBySubSubCategory, searchProducts, updateProduct, updateRating, updateReviews
 } from "../controllers/product.js";
 
 const productRouter = express.Router();
@@ -19,5 +19,7 @@ productRouter.get('/search', searchProducts);
 productRouter.patch('/update-rating/:productId/:rating', updateRating);
 productRouter.patch('/update-reviews/:productId', updateReviews);
 productRouter.get('/filtered-products', getFilteredProducts);
+productRouter.put('/update/:productId', updateProduct);
+productRouter.delete('/delete/:productId', deleteProduct);
 
 export default productRouter;

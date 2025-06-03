@@ -24,7 +24,6 @@
 }
 
 
-/* Логін */
 .login {
     display: flex;
     align-items: center;
@@ -69,18 +68,20 @@
     display: grid;
     padding: 10px;
 }
-
 .logoDiv {
+    cursor: pointer;
+    padding: 5px 25px;
     background-color: #212529;
     color: #F8F9FA;
-    width: 100%;
     text-align: center;
-    transition: transform 0.2s ease-in;
+    transition: transform 0.3s ease;
+    will-change: transform;
 }
-.logoDiv:hover{
+
+.logoDiv:hover {
     transform: translateX(5px);
-    cursor: pointer;
 }
+
 
 h3 {
     color: white;
@@ -243,4 +244,18 @@ h3 {
     font-weight: 500;
     color: #212529;
 }
+
+.logoLink {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logoLink:hover {
+    transform: translateX(5px);
+}
+
 

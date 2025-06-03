@@ -94,17 +94,56 @@ export const getProducts = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        const { productId } = req.params;
-        const updatedData = req.body;
+        upload.array("images", 5)(req, res, async (err) => {
+            if (err) return res.status(400).json({ msg: "Error uploading files" });
 
-        const updatedProduct = await Product.findByIdAndUpdate(productId, updatedData, { new: true });
+            const { productId } = req.params;
 
-        if (!updatedProduct) return res.status(404).json({ msg: "Product not found" });
-        res.status(200).json(updatedProduct);
+            if (!req.body.subCategory) req.body.subCategory = null;
+            if (!req.body.subSubCategory) req.body.subSubCategory = null;
+
+            const updatedData = req.body;
+            updatedData.slug = slugify(updatedData.name, { lower: true });
+
+            console.log('update body:', updatedData);
+            console.log('update files:', req.files);
+
+            let uploadedImages = [];
+
+            if (req.files && req.files.length > 0) {
+                try {
+                    for (const file of req.files) {
+                        const result = await new Promise((resolve, reject) => {
+                            const stream = cloudinary.uploader.upload_stream(
+                                { folder: "products" },
+                                (error, result) => (error ? reject(error) : resolve(result))
+                            );
+                            stream.end(file.buffer);
+                        });
+                        uploadedImages.push(result.secure_url);
+                    }
+
+                    const existingProduct = await Product.findById(productId);
+                    if (!existingProduct) return res.status(404).json({ msg: "Product not found" });
+
+                    updatedData.images = [...existingProduct.images, ...uploadedImages];
+                } catch (uploadError) {
+                    return res.status(500).json({ msg: "Error uploading images" });
+                }
+            }
+
+            const updatedProduct = await Product.findByIdAndUpdate(productId, updatedData, {
+                new: true,
+            });
+
+            if (!updatedProduct) return res.status(404).json({ msg: "Product not found" });
+            res.status(200).json(updatedProduct);
+        });
     } catch (err) {
         return res.status(500).json({ msg: err.message });
     }
 };
+
 
 export const updateRating = async (req, res) => {
     try {

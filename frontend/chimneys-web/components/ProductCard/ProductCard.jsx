@@ -8,16 +8,24 @@ import "./ProductCard.css";
 import { addItemToCart } from "../../redux/slices/cart";
 import { useDispatch } from "../../redux/store";
 import axios from "axios";
+import {deleteProductRequest} from "../../services/product";
+import ProductForm from "../modals/ProductCreate";
+import EditProductModal from "../modals/ProductEdit";
 
 const ProductCard = ({ product }) => {
     const dispatch = useDispatch();
     const [userId, setUserId] = useState(null);
+    const [role, setUserRole] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
 
     useEffect(() => {
         const userRaw = localStorage.getItem("user");
         if (userRaw) {
             const user = JSON.parse(userRaw);
             setUserId(user.id);
+            setUserRole(user.role);
         }
     }, []);
 
@@ -51,33 +59,74 @@ const ProductCard = ({ product }) => {
 
     return (
         <li className="product-item" key={product._id}>
-            <Link className="product-link" href={`/product/${product.slug}`}>
-                <div className="productCardContainer">
-                    <img src={product.images[0]} alt={product.name} />
+            <div className="productCardContainer">
+                <Link className="product-link" href={`/product/${product.slug}`}>
+                    <img src={product.images[0]} alt={product.name}/>
                     <p className="productCardName">{product.name}</p>
                     <div className="productCard-review-stock">
                         <div className="card-reviews-div">
-                            <StarRating rating={product.rating} />
+                            <StarRating rating={product.rating}/>
                             <span className="count-reviews">({product.reviews?.length || 0})</span>
                         </div>
                         {product.stock !== 0 ? (
                             <span className="card-in-stock">В наявності: {product.stock}</span>
                         ) : (
-                            <span className="card-in-stock" style={{ color: 'red' }}>Немає в наявності</span>
+                            <span className="card-in-stock" style={{color: 'red'}}>Немає в наявності</span>
                         )}
                     </div>
-                    <div className="card-favorites" onClick={(e) => { e.preventDefault(); handleAddToFavorites(); }} style={{cursor: 'pointer'}}>
-                        <FaHeart />
-                        <span className="card-heart">До вішлісту</span>
-                    </div>
+                </Link>
+
+                <div className="card-favorites" onClick={handleAddToFavorites}>
+                    <FaHeart/>
+                    <span className="card-heart">До вішлісту</span>
+                </div>
+
+                <div className="card-bottom">
                     <div className="card-price-cart">
                         <span className="card-price">{product.price}₴</span>
-                        <FaShoppingCart onClick={() => handleAddToCart(product)} />
+                        <FaShoppingCart onClick={() => handleAddToCart(product)}/>
                     </div>
+                    {role === "user" && (
+                        <div className="admin-buttons">
+                            <button onClick={() => {
+                                setSelectedProduct(product);
+                                setIsModalOpen(true);
+                            }}>Оновити</button>
+                            <button onClick={() => {
+                                if (confirm("Ви впевнені, що хочете видалити цей товар?")) {
+                                    deleteProductRequest(product._id);
+                                }
+                            }}>Видалити
+                            </button>
+                        </div>
+                    )}
                 </div>
-            </Link>
+
+                <EditProductModal
+                    isOpen={isModalOpen}
+                    product={selectedProduct}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={(updatedProduct) => {
+                        setSelectedProduct(updatedProduct);
+                    }}
+                />
+                {/*{isEditing && <ProductForm />}*/}
+
+                {/*{role === "admin" && (*/}
+                {/*    <div className="admin-buttons">*/}
+                {/*        <button onClick={() => setIsEditing(true)}>Оновити</button>*/}
+                {/*        <button onClick={() => {*/}
+                {/*            if (confirm("Ви впевнені, що хочете видалити цей товар?")) {*/}
+                {/*                deleteProductRequest(product.id);*/}
+                {/*            }*/}
+                {/*        }}>Видалити*/}
+                {/*        </button>*/}
+                {/*    </div>*/}
+                {/*)}*/}
+            </div>
         </li>
     );
+
 };
 
 export default ProductCard;

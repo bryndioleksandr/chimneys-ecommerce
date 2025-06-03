@@ -1,9 +1,6 @@
 import HeaderTop from "../components/HeaderTop/HeaderTop";
 import HeaderMain from "@/components/HeaderMain/HeaderMain";
-import BannerSection from "@/components/BannerSection/BannerSection";
-import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
 import Footer from "@/components/Footer/Footer";
-import Head from "next/head";
 import "../styles/globals.css";
 import ClientProvider from "@/app/ClientProvider";
 

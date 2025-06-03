@@ -98,13 +98,13 @@ export default function HeaderMain() {
     return (
         <div className="headerMain">
             <div className="wrapperLeft">
+                <Link href="/" className="logoLink">
                 <div className="logoDiv">
-                    <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
                         <div className="logoImg">
                             <h3>ДИМАРІ</h3>
                         </div>
-                    </Link>
                 </div>
+                </Link>
                 <div className="categories">
                     <CatalogDropdown />
                 </div>

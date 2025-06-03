@@ -107,3 +107,45 @@
     color: #1976D2;
     transform: scale(1.05);
 }
+
+.admin-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.admin-buttons button {
+    flex: 1;
+    padding: 8px 12px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-buttons button:hover {
+    background-color: #f57c00;
+    transform: scale(1.05);
+}
+
+.productCardName {
+    min-height: 48px; /* або щось близько цього */
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.productCardContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+
+
