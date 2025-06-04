@@ -46,6 +46,26 @@
     color: #007bff;
 }
 
+.sign-out, .sign-out span {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #212529;
+    font-weight: bold;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.sign-out svg{
+    font-size: 24px;
+    transition: color 0.3s ease;
+}
+
+
+.sign-out:hover svg {
+    color: #007bff;
+}
+
 .goods {
     display: flex;
     gap: 30px;

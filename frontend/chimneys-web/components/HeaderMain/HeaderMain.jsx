@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import "./HeaderMain.css";
-import { FaHeart, FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
+import { FaHeart, FaShoppingCart, FaUser, FaSearch, FaSignOutAlt } from "react-icons/fa";
 import Link from "next/link";
 import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
 import AuthModal from "@/components/AuthModal/AuthModal";
@@ -171,7 +171,10 @@ export default function HeaderMain() {
                                 <span>{user.name}</span>
                             </div>
                         </Link>
-                        <button onClick={handleLogout}>Logout</button>
+                        <div className="sign-out">
+                        <FaSignOutAlt onClick={() => handleLogout()} />
+                            <span>Вийти</span>
+                        </div>
                         <Link href="/my-orders">Мої замовлення</Link>
                     </>
                 ) : (

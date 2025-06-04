@@ -1,11 +1,14 @@
 import Product from '../models/Product.js';
 
 export const getFiltersByCategory = async (req, res) => {
-    const { id: categoryId } = req.params;
+    const { categoryId, subCategoryId, subSubCategoryId } = req.params;
     // if (!subCategoryId) subCategoryId = null;
     // if (!subSubCategoryId) subSubCategoryId = null;
+    console.log('cat id:', categoryId);
+    console.log('subcat id:', subCategoryId);
+    console.log('subsubcat id:', subSubCategoryId);
     try {
-        const products = await Product.find({ category: categoryId });
+        const products = await Product.find({ category: categoryId, subCategory: subCategoryId ?? null, subSubCategory: subSubCategoryId ?? null });
 
         if (!products.length) {
             return res.json({ filters: {} });
@@ -52,6 +55,7 @@ export const getFiltersByCategory = async (req, res) => {
             filters[key] = Array.from(valueSet);
         }
 
+        console.log('filters are : ', filters);
         res.json({ filters });
 
     } catch (err) {

@@ -128,6 +128,7 @@ export const findSubCategoryByName  = async (req, res) => {
     }
 };
 
+//finds subcategories by category name in general
 export const findSubCategoryBySlug  = async (req, res) => {
     try {
         const { slug } = req.query;
@@ -146,3 +147,15 @@ export const findSubCategoryBySlug  = async (req, res) => {
         return res.status(500).json({ msg: err.message });
     }
 };
+
+//finds one subcategory
+export const searchBySlug = async (req, res) => {
+    try {
+        const subCategory = await SubCategory.find({ slug: req.params.slug});
+        console.log('onecat back:', subCategory);
+        res.json(subCategory);
+    }
+    catch(error) {
+        return res.status(500).json({ msg: error.message });
+    }
+}

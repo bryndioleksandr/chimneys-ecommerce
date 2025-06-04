@@ -133,3 +133,33 @@ export const findSubSubCategoryByName  = async (req, res) => {
         return res.status(500).json({ msg: err.message });
     }
 };
+
+export const findSubSubCategoryBySlug  = async (req, res) => {
+    try {
+        const { slug } = req.query;
+        if (!slug) return res.status(400).json({ msg: "slug is required" });
+        console.log('slug find subsubcat: ', slug);
+
+        const subCategory = await SubCategory.findOne({ slug: slug });
+        if (!subCategory) return res.status(404).json({ msg: "subCategory not found" });
+        console.log('sub cat from cat', subCategory);
+
+        console.log('_id isisis', subCategory._id);
+        const subSubCategories = await SubSubCategory.find({ subCategory: subCategory._id });
+        console.log('result find is:', subSubCategories);
+        res.status(200).json(subSubCategories);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+};
+
+export const searchBySlug = async (req, res) => {
+    try {
+        const subSubCategory = await SubSubCategory.find({ slug: req.params.slug});
+        console.log('onecat back:', subSubCategory);
+        res.json(subSubCategory);
+    }
+    catch(error) {
+        return res.status(500).json({ msg: error.message });
+    }
+}

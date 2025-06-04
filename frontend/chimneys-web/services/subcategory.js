@@ -35,6 +35,18 @@ export const searchSubCategoriesBySlug = async (slug) => {
     }
 };
 
+export const searchOneSubCategoryBySlug = async (slug) => {
+    try {
+        const response = await fetch(`${API_BASE}/subcategory/search-slug-one/${slug}`);
+        console.log('res onecat:', response);
+        if (!response.ok) throw new Error('Failed to fetch subcategory');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching subcategory:', error);
+        throw error;
+    }
+}
+
 
 export const createSubCategory = async (subCategoryData) => {
     try {

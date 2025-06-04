@@ -3,6 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 import Product from "../models/product.js";
 import slugify from "slugify";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -207,10 +208,13 @@ export const searchByCategory = async (req, res) => {
 
 export const searchBySubCategory = async (req, res) => {
     try {
-        console.log('params:', req.params);
-        const products = await Product.find({ subCategory: req.params.subCategoryId, subSubCategory: null });
+        const subCategoryId = new mongoose.Types.ObjectId(req.params.subCategoryId);
+        console.log('params search products subCat:', req.params);
+        const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null });
+        console.log('searched products are:', products);
         res.json(products);
-    } catch (err) {
+    } catch (err){
+        console.log('error is', err);
         res.status(500).json({ error: 'Server error' });
     }
 };

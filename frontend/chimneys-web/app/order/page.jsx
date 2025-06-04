@@ -162,37 +162,59 @@ export default function CreateOrderPage() {
                         isSearchable={false}
                     />
 
-                    <AsyncSelect
-                        classNamePrefix="react-select"
-                        cacheOptions
-                        defaultOptions={formattedSomeWarehouses}
-                        loadOptions={async (inputValue) => {
-                            if (!formData.address) return [];
-                            if (!inputValue || inputValue.length < 1) return [];
+                    {formData.deliveryWay === "nova_poshta_branch" && (
+                        <AsyncSelect
+                            classNamePrefix="react-select"
+                            cacheOptions
+                            loadOptions={async (inputValue) => {
+                                if (!formData.address) return [];
+                                if (!inputValue || inputValue.length < 1) return [];
 
-                            try {
-                                const allWarehouses = await fetchWarehouses(formData.address);
-                                return allWarehouses
-                                    .filter(w => w.Description.toLowerCase().includes(inputValue.toLowerCase()))
-                                    .map(wh => ({
-                                        value: wh.Description,
-                                        label: wh.Description
-                                    }));
-                            } catch (error) {
-                                console.error("Помилка при завантаженні відділень:", error);
-                                return [];
+                                try {
+                                    const allWarehouses = await fetchWarehouses(formData.address);
+                                    return allWarehouses
+                                        .filter(w => w.Description.toLowerCase().includes(inputValue.toLowerCase()))
+                                        .map(wh => ({
+                                            value: wh.Description,
+                                            label: wh.Description
+                                        }));
+                                } catch (error) {
+                                    console.error("Помилка при завантаженні відділень:", error);
+                                    return [];
+                                }
+                            }}
+                            onChange={(selectedOption) =>
+                                setFormData({ ...formData, city: selectedOption?.value || "" })
                             }
-                        }}
-                        onChange={(selectedOption) =>
-                            setFormData({ ...formData, city: selectedOption?.value || "" })
-                        }
-                        placeholder="Оберіть відділення..."
-                        isClearable
-                    />
+                            placeholder="Оберіть відділення Нової пошти..."
+                            isClearable
+                        />
+                    )}
 
+                    {formData.deliveryWay === "nova_poshta_courier" && (
+                        <input
+                            type="text"
+                            name="city"
+                            placeholder="Введіть адресу доставки (вулиця, будинок, квартира)"
+                            required
+                            onChange={handleChange}
+                        />
+                    )}
 
-                    <input type="text" name="postalCode" placeholder="Поштовий індекс" required
-                           onChange={handleChange}/>
+                    {formData.deliveryWay === "ukrposhta" && (
+                        <input
+                            type="text"
+                            name="city"
+                            placeholder="Введіть адресу відділення УкрПошти вручну"
+                            required
+                            onChange={handleChange}
+                        />
+                    )}
+
+                    {formData.deliveryWay === "pickup" && (
+                        <p>Адреса самовивозу: м. Київ, вул. Хрещатик, 10</p>
+                    )}
+
 
                     <p>Загальна сума: {totalPrice} грн</p>
                     <button type="submit">Підтвердити замовлення</button>
