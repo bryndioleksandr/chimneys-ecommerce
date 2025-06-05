@@ -221,8 +221,9 @@ export const searchBySubCategory = async (req, res) => {
 
 export const searchBySubSubCategory = async (req, res) => {
     try {
+        const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subCategoryId);
         console.log('params:', req.params);
-        const products = await Product.find({ subSubCategory: req.params.subSubCategoryId });
+        const products = await Product.find({ subSubCategory: subSubCategoryId });
         res.json(products);
     } catch (err) {
         res.status(500).json({ error: 'Server error' });

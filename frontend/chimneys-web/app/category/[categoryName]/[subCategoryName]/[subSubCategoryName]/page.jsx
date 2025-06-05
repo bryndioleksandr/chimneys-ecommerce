@@ -1,33 +1,28 @@
 "use client";
 
-import {useParams, useRouter} from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
-    searchOneSubCategoryBySlug, searchSubCategoriesBySlug,
-    searchSubCategoryBySlug,
-    searchSubCategoryProducts,
-} from "../../../../services/subcategory";
-import ProductCard from "../../../../components/ProductCard/ProductCard";
-import FiltersPanel from "../../../../components/FiltersPanel/FiltersPanel";
-import "../../category.css";
-import {searchCategoryBySlug} from "../../../../services/category";
-import Link from "next/link";
-import {searchSubSubCategoriesBySlug} from "../../../../services/subsubcategory";
+    searchOneSubCategoryBySlug
+} from "../../../../../services/subcategory";
+import ProductCard from "../../../../../components/ProductCard/ProductCard";
+import FiltersPanel from "../../../../../components/FiltersPanel/FiltersPanel";
+import "../../../category.css";
+import {searchCategoryBySlug} from "../../../../../services/category";
 
-const SubCategoryPage = () => {
-    const { categoryName, subCategoryName } = useParams();
-    console.log('category name from params:', categoryName);
-    const router = useRouter();
+import {searchOneSubSubCategoryBySlug, searchSubSubCategoryProducts} from "../../../../../services/subsubcategory";
+
+const SubSubCategoryPage = () => {
+    const { categoryName, subCategoryName, subSubCategoryName } = useParams();
     const [products, setProducts] = useState([]);
     const [filters, setFilters] = useState({});
     const [sortOption, setSortOption] = useState("default");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [subSubCategories, setSubSubCategories] = useState([]);
 
-    const getFiltersByCategory = async (categoryId, subCategoryId) => {
-        console.log('filters id:', categoryId, "and as well ", subCategoryId);
-        const res = await fetch(`http://localhost:5501/filters/${categoryId}/${subCategoryId}`);
+    const getFiltersByCategory = async (categoryId, subCategoryId, subSubCategoryId) => {
+        console.log('filters id:', categoryId, "and as well ", subCategoryId, "and as well ", subSubCategoryId);
+        const res = await fetch(`http://localhost:5501/filters/${categoryId}/${subCategoryId}/${subSubCategoryId}`);
         if (!res.ok) throw new Error('Не вдалося отримати фільтри');
         const data = await res.json();
         return data.filters;
@@ -38,19 +33,22 @@ const SubCategoryPage = () => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const subSubCategories = await searchSubSubCategoriesBySlug(subCategoryName);
-                setSubSubCategories(subSubCategories);
-                const subCategoryData = await searchOneSubCategoryBySlug(subCategoryName);
-                const subCategoryId = subCategoryData[0]._id;
-                const productData = await searchSubCategoryProducts(subCategoryId);
+                console.log('subsubname:', subSubCategoryName);
+                const subSubCategoryData = await searchOneSubSubCategoryBySlug(subSubCategoryName);
+                const subSubCategoryId = subSubCategoryData[0]._id;
+                console.log('subsub data:', subSubCategoryData);
+                console.log('subsub id:', subSubCategoryId);
+                const productData = await searchSubSubCategoryProducts(subSubCategoryId);
                 const parentCategory = await searchCategoryBySlug(categoryName);
+                const parentSubCategory = await searchOneSubCategoryBySlug(subCategoryName);
                 console.log('parent category:', parentCategory);
                 console.log('parent category id:', parentCategory[0]._id);
-                const filtersData = await getFiltersByCategory(parentCategory[0]._id, subCategoryId);
+                const filtersData = await getFiltersByCategory(parentCategory[0]._id, parentSubCategory[0]._id, subSubCategoryId);
 
                 setProducts(productData);
                 setFilters(filtersData);
             } catch (err) {
+                console.log('error subsub:', err);
                 setError("Не вдалося завантажити дані.");
             } finally {
                 setLoading(false);
@@ -81,10 +79,6 @@ const SubCategoryPage = () => {
         return sorted;
     };
 
-    const handleSubSubcategoryClick = (subsubcategory) => {
-        router.push(`/category/${categoryName}/${subCategoryName}/${subsubcategory.slug}`);
-    };
-
     return (
         <div className="category-page-wrapper">
             <aside className="sidebar-panel">
@@ -92,30 +86,10 @@ const SubCategoryPage = () => {
             </aside>
 
             <main className="content-section">
-                <h1>Підкатегорія: {subCategoryName}</h1>
+                <h1>Підпідкатегорія: {subSubCategoryName}</h1>
                 {loading && <p>Завантаження...</p>}
                 {error && <p style={{color: "red"}}>{error}</p>}
 
-                <ul className="subcategory-list">
-                    {subSubCategories.length > 0 ? (
-                        subSubCategories.map((subsubcategory) => (
-                            <Link
-                                className="subsubcategory-item"
-                                href={`/category/${categoryName}/${subCategoryName}/${subsubcategory.slug}`}
-                                key={subsubcategory._id}
-                            >
-                                <li
-                                    onClick={() => handleSubSubcategoryClick(subsubcategory)}
-                                    className="subsubcategory-item"
-                                >
-                                    {subsubcategory.name}
-                                </li>
-                            </Link>
-                        ))
-                    ) : (
-                        <p></p>
-                    )}
-                </ul>
 
                 <div className="sort-options-container">
                     <span className="sort-label">Сортувати:</span>
@@ -150,4 +124,4 @@ const SubCategoryPage = () => {
     );
 };
 
-export default SubCategoryPage;
+export default SubSubCategoryPage;

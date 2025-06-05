@@ -3,6 +3,7 @@ import HeaderMain from "@/components/HeaderMain/HeaderMain";
 import Footer from "@/components/Footer/Footer";
 import "../styles/globals.css";
 import ClientProvider from "@/app/ClientProvider";
+import {ToastContainer} from "react-toastify";
 
 // @ts-ignore
 export default function RootLayout({children}) {
@@ -17,6 +18,7 @@ export default function RootLayout({children}) {
                 <HeaderMain/>
                 {children}
                 <Footer/>
+                <ToastContainer />
             </ClientProvider>
             </body>
         </html>

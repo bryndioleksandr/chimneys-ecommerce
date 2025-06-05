@@ -155,8 +155,9 @@ export const findSubSubCategoryBySlug  = async (req, res) => {
 
 export const searchBySlug = async (req, res) => {
     try {
-        const subSubCategory = await SubSubCategory.find({ slug: req.params.slug});
-        console.log('onecat back:', subSubCategory);
+        console.log('params for one subsub:', req.query);
+        const subSubCategory = await SubSubCategory.find({ slug: req.query.slug});
+        console.log('onesubsubcat back:', subSubCategory);
         res.json(subSubCategory);
     }
     catch(error) {

@@ -31,17 +31,24 @@ export const createCategory = [
 
             if (req.file) {
                 try {
-                    const result = await cloudinary.uploader.upload_stream(
-                        { resource_type: "image", folder: "categories" },
-                        (error, result) => {
-                            if (error) throw error;
-                            imagePath = result.secure_url;
-                            cloudinaryPublicId = result.public_id;
-                            return result;
-                        }
-                    ).end(req.file.buffer);
+                    const streamUpload = (buffer) => {
+                        return new Promise((resolve, reject) => {
+                            const stream = cloudinary.uploader.upload_stream(
+                                { resource_type: "image", folder: "categories" },
+                                (error, result) => {
+                                    if (error) return reject(error);
+                                    resolve(result);
+                                }
+                            );
+                            stream.end(buffer);
+                        });
+                    };
 
+                    const result = await streamUpload(req.file.buffer);
+                    imagePath = result.secure_url;
+                    cloudinaryPublicId = result.public_id;
 
+                    console.log('cat image is:', imagePath);
                 } catch (error) {
                     console.error("Error uploading image to Cloudinary:", error);
                     return res.status(500).json({ msg: "Error uploading image" });
@@ -51,7 +58,7 @@ export const createCategory = [
             const newCategory = new Category({
                 name: name,
                 slug: categorySlug,
-                image: imagePath,
+                img: imagePath,
                 cloudinaryPublicId,
             });
 

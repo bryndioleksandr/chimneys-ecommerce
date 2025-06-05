@@ -17,7 +17,14 @@ export const loginUser = async (email, password) => {
         mode: "cors",
         body: JSON.stringify({ email, password }),
     });
-    return await response.json();
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.msg || "Щось пішло не так");
+    }
+
+    return data;
 };
 
 export const logoutUser = async () => {

@@ -9,6 +9,7 @@ import orderRouter from "./order.js";
 import filtersRouter from "./filters.js";
 import reviewRouter from "./review.js";
 import favoritesRouter from "./favorites.js";
+import {verifyEmail} from "../controllers/verifyEmail.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -23,6 +24,7 @@ router.use('/order', orderRouter);
 router.use('/filters', filtersRouter);
 router.use('/reviews', reviewRouter);
 router.use('/favorites', favoritesRouter);
+router.post('/verify-email', verifyEmail);
 
 
 export default router;

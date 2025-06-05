@@ -3,16 +3,25 @@ import axios from 'axios';
 
 const CategoryForm = () => {
     const [name, setName] = useState('');
-    const [img, setImg] = useState('');
+    const [imgFile, setImgFile] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('categoryImage', imgFile); // 'img' має відповідати імені поля у Multer
+
         try {
-            const response = await axios.post('http://localhost:5501/category/category', {
-                name,
-                img
-            });
+            const response = await axios.post(
+                'http://localhost:5501/category/category',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
             alert('Категорія додана!');
         } catch (error) {
             console.error('Помилка при додаванні категорії:', error);
@@ -32,10 +41,10 @@ const CategoryForm = () => {
                     required
                 />
                 <input
-                    type="text"
-                    placeholder="URL зображення"
-                    value={img}
-                    onChange={(e) => setImg(e.target.value)}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImgFile(e.target.files[0])}
+                    required
                 />
                 <button type="submit">Додати категорію</button>
             </form>

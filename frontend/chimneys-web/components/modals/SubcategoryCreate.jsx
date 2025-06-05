@@ -4,18 +4,27 @@ import axios from 'axios';
 const SubCategoryForm = () => {
     const [category, setCategory] = useState('');
     const [name, setName] = useState('');
-    const [img, setImg] = useState('');
+    const [imgFile, setImgFile] = useState(null);
     const [categories, setCategories] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append('category', category);
+        formData.append('name', name);
+        formData.append('subcategoryImage', imgFile);
+
         try {
-            const response = await axios.post('http://localhost:5501/subcategory/subcategory', {
-                category,
-                name,
-                img
-            });
+            const response = await axios.post(
+                'http://localhost:5501/subcategory/subcategory',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
             alert('Підкатегорія додана!');
         } catch (error) {
             console.error('Помилка при додаванні підкатегорії:', error);
@@ -51,10 +60,10 @@ const SubCategoryForm = () => {
                     required
                 />
                 <input
-                    type="text"
-                    placeholder="URL зображення"
-                    value={img}
-                    onChange={(e) => setImg(e.target.value)}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImgFile(e.target.files[0])}
+                    required
                 />
                 <button type="submit">Додати підкатегорію</button>
             </form>

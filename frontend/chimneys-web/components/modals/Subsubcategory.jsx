@@ -4,18 +4,27 @@ import axios from 'axios';
 const SubSubCategoryForm = () => {
     const [subCategory, setSubCategory] = useState('');
     const [name, setName] = useState('');
-    const [img, setImg] = useState('');
+    const [imgFile, setImgFile] = useState(null);
     const [subCategories, setSubCategories] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append('subCategory', subCategory);
+        formData.append('name', name);
+        formData.append('subsubcategoryImage', imgFile);
+
         try {
-            const response = await axios.post('http://localhost:5501/subsubcategory/subsubcategory', {
-                subCategory,
-                name,
-                img
-            });
+            const response = await axios.post(
+                'http://localhost:5501/subsubcategory/subsubcategory',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
             alert('Підпідкатегорія додана!');
         } catch (error) {
             console.error('Помилка при додаванні підпідкатегорії:', error);
@@ -24,7 +33,6 @@ const SubSubCategoryForm = () => {
     };
 
     useEffect(() => {
-        // Fetch subcategories for select dropdown
         axios.get('http://localhost:5501/subcategory/subcategories')
             .then(response => {
                 setSubCategories(response.data);
@@ -52,10 +60,10 @@ const SubSubCategoryForm = () => {
                     required
                 />
                 <input
-                    type="text"
-                    placeholder="URL зображення"
-                    value={img}
-                    onChange={(e) => setImg(e.target.value)}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImgFile(e.target.files[0])}
+                    required
                 />
                 <button type="submit">Додати підпідкатегорію</button>
             </form>
