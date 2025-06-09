@@ -208,8 +208,9 @@ export const searchByCategory = async (req, res) => {
 
 export const searchBySubCategory = async (req, res) => {
     try {
-        const subCategoryId = new mongoose.Types.ObjectId(req.params.subCategoryId);
+        const subCategoryId = new mongoose.Types.ObjectId(req.params.subcategoryid);
         console.log('params search products subCat:', req.params);
+        console.log('converted id subcat is:', subCategoryId);
         const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null });
         console.log('searched products are:', products);
         res.json(products);
@@ -221,7 +222,7 @@ export const searchBySubCategory = async (req, res) => {
 
 export const searchBySubSubCategory = async (req, res) => {
     try {
-        const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subCategoryId);
+        const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subsubcategoryid);
         console.log('params:', req.params);
         const products = await Product.find({ subSubCategory: subSubCategoryId });
         res.json(products);
@@ -231,13 +232,22 @@ export const searchBySubSubCategory = async (req, res) => {
 };
 
 export const getFilteredProducts = async (req, res) => {
-    const { diameter, steelGrade, price, thickness, weight } = req.query;
+    const { diameter, steelGrade, price, thickness, weight, categoryId, subCategoryId, subSubCategoryId } = req.query;
     let { hasMesh, revision, stock } = req.query;
     const filters = {};
     // if(hasMesh === undefined) hasMesh = false;
     // if(revision === undefined) revision = false;
     const stockValues = Array.isArray(stock) ? stock : [stock];
 
+    if (categoryId) {
+        filters.category = categoryId;
+    }
+    if (subCategoryId && subCategoryId !== 'undefined') {
+        filters.subCategory = subCategoryId;
+    }
+    if (subSubCategoryId && subSubCategoryId !== 'undefined') {
+        filters.subSubCategory = subSubCategoryId;
+    }
     const includeInStock = stockValues.includes("true");
     const includeOutOfStock = stockValues.includes("false");
 

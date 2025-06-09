@@ -16,7 +16,7 @@ const FILTER_LABELS = {
     angle: "Кут(°)"
 };
 
-const FiltersPanel = ({ filters = {}, onFilter }) => {
+const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSubCategoryId }) => {
     const [selectedFilters, setSelectedFilters] = useState({});
     const [collapsed, setCollapsed] = useState({});
     const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
@@ -77,6 +77,15 @@ const FiltersPanel = ({ filters = {}, onFilter }) => {
             price: [selectedPrice.min, selectedPrice.max],
         };
         const queryParams = new URLSearchParams();
+        if (categoryId) {
+            queryParams.append('categoryId', categoryId);
+        }
+        if (subCategoryId !== undefined && subCategoryId !== null) {
+            queryParams.append('subCategoryId', subCategoryId);
+        }
+        if (subSubCategoryId !== undefined && subSubCategoryId !== null) {
+            queryParams.append('subSubCategoryId', subSubCategoryId);
+        }
         for (const key in finalFilters) {
             const value = finalFilters[key];
             if (Array.isArray(value)) {
@@ -112,6 +121,15 @@ const FiltersPanel = ({ filters = {}, onFilter }) => {
             price: [resetPrice.min, resetPrice.max],
         };
         const queryParams = new URLSearchParams();
+        if (categoryId) {
+            queryParams.append('categoryId', categoryId);
+        }
+        if (subCategoryId !== undefined && subCategoryId !== null) {
+            queryParams.append('subCategoryId', subCategoryId);
+        }
+        if (subSubCategoryId !== undefined && subSubCategoryId !== null) {
+            queryParams.append('subSubCategoryId', subSubCategoryId);
+        }
         for (const key in finalFilters) {
             const value = finalFilters[key];
             if (Array.isArray(value)) {

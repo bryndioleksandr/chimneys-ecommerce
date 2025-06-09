@@ -6,7 +6,8 @@ import "./style.css";
 import {fetchCities, fetchWarehouses} from "../../services/novapost";
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function CreateOrderPage() {
@@ -24,6 +25,10 @@ export default function CreateOrderPage() {
     const [someCities, setSomeCities] = useState([]);
     const [someWarehouses, setSomeWarehouses] = useState([]);
 
+    const validatePhoneNumber = (number) => {
+        const phoneRegex = /^(\+380|0)\d{9}$/;
+        return phoneRegex.test(number);
+    };
 
     useEffect(() => {
         const fetchAndLogCities = async () => {
@@ -96,16 +101,17 @@ export default function CreateOrderPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!validatePhoneNumber(formData.phoneNumber)) {
+            toast.error("Невірний номер телефону. Приклад: +380XXXXXXXXX або 0XXXXXXXXX");
+            return;
+        }
+
         try {
             const products = cartItems.map(item => ({
                 product: item._id,
                 quantity: item.quantity,
             }));
 
-            console.log('userid', userId);
-            console.log('formdata:', formData);
-            console.log('prod:', products);
-            console.log('total price:', totalPrice);
             await axios.post("http://localhost:5501/order/make", {
                 user: userId,
                 ...formData,
@@ -115,14 +121,16 @@ export default function CreateOrderPage() {
             });
 
             localStorage.removeItem("cart");
-            alert("Замовлення оформлено!");
-            window.location.href = "/";
+            toast.success("Замовлення оформлено!");
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 2000);
         } catch (err) {
-            console.log('error in create order is:', err);
-            console.error(err);
-            alert("Помилка при оформленні замовлення");
+            console.error('error in create order is:', err);
+            toast.error("Помилка при оформленні замовлення");
         }
     };
+
 
     return (
         <section className="order-form">
@@ -166,6 +174,7 @@ export default function CreateOrderPage() {
                         <AsyncSelect
                             classNamePrefix="react-select"
                             cacheOptions
+                            defaultOptions={formattedSomeWarehouses}
                             loadOptions={async (inputValue) => {
                                 if (!formData.address) return [];
                                 if (!inputValue || inputValue.length < 1) return [];
@@ -220,6 +229,7 @@ export default function CreateOrderPage() {
                     <button type="submit">Підтвердити замовлення</button>
                 </form>
             </div>
+            <ToastContainer position="top-right" autoClose={3000} />
         </section>
     );
 }

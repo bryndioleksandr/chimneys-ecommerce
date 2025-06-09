@@ -16,6 +16,7 @@ const CategoryPage = () => {
     const router = useRouter();
     const {categoryName} = params;
     const [subcategories, setSubcategories] = useState([]);
+    const [currentCat, setCurrentCat] = useState({});
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -59,6 +60,7 @@ const CategoryPage = () => {
         const fetchSubcategories = async () => {
             const currentCategory = await searchCategoryBySlug(categoryId);
             console.log('current category:', currentCategory);
+            setCurrentCat(currentCategory[0]);
             console.log('_id:', currentCategory[0]._id);
             if (categoryId) {
                 setLoading(true);
@@ -91,11 +93,11 @@ const CategoryPage = () => {
     return (
         <div className="category-page-wrapper">
             <aside className="sidebar-panel">
-                <FiltersPanel filters={filters} onFilter={setProducts}/>
+                <FiltersPanel filters={filters} onFilter={setProducts} categoryId={currentCat._id} subCategoryId={null} subSubCategoryId={null}/>
             </aside>
 
             <main className="content-section">
-                <h1>Категорія: {categoryId}</h1>
+                <h1>{currentCat.name}</h1>
                 {loading && <p>Завантаження...</p>}
                 {error && <p style={{ color: "red" }}>{error}</p>}
 

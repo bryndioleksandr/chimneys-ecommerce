@@ -24,6 +24,9 @@ const SubCategoryPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [subSubCategories, setSubSubCategories] = useState([]);
+    const [parentCat, setParentCat] = useState('');
+    const [currentSubCat, setCurrentSubCat] = useState('');
+
 
     const getFiltersByCategory = async (categoryId, subCategoryId) => {
         console.log('filters id:', categoryId, "and as well ", subCategoryId);
@@ -42,10 +45,13 @@ const SubCategoryPage = () => {
                 setSubSubCategories(subSubCategories);
                 const subCategoryData = await searchOneSubCategoryBySlug(subCategoryName);
                 const subCategoryId = subCategoryData[0]._id;
+                setCurrentSubCat(subCategoryId);
+                console.log('subcat id:', subCategoryId);
                 const productData = await searchSubCategoryProducts(subCategoryId);
                 const parentCategory = await searchCategoryBySlug(categoryName);
                 console.log('parent category:', parentCategory);
                 console.log('parent category id:', parentCategory[0]._id);
+                setParentCat(parentCategory[0]._id);
                 const filtersData = await getFiltersByCategory(parentCategory[0]._id, subCategoryId);
 
                 setProducts(productData);
@@ -88,7 +94,7 @@ const SubCategoryPage = () => {
     return (
         <div className="category-page-wrapper">
             <aside className="sidebar-panel">
-                <FiltersPanel filters={filters} onFilter={setProducts} />
+                <FiltersPanel filters={filters} onFilter={setProducts} categoryId={parentCat} subCategoryId={currentSubCat}/>
             </aside>
 
             <main className="content-section">
