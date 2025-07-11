@@ -16,10 +16,17 @@ const OrderSchema = new mongoose.Schema({
     ],
     totalPrice: { type: Number, required: true },
     status: { type: String, enum: ['processing', 'shipped', 'delivered', 'cancelled', 'returned'], default: 'processing' },
-    country: {type: String, required: true},
     city: {type: String, required: true},
     postalCode: {type: String, required: false},
-    address: { type: String, required: true }
+    address: { type: String, required: true },
+    paymentMethod: {
+        type: String,
+        enum: ['liqpay', 'on_delivery_place', 'bank_transfer'],
+        default: 'liqpay',
+        required: true
+    },
+    isPaid: { type: Boolean, default: false },
+    paidAt: { type: Date }
 }, { timestamps: true });
 
 const Order = mongoose.model("Order", OrderSchema);

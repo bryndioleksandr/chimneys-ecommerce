@@ -1,4 +1,3 @@
-import Link from "next/link";
 import BannerSection from "@/components/BannerSection/BannerSection";
 import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
 import StoreDescription from "@/components/StoreDescription/StoreDescription";

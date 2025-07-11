@@ -2,7 +2,9 @@ const API_BASE = 'http://localhost:5501';
 
 export const fetchCategories = async () => {
     try {
-        const response = await fetch(`${API_BASE}/category/categories`);
+        const response = await fetch(`${API_BASE}/category/categories`, {
+            credentials: 'include'
+        });
         if (!response.ok) throw new Error('Failed to fetch categories');
         return await response.json();
     } catch (error) {

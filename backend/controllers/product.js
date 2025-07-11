@@ -1,5 +1,5 @@
 import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
+import {v2 as cloudinary} from "cloudinary";
 import dotenv from "dotenv";
 import Product from "../models/product.js";
 import slugify from "slugify";
@@ -46,6 +46,10 @@ export const createProduct = async (req, res) => {
                     return res.status(500).json({ msg: "Error uploading images" });
                 }
             }
+
+            const price = parseFloat(productData.price);
+            const discount = parseFloat(productData.discount || 0);
+            productData.discountedPrice = Math.round(price - (price * discount / 100));
 
             const newProduct = new Product({
                 ...productData,
@@ -132,6 +136,9 @@ export const updateProduct = async (req, res) => {
                     return res.status(500).json({ msg: "Error uploading images" });
                 }
             }
+            const price = parseFloat(updatedData.price);
+            const discount = parseFloat(updatedData.discount || 0);
+            updatedData.discountedPrice = Math.round(price - (price * discount / 100));
 
             const updatedProduct = await Product.findByIdAndUpdate(productId, updatedData, {
                 new: true,

@@ -1,37 +1,32 @@
-import { backUrl, getUser } from "./config/config";
+export const backUrl = "http://localhost:5501";
 
 export const refreshToken = async () => {
-    return new Promise( (res, rej) => {
+    console.log("🔄 Refresh token started...");
+
+    return new Promise((resolve, reject) => {
         fetch(`${backUrl}/user/refreshToken`, {
             method: 'POST',
-            mode: 'cors',
-            credentials: 'include'
+            credentials: 'include',
         })
-            .then(response => response.json())
-            .then(data => {
-                const user = getUser();
+            .then(async response => {
+                const data = await response.json();
+                console.log("🔁 Refresh token response:", data);
+
                 if (data.msg === 'Token updated successful') {
-                    console.log(data);
-                    res();
-                }
-                if (data.message === 'Invalid access token') {
-                    if (user) {
-                        localStorage.clear();
-                        location.reload();
-                    }
-                }
-                if (data.message === 'Authorization error') {
-                    rej("Please, LogIN", data);
+                    resolve();
+                } else if (data.message === 'Invalid access token') {
+                    localStorage.clear();
+                    location.reload();
+                } else if (data.message === 'Authorization error') {
+                    reject("Authorization error");
+                } else {
+                    reject("Unknown refresh response");
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                rej(error);
+            .catch(err => {
+                console.error("⛔ Refresh token error:", err);
+                reject(err);
             });
-    })
-}
-
-refreshToken();
-setInterval(refreshToken, 3 * 60 * 1000);
-
+    });
+};
 

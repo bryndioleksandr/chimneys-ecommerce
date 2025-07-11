@@ -92,13 +92,13 @@ export default function CartPage() {
                             <p>Товари: {cartItems.length}</p>
                             <p>{totalPrice} грн</p>
                         </div>
-                        <label>Доставка</label>
-                        <select className="shipping-options">
-                            <option value="1">Стандартна доставка - 50 грн</option>
-                            <option value="2">Експрес-доставка - 100 грн</option>
-                        </select>
-                        <label>Купон</label>
-                        <input type="text" placeholder="Введіть код знижки" className="discount-code"/>
+                        {/*<label>Доставка</label>*/}
+                        {/*<select className="shipping-options">*/}
+                        {/*    <option value="1">Стандартна доставка - 50 грн</option>*/}
+                        {/*    <option value="2">Експрес-доставка - 100 грн</option>*/}
+                        {/*</select>*/}
+                        {/*<label>Купон</label>*/}
+                        {/*<input type="text" placeholder="Введіть код знижки" className="discount-code"/>*/}
                         <hr/>
                         <div className="summary-item total">
                             <p>Загальна сума</p>

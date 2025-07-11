@@ -120,6 +120,7 @@ export const userRegister = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
     try {
+        console.log('refreshing token back');
         const refreshToken = req.cookies.refreshToken;
 
         if (!refreshToken)  return res.status(401).json({ msg: "Помилка оновлення токена. Refreshtoken відсутній" });
@@ -134,7 +135,7 @@ export const refreshToken = async (req, res) => {
 
                 const accessToken = jwt.sign({ _id: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 
-                res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+                res.cookie('accessToken', accessToken, { httpOnly: true, secure: false, sameSite: 'lax' });
                 res.status(200).json({ msg: 'Token updated successful' });
 
             })
@@ -166,8 +167,9 @@ export const userLogin = async (req, res) => {
 
         const accessToken = createAccessToken({_id: user._id});
         const refreshToken = createRefreshToken({_id: user._id});
-        res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+        console.log('Tokens are:', accessToken, "and refresh:", refreshToken);
+        res.cookie('accessToken', accessToken, { httpOnly: true, secure:false, sameSite: 'lax' });
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure:false, sameSite: 'lax' });
 
         res.status(200).json({
             message: "User login successfully!",

@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import multer from "multer";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
+import SubCategory from "../models/subCategory.js";
+import SubSubCategory from "../models/subSubCategory.js";
 
 dotenv.config();
 
@@ -84,11 +86,13 @@ export const removeCategory = async (req, res) => {
     const category_id = req.params.id;
     try {
         const category = await Category.findById(category_id);
-        if (category.cloudinaryPublicId) {
-            await cloudinary.uploader.destroy(category.cloudinaryPublicId);
-        }
+        // if (category.cloudinaryPublicId) {
+        //     await cloudinary.uploader.destroy(category.cloudinaryPublicId);
+        // }
 
         await Product.deleteMany({ category: category_id });
+        await SubCategory.deleteMany({ category: category_id });
+        await SubSubCategory.deleteMany({ category: category_id });
         await Category.findByIdAndDelete(category_id);
         res.status(200).json({ msg: "Category and its products successfully deleted" });
     } catch (error) {

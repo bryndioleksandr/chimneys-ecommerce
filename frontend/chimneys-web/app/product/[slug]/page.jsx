@@ -7,6 +7,10 @@ import './style.css';
 import ImageGallery from 'react-image-gallery';
 import ReviewForm from "../../../components/modals/ReviewCreate";
 import StarRating from "../../../components/StarRating/StarRating";
+import LiqPayButton from "../../../components/LiqPayBtn/LiqPayBtn";
+import {addItemToCart} from "../../../redux/slices/cart";
+import axios from "axios";
+import {useDispatch} from "../../../redux/store";
 
 const ProductPage = () => {
     const { slug } = useParams();
@@ -15,6 +19,45 @@ const ProductPage = () => {
     const [loading, setLoading] = useState(true);
     const [showReviewForm, setShowReviewForm] = useState(false);
 
+    const dispatch = useDispatch();
+    const [userId, setUserId] = useState(null);
+    const [role, setUserRole] = useState(null);
+
+    useEffect(() => {
+        const userRaw = localStorage.getItem("user");
+        if (userRaw) {
+            const user = JSON.parse(userRaw);
+            setUserId(user.id);
+            setUserRole(user.role);
+        }
+    }, []);
+
+    const handleAddToCart = (product) => {
+        dispatch(addItemToCart(product));
+        alert('Товар додано до кошика! ' + product.name);
+    };
+
+    const handleAddToFavorites = async () => {
+        if (!userId) {
+            alert("Будь ласка, увійдіть, щоб додати улюблені.");
+            alert(`id is ${userId}`);
+            return;
+        }
+        try {
+            const res = await axios.post(`http://localhost:5501/favorites/${userId}`, {
+                productId: product._id
+            });
+
+            if (res.status === 200) {
+                alert("Товар додано у улюблені!");
+            } else {
+                alert("Помилка при додаванні у улюблені");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Не вдалося додати улюблені");
+        }
+    };
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -59,6 +102,8 @@ const ProductPage = () => {
         thumbnail: url,
     })) || [];
 
+
+
     return (
         <div className="container mx-auto px-4 py-8 productContainer">
             <div className="flex flex-col md:flex-row gap-6">
@@ -74,9 +119,8 @@ const ProductPage = () => {
                     <h1 className="font-bold">{product.name}</h1>
                     <p className="productPrice">{product.price} грн</p>
                     <div className="flex gap-4">
-                        <button className="buyButton px-4 py-2">Купити
-                        </button>
-                        <button className="wishlistButton px-4 py-2 rounded">Додати до вішлисту</button>
+                        <button onClick={() => handleAddToCart(product)} className="buyButton px-4 py-2">Купити</button>
+                        <button onClick={handleAddToFavorites} className="wishlistButton px-4 py-2 rounded">Додати до вішлисту</button>
                     </div>
                     <p className="productMeta">Код товару: {product.productCode}</p>
                     <div className="space-y-2">

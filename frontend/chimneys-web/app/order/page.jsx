@@ -14,16 +14,18 @@ export default function CreateOrderPage() {
     const [cartItems, setCartItems] = useState([]);
     const [formData, setFormData] = useState({
         phoneNumber: "",
-        country: "",
         city: "",
         postalCode: "",
         address: "",
         deliveryWay: "pickup",
+        paymentMethod: "on_delivery_place"
     });
     const [cities, setCities] = useState([]);
     const [warehouses, setWarehouses] = useState([]);
     const [someCities, setSomeCities] = useState([]);
     const [someWarehouses, setSomeWarehouses] = useState([]);
+    const [liqpayFormHtml, setLiqpayFormHtml] = useState("");
+
 
     const validatePhoneNumber = (number) => {
         const phoneRegex = /^(\+380|0)\d{9}$/;
@@ -98,6 +100,40 @@ export default function CreateOrderPage() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //
+    //     if (!validatePhoneNumber(formData.phoneNumber)) {
+    //         toast.error("Невірний номер телефону. Приклад: +380XXXXXXXXX або 0XXXXXXXXX");
+    //         return;
+    //     }
+    //
+    //     try {
+    //         const products = cartItems.map(item => ({
+    //             product: item._id,
+    //             quantity: item.quantity,
+    //         }));
+    //
+    //         await axios.post("http://localhost:5501/order/make", {
+    //             user: userId,
+    //             ...formData,
+    //             deliveryWay: formData.deliveryWay,
+    //             paymentMethod: formData.paymentMethod,
+    //             products,
+    //             totalPrice,
+    //         });
+    //
+    //         localStorage.removeItem("cart");
+    //         toast.success("Замовлення оформлено!");
+    //         setTimeout(() => {
+    //             window.location.href = "/";
+    //         }, 2000);
+    //     } catch (err) {
+    //         console.error('error in create order is:', err);
+    //         toast.error("Помилка при оформленні замовлення");
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -112,24 +148,40 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
-            await axios.post("http://localhost:5501/order/make", {
+            const orderResponse = await axios.post("http://localhost:5501/order/make", {
                 user: userId,
                 ...formData,
                 deliveryWay: formData.deliveryWay,
+                paymentMethod: formData.paymentMethod,
                 products,
                 totalPrice,
             });
 
             localStorage.removeItem("cart");
-            toast.success("Замовлення оформлено!");
-            setTimeout(() => {
-                window.location.href = "/";
-            }, 2000);
+
+            const productNames = cartItems.map(item => item.name).join(", ");
+
+
+            if (formData.paymentMethod === "liqpay") {
+                const liqpayRes = await axios.post("http://localhost:5501/liqpay/create-payment", {
+                    amount: totalPrice,
+                    description: `Оплата замовлення "${productNames}"`,
+                    orderId: orderResponse.data._id,
+                });
+
+                setLiqpayFormHtml(liqpayRes.data.html);
+            } else {
+                toast.success("Замовлення оформлено!");
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 2000);
+            }
         } catch (err) {
-            console.error('error in create order is:', err);
+            console.error("error in create order is:", err);
             toast.error("Помилка при оформленні замовлення");
         }
     };
+
 
 
     return (
@@ -139,7 +191,6 @@ export default function CreateOrderPage() {
                 <form onSubmit={handleSubmit}>
                     <input type="text" name="phoneNumber" placeholder="Номер телефону" required
                            onChange={handleChange}/>
-                    <input type="text" name="country" placeholder="Країна" required onChange={handleChange}/>
                     {/*<input type="text" name="city" placeholder="Місто" required onChange={handleChange}/>*/}
                     <AsyncSelect
                         classNamePrefix="react-select"
@@ -224,9 +275,28 @@ export default function CreateOrderPage() {
                         <p>Адреса самовивозу: м. Київ, вул. Хрещатик, 10</p>
                     )}
 
-
+                    <Select
+                        classNamePrefix="react-select"
+                        options={[
+                            { value: "liqpay", label: "Оплата карткою онлайн (LiqPay)" },
+                            { value: "on_delivery_place", label: "Оплата при отриманні" },
+                            { value: "bank_transfer", label: "Банківський переказ" },
+                        ]}
+                        defaultValue={{ value: "on_delivery_place", label: "Оплата при отриманні" }}
+                        onChange={(selectedOption) =>
+                            setFormData({ ...formData, paymentMethod: selectedOption?.value || "on_delivery_place" })
+                        }
+                        placeholder="Оберіть спосіб оплати..."
+                        isSearchable={false}
+                    />
                     <p>Загальна сума: {totalPrice} грн</p>
                     <button type="submit">Підтвердити замовлення</button>
+                    {liqpayFormHtml && (
+                        <div
+                            dangerouslySetInnerHTML={{ __html: liqpayFormHtml }}
+                            style={{ marginTop: "20px" }}
+                        />
+                    )}
                 </form>
             </div>
             <ToastContainer position="top-right" autoClose={3000} />

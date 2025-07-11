@@ -105,12 +105,10 @@
     box-sizing: border-box;
 }
 
-/* Підгонка висоти select під input */
 .order-form form .react-select__control {
     min-height: 44px;
 }
 
-/* Focus & hover ефекти */
 .order-form form input:focus,
 .order-form form select:focus,
 .order-form form .react-select__control--is-focused {
@@ -119,25 +117,21 @@
     outline: none;
 }
 
-/* Фіксуємо фон для повідомлень Toastify */
 .Toastify__toast {
     background-color: #fff !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
     border-radius: 8px !important;
 }
 
-/* Фіксуємо тіло повідомлення */
 .Toastify__toast-body {
     background-color: transparent !important;
     color: #333;
 }
 
-/* Іконка */
 .Toastify__toast-icon {
     color: #ff4e4e;
 }
 
-/* Контейнер */
 .Toastify__toast-container {
     z-index: 9999;
 }

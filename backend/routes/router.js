@@ -9,6 +9,7 @@ import orderRouter from "./order.js";
 import filtersRouter from "./filters.js";
 import reviewRouter from "./review.js";
 import favoritesRouter from "./favorites.js";
+import liqpayRouter from "./payment.js";
 import {verifyEmail} from "../controllers/verifyEmail.js";
 
 const router = express.Router();
@@ -25,6 +26,7 @@ router.use('/filters', filtersRouter);
 router.use('/reviews', reviewRouter);
 router.use('/favorites', favoritesRouter);
 router.post('/verify-email', verifyEmail);
+router.use('/liqpay', liqpayRouter);
 
 
 export default router;

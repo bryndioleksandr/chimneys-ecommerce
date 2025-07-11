@@ -6,10 +6,12 @@ import {
     searchBySubCategory,
     searchBySubSubCategory, searchProducts, updateProduct, updateRating, updateReviews
 } from "../controllers/product.js";
+import {verifyToken} from "../middleware/auth.js";
+import cookieParser from "cookie-parser";
 
 const productRouter = express.Router();
 
-productRouter.get('/products', getProducts);
+productRouter.get('/products', cookieParser(), verifyToken, getProducts);
 productRouter.post('/product', createProduct);
 productRouter.get('/by-category/:categoryid', searchByCategory);
 productRouter.get('/by-subcategory/:subcategoryid', searchBySubCategory);

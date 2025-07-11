@@ -4,6 +4,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./style.css";
 
+const deliveryWayMap = {
+    nova_poshta_branch: "Нова Пошта (відділення)",
+    nova_poshta_courier: "Нова Пошта (кур'єр)",
+    ukrposhta: "Укрпошта",
+    pickup: "Самовивіз"
+};
+
 export default function AllOrdersPage() {
     const [orders, setOrders] = useState([]);
 
@@ -48,7 +55,7 @@ export default function AllOrdersPage() {
                         <p><strong>Дата створення:</strong> {new Date(order.createdAt).toLocaleString()}</p>
                         <p><strong>Користувач:</strong> {order.user?.email || "Гість"}</p>
                         <p><strong>Номер телефону:</strong> {order.phoneNumber}</p>
-                        <p><strong>Спосіб доставки:</strong> {order.deliveryWay}</p>
+                        <p><strong>Спосіб доставки:</strong> {deliveryWayMap[order.deliveryWay] || order.deliveryWay}</p>
                         <p><strong>Адреса:</strong> {`${order.address}, ${order.city}, ${order.country}, ${order.postalCode}`}</p>
 
                         <div className="products-list">

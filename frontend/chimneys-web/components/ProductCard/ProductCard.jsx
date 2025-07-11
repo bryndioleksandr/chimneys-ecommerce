@@ -56,10 +56,19 @@ const ProductCard = ({ product }) => {
         }
     };
 
+    const hasDiscount = product.discount > 0;
+    const discountedPrice = hasDiscount
+        ? Math.round(product.price * (1 - product.discount / 100))
+        : product.price;
 
     return (
         <li className="product-item" key={product._id}>
             <div className="productCardContainer">
+                {product.discount > 0 && (
+                    <div className="discount-badge">
+                        -{product.discount}%
+                    </div>
+                )}
                 <Link className="product-link" href={`/product/${product.slug}`}>
                     <img src={product.images[0]} alt={product.name}/>
                     <p className="productCardName">{product.name}</p>
@@ -83,7 +92,14 @@ const ProductCard = ({ product }) => {
 
                 <div className="card-bottom">
                     <div className="card-price-cart">
-                        <span className="card-price">{product.price}₴</span>
+                        {hasDiscount ? (
+                            <div className="card-price-discount">
+                                <span className="original-price">{product.price}₴</span>
+                                <span className="discounted-price">{discountedPrice}₴</span>
+                            </div>
+                        ) : (
+                            <span className="card-price">{product.price}₴</span>
+                        )}
                         <FaShoppingCart onClick={() => handleAddToCart(product)}/>
                     </div>
                     {role === "user" && (
@@ -92,7 +108,7 @@ const ProductCard = ({ product }) => {
                                 setSelectedProduct(product);
                                 setIsModalOpen(true);
                             }}>Оновити</button>
-                            <button onClick={() => {
+                            <button style={{backgroundColor:"#C80106"}} onClick={() => {
                                 if (confirm("Ви впевнені, що хочете видалити цей товар?")) {
                                     deleteProductRequest(product._id);
                                 }

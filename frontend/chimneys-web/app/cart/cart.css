@@ -1,29 +1,50 @@
+:root {
+    --main-bg: #f0f2f5;
+    --card-bg: #ffffff;
+    --accent-color: #4a90e2;
+    --text-color: #333;
+    --light-text: #888;
+    --shadow-light: rgba(255, 255, 255, 0.6);
+    --shadow-dark: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--main-bg);
+    color: var(--text-color);
+}
+
 .shopping-cart {
-    background-color: #f5f5f5;
-    min-height: 100vh;
     padding: 40px 20px;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    min-height: 100vh;
 }
 
 .container {
     width: 100%;
-    max-width: 1000px;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light);
     padding: 30px;
+    transition: all 0.3s ease;
 }
 
 .title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 10px;
+    font-weight: 700;
 }
 
 .items-count {
-    font-size: 1rem;
-    color: #666;
+    font-size: 1.1rem;
+    color: var(--light-text);
     margin-bottom: 20px;
 }
 
@@ -31,105 +52,153 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 0;
+    padding: 20px 0;
     border-bottom: 1px solid #eee;
+    transition: background 0.3s;
+}
+
+.cart-item:hover {
+    background: #f9f9f9;
+    border-radius: 10px;
 }
 
 .item-image {
     width: 80px;
     height: 80px;
-    border-radius: 5px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .item-details {
     flex-grow: 1;
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 .item-category {
     font-size: 0.85rem;
-    color: #888;
+    color: var(--light-text);
 }
 
 .item-name {
-    font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 5px;
 }
 
 .quantity-controls {
     display: flex;
     align-items: center;
+    gap: 5px;
+}
+
+.btn {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.2s ease;
+}
+
+.btn:hover {
+    background: #2b6ecb;
 }
 
 .quantity-input {
     width: 50px;
     text-align: center;
-    margin: 0 5px;
+    padding: 5px;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.item-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding:10px;
 }
 
 .remove-item {
     background: none;
     border: none;
-    color: #ff3333;
-    font-size: 1.5rem;
+    color: #ff4d4d;
+    font-size: 1.7rem;
     cursor: pointer;
+    transition: color 0.2s ease;
 }
 
 .remove-item:hover {
-    color: #ff0000;
+    color: #d90000;
 }
 
 .summary {
-    margin-top: 30px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
+    margin-top: 40px;
+    padding: 25px;
+    background: #f1f3f6;
+    border-radius: 15px;
+    box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
 }
 
 .summary h3 {
-    color: black;
+    color: var(--text-color);
+    font-size: 1.5rem;
     margin-bottom: 20px;
 }
 
 .summary-item {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
     font-size: 1rem;
-    margin: 5px 0;
 }
 
 .total {
-    font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
 }
 
 .checkout-btn {
     width: 100%;
-    padding: 12px;
-    background: #333;
-    color: white;
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--accent-color);
+    color: #fff;
     border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 1.1rem;
-    border-radius: 5px;
-    margin-top: 15px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
 }
 
 .checkout-btn:hover {
-    background: #555;
+    background: #3c78d8;
+    transform: translateY(-2px);
 }
 
 .shipping-options,
 .discount-code {
     width: 100%;
     padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
     margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #ddd;
 }
 
 label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
     font-weight: 600;
+    margin-top: 10px;
+    display: block;
+    font-size: 0.95rem;
 }

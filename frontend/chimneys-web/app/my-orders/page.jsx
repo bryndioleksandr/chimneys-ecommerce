@@ -3,6 +3,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./style.css";
 
+const deliveryWayMap = {
+    nova_poshta_branch: "Нова Пошта (відділення)",
+    nova_poshta_courier: "Нова Пошта (кур'єр)",
+    ukrposhta: "Укрпошта",
+    pickup: "Самовивіз"
+};
+
+
 export default function MyOrdersPage() {
     const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -44,7 +52,7 @@ export default function MyOrdersPage() {
                     <h2>Деталі замовлення</h2>
                     <p><strong>Статус:</strong> {selectedOrder.status}</p>
                     <p><strong>Дата створення:</strong> {new Date(selectedOrder.createdAt).toLocaleString()}</p>
-                    <p><strong>Спосіб доставки:</strong> {selectedOrder.deliveryWay}</p>
+                    <p><strong>Спосіб доставки:</strong> {deliveryWayMap[selectedOrder.deliveryWay] || selectedOrder.deliveryWay}</p>
                     <p><strong>Адреса:</strong> {selectedOrder.address}, {selectedOrder.city}, {selectedOrder.country}, {selectedOrder.postalCode}</p>
                     <p><strong>Загальна сума:</strong> {selectedOrder.totalPrice} грн</p>
 

@@ -165,15 +165,17 @@ export default function HeaderMain() {
             <div className="headerActions">
                 {role === "user" ? (
                     <>
+                        <div className="log-in-out">
                         <Link href="/admin">
                             <div className="login">
-                                <FaUser/>
+                                <FaUser />
                                 <span>{user.name}</span>
                             </div>
                         </Link>
                         <div className="sign-out">
                         <FaSignOutAlt onClick={() => handleLogout()} />
                             <span>Вийти</span>
+                        </div>
                         </div>
                         <Link href="/my-orders">Мої замовлення</Link>
                     </>
