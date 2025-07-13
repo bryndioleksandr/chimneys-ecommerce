@@ -9,6 +9,12 @@ export const refreshToken = async () => {
             credentials: 'include',
         })
             .then(async response => {
+                if (response.status === 401) {
+                    console.log("ℹ️ No refresh token, probably not logged in.");
+                    resolve();
+                    return;
+                }
+
                 const data = await response.json();
                 console.log("🔁 Refresh token response:", data);
 

@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from "react";
+import {useState} from "react";
 import CategoryForm from "../../components/modals/CategoryCreate";
 import ProductForm from "../../components/modals/ProductCreate";
 import SubcategoryForm from "../../components/modals/SubcategoryCreate";
 import SubsubcategoryForm from "../../components/modals/Subsubcategory";
+import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
 import './style.css';
 
 export default function AdminPage() {
@@ -29,11 +30,35 @@ export default function AdminPage() {
                 <button onClick={handleSubcategoryFormToggle}>Додати підкатегорію</button>
                 <button onClick={handleSubsubcategoryFormToggle}>Додати підпідкатегорію</button>
             </div>
+            <div className="panel-update">
+                <p>Оновити або видалити</p>
+                <div className="update-btns">
+                    <a href='/admin/update/category'>Категорії товарів</a>
+                    <a href='/admin/update/subcategory'>Підкатегорії товарів</a>
+                    <a href='/admin/update/subsubcategory'>Підпідкатегорії товарів</a>
+                </div>
+            </div>
 
-            {isCategoryFormVisible && <CategoryForm />}
-            {isProductFormVisible && <ProductForm />}
-            {isSubcategoryFormVisible && <SubcategoryForm />}
-            {isSubsubcategoryFormVisible && <SubsubcategoryForm />}
+            {isCategoryFormVisible && (
+                <ModalWrapper onClose={handleCategoryFormToggle}>
+                    <CategoryForm />
+                </ModalWrapper>
+            )}
+            {isProductFormVisible && (
+                <ModalWrapper onClose={handleProductFormToggle}>
+                    <ProductForm />
+                </ModalWrapper>
+            )}
+            {isSubcategoryFormVisible && (
+                <ModalWrapper onClose={handleSubcategoryFormToggle}>
+                    <SubcategoryForm />
+                </ModalWrapper>
+            )}
+            {isSubsubcategoryFormVisible && (
+                <ModalWrapper onClose={handleSubsubcategoryFormToggle}>
+                    <SubsubcategoryForm />
+                </ModalWrapper>
+            )}
         </div>
     );
 }

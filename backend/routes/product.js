@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 
 const productRouter = express.Router();
 
-productRouter.get('/products', cookieParser(), verifyToken, getProducts);
+productRouter.get('/products', cookieParser(), getProducts);
 productRouter.post('/product', createProduct);
 productRouter.get('/by-category/:categoryid', searchByCategory);
 productRouter.get('/by-subcategory/:subcategoryid', searchBySubCategory);

@@ -3,7 +3,7 @@ import {
     createSubSubCategory,
     findSubSubCategoryByName,
     findSubSubCategoryBySlug,
-    getSubSubCategories, searchBySlug
+    getSubSubCategories, removeSubSubCategory, searchBySlug, updateSubSubCategory
 } from "../controllers/subSubCategory.js";
 
 const subSubCategoryRouter = express.Router();
@@ -13,6 +13,8 @@ subSubCategoryRouter.post('/subsubcategory', createSubSubCategory);
 subSubCategoryRouter.get("/search", findSubSubCategoryByName);
 subSubCategoryRouter.get("/search-all", findSubSubCategoryBySlug);
 subSubCategoryRouter.get("/search-one", searchBySlug);
+subSubCategoryRouter.patch('/update/:id', updateSubSubCategory);
+subSubCategoryRouter.delete('/:id', removeSubSubCategory)
 
 
 export default subSubCategoryRouter;

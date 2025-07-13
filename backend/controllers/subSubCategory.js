@@ -5,6 +5,7 @@ import slugify from "slugify";
 import SubSubCategory from "../models/subSubCategory.js";
 import SubCategory from "../models/subCategory.js";
 import Category from "../models/category.js";
+import Product from "../models/product.js";
 
 dotenv.config();
 
@@ -17,7 +18,6 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Create subSubCategory
 export const createSubSubCategory = async (req, res) => {
     try {
         upload.single("subsubcategoryImage")(req, res, async (err) => {
@@ -60,7 +60,6 @@ export const createSubSubCategory = async (req, res) => {
     }
 };
 
-// Get all subSubCategories
 export const getSubSubCategories = async (req, res) => {
     try {
         const allSubSubCategories = await SubSubCategory.find().populate("subCategory");
@@ -70,49 +69,67 @@ export const getSubSubCategories = async (req, res) => {
     }
 };
 
-// Edit subSubCategory
-export const editSubSubCategory = async (req, res) => {
-    try {
-        upload.single("subsubcategoryImage")(req, res, async (err) => {
-            if (err) return res.status(400).json({ msg: "Error uploading file" });
+export const updateSubSubCategory = [
+    upload.single("subsubcategoryImage"),
+    async (req, res) => {
+        const { id } = req.params;
 
-            const { subSubCategoryId, name, subCategory, oldImagePath } = req.body;
-            const updatedData = { name, subCategory };
+        try {
+            const subSubCategory = await SubSubCategory.findById(id);
+            if (!subSubCategory) return res.status(404).json({ msg: "SubSubCategory not found" });
+
+            const { name } = req.body;
+
+            let updatedFields = {};
+
+            if (name) {
+                updatedFields.name = name;
+                updatedFields.slug = slugify(name, { lower: true, strict: true });
+
+                const exists = await SubSubCategory.findOne({ slug: updatedFields.slug, _id: { $ne: id } });
+                if (exists) return res.status(400).json({ msg: "Another subsubcategory with the same name already exists" });
+            }
 
             if (req.file) {
-                try {
-                    const result = await cloudinary.uploader.upload_stream(
-                        { folder: "subsubcategories" },
-                        (error, result) => {
-                            if (error) return res.status(500).json({ msg: "Image upload failed" });
-                            updatedData.img = result.secure_url;
-                            cloudinary.uploader.destroy(oldImagePath);
-                            SubSubCategory.findByIdAndUpdate(subSubCategoryId, updatedData)
-                                .then(() => res.status(200).json({ msg: "Subsubcategory updated successfully" }))
-                                .catch(err => res.status(500).json({ msg: err.message }));
-                        }
-                    );
-                    result.end(req.file.buffer);
-                } catch (error) {
-                    return res.status(500).json({ msg: "Error updating image" });
+                if (subSubCategory.cloudinaryPublicId) {
+                    await cloudinary.uploader.destroy(subSubCategory.cloudinaryPublicId);
                 }
-            } else {
-                await SubSubCategory.findByIdAndUpdate(subSubCategoryId, updatedData);
-                res.status(200).json({ msg: "Subsubcategory updated successfully" });
-            }
-        });
-    } catch (error) {
-        return res.status(500).json({ msg: error.message });
-    }
-};
 
-// Delete subSubCategory
+                const streamUpload = (buffer) => {
+                    return new Promise((resolve, reject) => {
+                        const stream = cloudinary.uploader.upload_stream(
+                            { resource_type: "image", folder: "subsubcategories" },
+                            (error, result) => {
+                                if (error) return reject(error);
+                                resolve(result);
+                            }
+                        );
+                        stream.end(buffer);
+                    });
+                };
+
+                const result = await streamUpload(req.file.buffer);
+                updatedFields.img = result.secure_url;
+                updatedFields.cloudinaryPublicId = result.public_id;
+            }
+
+            const updatedSubSubCategory = await SubSubCategory.findByIdAndUpdate(id, updatedFields, { new: true });
+
+            res.status(200).json(updatedSubSubCategory);
+        } catch (error) {
+            console.error("Помилка при оновленні підпідкатегорії:", error);
+            return res.status(500).json({ msg: "Не вдалося оновити підпідкатегорію" });
+        }
+    },
+];
+
 export const removeSubSubCategory = async (req, res) => {
     try {
         const { subSubCategoryId, imagePath } = req.body;
         if (imagePath) await cloudinary.uploader.destroy(imagePath);
+        await Product.deleteMany({ subSubCategory: subSubCategoryId });
         await SubSubCategory.findByIdAndDelete(subSubCategoryId);
-        res.status(200).json({ msg: "Subsubcategory successfully deleted" });
+        res.status(200).json({ msg: "SubSubCategory successfully deleted" });
     } catch (error) {
         return res.status(500).json({ msg: error.message });
     }

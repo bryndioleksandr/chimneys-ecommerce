@@ -73,6 +73,61 @@ export const createCategory = [
     },
 ];
 
+export const updateCategory = [
+    upload.single("categoryImage"),
+    async (req, res) => {
+        const { id } = req.params;
+
+        try {
+            const category = await Category.findById(id);
+            if (!category) return res.status(404).json({ msg: "Category not found" });
+
+            const { name } = req.body;
+
+            let updatedFields = {};
+
+            if (name) {
+                updatedFields.name = name;
+                updatedFields.slug = slugify(name, { lower: true, strict: true });
+
+                const exists = await Category.findOne({ slug: updatedFields.slug, _id: { $ne: id } });
+                if (exists) return res.status(400).json({ msg: "Another category with the same name already exists" });
+            }
+
+            if (req.file) {
+                if (category.cloudinaryPublicId) {
+                    await cloudinary.uploader.destroy(category.cloudinaryPublicId);
+                }
+
+                const streamUpload = (buffer) => {
+                    return new Promise((resolve, reject) => {
+                        const stream = cloudinary.uploader.upload_stream(
+                            { resource_type: "image", folder: "categories" },
+                            (error, result) => {
+                                if (error) return reject(error);
+                                resolve(result);
+                            }
+                        );
+                        stream.end(buffer);
+                    });
+                };
+
+                const result = await streamUpload(req.file.buffer);
+                updatedFields.img = result.secure_url;
+                updatedFields.cloudinaryPublicId = result.public_id;
+            }
+
+            const updatedCategory = await Category.findByIdAndUpdate(id, updatedFields, { new: true });
+
+            res.status(200).json(updatedCategory);
+        } catch (error) {
+            console.error("Помилка при оновленні категорії:", error);
+            return res.status(500).json({ msg: "Не вдалося оновити категорію" });
+        }
+    },
+];
+
+
 export const getCategories = async (req, res) => {
     try {
         const allCategories = await Category.find();
@@ -86,9 +141,9 @@ export const removeCategory = async (req, res) => {
     const category_id = req.params.id;
     try {
         const category = await Category.findById(category_id);
-        // if (category.cloudinaryPublicId) {
-        //     await cloudinary.uploader.destroy(category.cloudinaryPublicId);
-        // }
+        if (category.cloudinaryPublicId) {
+            await cloudinary.uploader.destroy(category.cloudinaryPublicId);
+        }
 
         await Product.deleteMany({ category: category_id });
         await SubCategory.deleteMany({ category: category_id });

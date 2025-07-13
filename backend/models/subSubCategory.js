@@ -22,6 +22,9 @@ const subSubCategorySchema = new mongoose.Schema(
         img: {
             type: String
         },
+        cloudinaryPublicId: {
+            type: String
+        },
         slug: {
             type: String,
             unique: true,

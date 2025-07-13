@@ -2,18 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './style.css'
+import '../CategoryManager/style.css';
 
-const CategoryManager = () => {
-    const [categories, setCategories] = useState([]);
-    const [editingCategory, setEditingCategory] = useState(null);
+const SubCategoryManager = () => {
+    const [subcategories, setSubCategories] = useState([]);
+    const [editingSubCategory, setEditingSubCategory] = useState(null);
     const [newName, setNewName] = useState('');
     const [newImage, setNewImage] = useState(null);
 
-    const fetchCategories = async () => {
+    const fetchSubCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:5501/category/categories');
-            setCategories(response.data);
+            const response = await axios.get('http://localhost:5501/subcategory/subcategories');
+            setSubCategories(response.data);
         } catch (error) {
             console.error('Помилка при отриманні категорій:', error);
         }
@@ -22,8 +22,8 @@ const CategoryManager = () => {
     const handleDelete = async (id) => {
         if (!confirm('Точно видалити категорію?')) return;
         try {
-            await axios.delete(`http://localhost:5501/category/${id}`);
-            fetchCategories();
+            await axios.delete(`http://localhost:5501/subcategory/${id}`);
+            fetchSubCategories();
         } catch (error) {
             console.error('Помилка при видаленні:', error);
         }
@@ -33,35 +33,35 @@ const CategoryManager = () => {
         try {
             const formData = new FormData();
             if (newName) formData.append('name', newName);
-            if (newImage) formData.append('categoryImage', newImage);
+            if (newImage) formData.append('subcategoryImage', newImage);
 
-            await axios.patch(`http://localhost:5501/category/update/${id}`, formData, {
+            await axios.patch(`http://localhost:5501/subcategory/update/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
                 withCredentials: true,
             });
 
-            setEditingCategory(null);
+            setEditingSubCategory(null);
             setNewName('');
             setNewImage(null);
-            fetchCategories();
+            fetchSubCategories();
         } catch (error) {
             console.error('Помилка при оновленні:', error);
         }
     };
 
     useEffect(() => {
-        fetchCategories();
+        fetchSubCategories();
     }, []);
 
     return (
         <div className="container-update">
             <h2>Категорії</h2>
             <ul>
-                {categories.map(cat => (
+                {subcategories.map(cat => (
                     <li key={cat._id}>
-                        {editingCategory === cat._id ? (
+                        {editingSubCategory === cat._id ? (
                             <>
                                 <input
                                     type="text"
@@ -75,7 +75,7 @@ const CategoryManager = () => {
                                 />
                                 <button onClick={() => handleEdit(cat._id)}>Зберегти</button>
                                 <button onClick={() => {
-                                    setEditingCategory(null);
+                                    setEditingSubCategory(null);
                                     setNewName('');
                                     setNewImage(null);
                                 }}>Скасувати
@@ -95,7 +95,7 @@ const CategoryManager = () => {
                                 </div>
                                 <div>
                                     <button onClick={() => {
-                                        setEditingCategory(cat._id);
+                                        setEditingSubCategory(cat._id);
                                         setNewName(cat.name);
                                     }}>Редагувати
                                     </button>
@@ -104,11 +104,10 @@ const CategoryManager = () => {
                             </>
                         )}
                     </li>
-
                 ))}
             </ul>
         </div>
     );
 };
 
-export default CategoryManager;
+export default SubCategoryManager;
