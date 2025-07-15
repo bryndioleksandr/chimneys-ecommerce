@@ -1,10 +1,20 @@
 import express from 'express';
 import {
-    createProduct, deleteProduct, getFilteredProducts, getProductBySlug,
+    createProduct,
+    deleteProduct,
+    getFilteredProducts,
+    getHotProducts,
+    getNewestProducts,
+    getPopularProducts,
+    getProductBySlug,
     getProducts,
     searchByCategory,
     searchBySubCategory,
-    searchBySubSubCategory, searchProducts, updateProduct, updateRating, updateReviews
+    searchBySubSubCategory,
+    searchProducts,
+    updateProduct,
+    updateRating,
+    updateReviews
 } from "../controllers/product.js";
 import {verifyToken} from "../middleware/auth.js";
 import cookieParser from "cookie-parser";
@@ -23,5 +33,8 @@ productRouter.patch('/update-reviews/:productId', updateReviews);
 productRouter.get('/filtered-products', getFilteredProducts);
 productRouter.put('/update/:productId', updateProduct);
 productRouter.delete('/delete/:productId', deleteProduct);
+productRouter.get('/popular', getPopularProducts);
+productRouter.get('/for-sale', getHotProducts);
+productRouter.get('/newest', getNewestProducts);
 
 export default productRouter;

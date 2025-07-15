@@ -4,6 +4,9 @@ import Footer from "@/components/Footer/Footer";
 import "../styles/globals.css";
 import ClientProvider from "@/app/ClientProvider";
 import {ToastContainer} from "react-toastify";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 // @ts-ignore
 export default function RootLayout({children}) {

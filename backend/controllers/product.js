@@ -97,6 +97,43 @@ export const getProducts = async (req, res) => {
     }
 };
 
+export const getPopularProducts = async (req, res) => {
+    try {
+        const popularProducts = await Product.find()
+            .sort({ purchaseCount: -1 })
+            .limit(10)
+            .populate("category subCategory subSubCategory");
+        res.status(200).json(popularProducts);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+};
+
+export const getHotProducts = async (req, res) => {
+    try{
+        const hotProducts = await Product.find({discount: { $gt:0 }})
+            .sort({discount: -1})
+            .limit(10)
+            .populate("category subCategory subSubCategory");
+        console.log('saled products are:', hotProducts);
+        res.status(200).json(hotProducts);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+}
+
+export const getNewestProducts = async (req, res) => {
+    try{
+        const newProducts = await Product.find()
+            .sort({createdAt: -1})
+            .limit(10)
+            .populate("category subCategory subSubCategory");
+        res.status(200).json(newProducts);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+}
+
 export const updateProduct = async (req, res) => {
     try {
         upload.array("images", 5)(req, res, async (err) => {

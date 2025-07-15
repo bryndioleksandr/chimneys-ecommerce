@@ -29,6 +29,7 @@ const ProductSchema = new mongoose.Schema({
         insulationThickness: { type: Number, required: false  }, // товщина утеплювача (для двостінних виробів)
         customAttributes: { type: Map, of: String }, // додаткові параметри у форматі ключ-значення
         stock: {type: Number, default: 0},
+        purchaseCount: {type: Number, default: 0},
         rating: {type: Number, default: 0},
         reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'Review'}]
     },

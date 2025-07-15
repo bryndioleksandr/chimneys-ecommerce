@@ -1,4 +1,5 @@
 import Order from "../models/order.js";
+import Product from "../models/product.js";
 
 export const createOrder = async (req, res) => {
     try {
@@ -53,6 +54,16 @@ export const updateOrderStatus = async (req, res) => {
 
         if (!updatedOrder) return res.status(404).json({ msg: "Order not found" });
 
+        if (status === 'delivered') {
+            for (const item of updatedOrder.products) {
+                await Product.findByIdAndUpdate(item.product, {
+                    $inc: { purchaseCount: item.quantity }
+                });
+            }
+
+            await updatedOrder.save();
+        }
+
         res.status(200).json(updatedOrder);
     } catch (err) {
         res.status(500).json({ msg: err.message });
@@ -81,3 +92,24 @@ export const getOrdersByUser = async (req, res) => {
         res.status(500).json({ msg: err.message });
     }
 };
+
+export const getOrdersByStatus = async(req, res) => {
+    try{
+        const { status } = req.params;
+        const orders = await Order.find({ status }).populate("user").populate("products.product");
+        res.status(200).json(orders);
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
+    }
+}
+
+export const getPaidOrders = async(req, res) => {
+    try{
+        const { isPaid } = req.params;
+        const orders = await Order.find({ isPaid }).populate("user").populate("products.product");
+        res.status(200).json(orders);
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
+    }
+}
+

@@ -1,5 +1,12 @@
 import express from "express";
-import {createOrder, getOrders, getOrdersByUser, updateOrderStatus} from "../controllers/order.js";
+import {
+    createOrder,
+    getOrders,
+    getOrdersByStatus,
+    getOrdersByUser,
+    getPaidOrders,
+    updateOrderStatus
+} from "../controllers/order.js";
 
 const orderRouter = express.Router();
 const jsonParser = express.json();
@@ -7,6 +14,8 @@ const jsonParser = express.json();
 orderRouter.post("/make", createOrder);
 orderRouter.get("/user/:userId", getOrdersByUser);
 orderRouter.get("/all-orders", getOrders);
+orderRouter.get("/by-status/:status", getOrdersByStatus);
+orderRouter.get("/paid-orders/:isPaid", getPaidOrders);
 orderRouter.patch("/update-status/:orderId", updateOrderStatus);
 
 

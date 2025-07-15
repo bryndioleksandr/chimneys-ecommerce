@@ -1,6 +1,8 @@
 import BannerSection from "@/components/BannerSection/BannerSection";
 import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
 import StoreDescription from "@/components/StoreDescription/StoreDescription";
+import PopularSlider from "@/components/PopularProductsSlider/PopularProductsSlider";
+import SaledProductsSlider from "@/components/SaledProductsSlider/SaledProductsSlider";
 
 export default async function Home() {
 
@@ -9,6 +11,8 @@ export default async function Home() {
             <div className="contentWrapper" style={styles.contentWrapper}>
                 <BannerSection/>
                 <CategoriesGrid/>
+                <PopularSlider />
+                <SaledProductsSlider />
                 <StoreDescription/>
             </div>
         </div>

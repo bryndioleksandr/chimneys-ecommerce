@@ -8,7 +8,8 @@ const OrderSchema = new mongoose.Schema({
         enum: ['nova_poshta_branch', 'nova_poshta_courier', 'ukrposhta', 'pickup'],
         default: 'nova_poshta_branch',
         required: true
-    },    products: [
+    },
+    products: [
         {
             product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
             quantity: { type: Number, default: 1, min:1 }
