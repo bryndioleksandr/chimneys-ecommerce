@@ -26,7 +26,7 @@ liqpayRouter.post("/create-payment", (req, res) => {
         order_id,
         version: 3,
         result_url: "http://localhost:3000/payment-success",
-        server_url: "https://a670748b2737.ngrok-free.app/liqpay/payment-callback",
+        server_url: "https://682e2a93a40d.ngrok-free.app/liqpay/payment-callback",
         language: "uk",
         sandbox: 1,
     });

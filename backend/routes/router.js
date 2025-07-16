@@ -11,6 +11,7 @@ import reviewRouter from "./review.js";
 import favoritesRouter from "./favorites.js";
 import liqpayRouter from "./payment.js";
 import {verifyEmail} from "../controllers/verifyEmail.js";
+import bannerRouter from "./banner.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -27,6 +28,7 @@ router.use('/reviews', reviewRouter);
 router.use('/favorites', favoritesRouter);
 router.post('/verify-email', verifyEmail);
 router.use('/liqpay', liqpayRouter);
+router.use('/banner', bannerRouter);
 
 
 export default router;

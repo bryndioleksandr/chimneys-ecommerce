@@ -7,7 +7,7 @@ const userRouter  = express.Router();
 
 userRouter.post("/register", cookieParser(), userRegister);
 userRouter.post("/login", cookieParser(), userLogin);
-userRouter.post("/refreshToken", cookieParser(), verifyToken, refreshToken);
+userRouter.post("/refreshToken", cookieParser(), refreshToken);
 userRouter.get("/logout", userLogout);
 
 export default userRouter;

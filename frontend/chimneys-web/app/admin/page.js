@@ -37,6 +37,9 @@ export default function AdminPage() {
                     <a href='/admin/update/subcategory'>Підкатегорії товарів</a>
                     <a href='/admin/update/subsubcategory'>Підпідкатегорії товарів</a>
                 </div>
+                <div className="manage-banners">
+                    <a href="/admin/banner-manager">Змінити основні баннери вебсайту</a>
+                </div>
             </div>
 
             {isCategoryFormVisible && (

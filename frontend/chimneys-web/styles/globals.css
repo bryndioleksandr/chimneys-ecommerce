@@ -6,3 +6,13 @@ body {
     background-color: #f5f5f5;
     font-family: 'Inter', sans-serif;
 }
+
+:root {
+    --primary-color: #C1440E;
+    --background-color: #FFF7F0;
+    --text-color: #3B2F2F;
+    --nav-bg: #4B2E2E;
+    --highlight-color: #D6A77A;
+    --discount-color: #CC6600;
+}
+

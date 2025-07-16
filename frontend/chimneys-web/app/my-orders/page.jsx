@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import "./style.css";
 
@@ -8,6 +8,25 @@ const deliveryWayMap = {
     nova_poshta_courier: "Нова Пошта (кур'єр)",
     ukrposhta: "Укрпошта",
     pickup: "Самовивіз"
+};
+
+const statusMap = {
+    pending: "Очікує обробки",
+    processing: "В обробці",
+    shipped: "Відправлено",
+    delivered: "Доставлено",
+    cancelled: "Скасовано"
+};
+
+const paymentStatusMap = {
+    paid: "Оплачено",
+    unpaid: "Не оплачено"
+};
+
+const paymentMethodMap = {
+    liqpay: "LiqPay",
+    on_delivery_place: "Оплата при отриманні",
+    bank_transfer: "Банківський переказ"
 };
 
 
@@ -23,7 +42,8 @@ export default function MyOrdersPage() {
                     const user = JSON.parse(userRaw);
                     const userId = user.id;
                     const res = await axios.get(`http://localhost:5501/order/user/${userId}`);
-                    setOrders(res.data);
+                    const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    setOrders(sorted);
                 }
             } catch (err) {
                 console.error("Помилка при завантаженні замовлень", err);
@@ -42,7 +62,8 @@ export default function MyOrdersPage() {
             <ul className="order-list">
                 {orders.map(order => (
                     <li key={order._id} onClick={() => setSelectedOrder(order)}>
-                        <strong>Замовлення #{order._id.slice(-6).toUpperCase()}</strong> — {new Date(order.createdAt).toLocaleDateString()} — {order.status}
+                        <strong>Замовлення
+                            #{order._id.slice(-6).toUpperCase()}</strong> — {new Date(order.createdAt).toLocaleDateString()} — {statusMap[order.status] || order.status}
                     </li>
                 ))}
             </ul>
@@ -50,32 +71,37 @@ export default function MyOrdersPage() {
             {selectedOrder && (
                 <div className="order-details">
                     <h2>Деталі замовлення</h2>
-                    <p><strong>Статус:</strong> {selectedOrder.status}</p>
+                    <p><strong>Статус:</strong> {statusMap[selectedOrder.status] || selectedOrder.status}</p>
+                    <p><strong>Оплата:</strong> {paymentStatusMap[selectedOrder.isPaid ? "paid" : "unpaid"]}</p>
                     <p><strong>Дата створення:</strong> {new Date(selectedOrder.createdAt).toLocaleString()}</p>
-                    <p><strong>Спосіб доставки:</strong> {deliveryWayMap[selectedOrder.deliveryWay] || selectedOrder.deliveryWay}</p>
-                    <p><strong>Адреса:</strong> {selectedOrder.address}, {selectedOrder.city}, {selectedOrder.country}, {selectedOrder.postalCode}</p>
+                    <p><strong>Спосіб
+                        доставки:</strong> {deliveryWayMap[selectedOrder.deliveryWay] || selectedOrder.deliveryWay}</p>
+                    <p><strong>Спосіб
+                        оплати:</strong> {paymentMethodMap[selectedOrder.paymentMethod] || selectedOrder.paymentMethod}
+                    </p>
+                    <p>
+                        <strong>Адреса:</strong> {selectedOrder.address}, {selectedOrder.city}, {selectedOrder.country}, {selectedOrder.postalCode}
+                    </p>
                     <p><strong>Загальна сума:</strong> {selectedOrder.totalPrice} грн</p>
 
                     <h3>Товари:</h3>
-                    <ul>
+                    <ul className="products-list">
                         {selectedOrder.products.map((item, index) => (
-                            <li key={index}>
-                                {item.product?.name || "Товар"} — {item.quantity} × {item.product?.price || "?"} грн
+                            <li key={index} className="product-item">
                                 <img
                                     src={item.product?.images[0]}
                                     alt={item.product?.name}
-                                    style={{
-                                        width: "60px",
-                                        height: "60px",
-                                        objectFit: "cover",
-                                    }}
+                                    className="product-image"
                                 />
+                                <div className="product-info">
+                                    <span>{item.product?.name || "Товар"}</span>
+                                    <span>{item.quantity} × {item.product?.price || "?"} грн</span>
+                                </div>
                             </li>
                         ))}
                     </ul>
 
-
-                    <button onClick={() => setSelectedOrder(null)}>Закрити</button>
+                    <button className="close-btn" onClick={() => setSelectedOrder(null)}>Закрити</button>
                 </div>
             )}
         </section>

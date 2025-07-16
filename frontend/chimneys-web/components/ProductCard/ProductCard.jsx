@@ -5,11 +5,10 @@ import Link from "next/link";
 import StarRating from "../StarRating/StarRating";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "./ProductCard.css";
-import { addItemToCart } from "../../redux/slices/cart";
-import { useDispatch } from "../../redux/store";
+import { addItemToCart } from "@/redux/slices/cart";
+import { useDispatch } from "@/redux/store";
 import axios from "axios";
-import {deleteProductRequest} from "../../services/product";
-import ProductForm from "../modals/ProductCreate";
+import {deleteProductRequest} from "@/services/product";
 import EditProductModal from "../modals/ProductEdit";
 
 const ProductCard = ({ product }) => {

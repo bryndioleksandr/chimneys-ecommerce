@@ -121,8 +121,8 @@ export default function HeaderMain() {
                         <span>qwerty123@gmail.com</span>
                     </div>
                     <div className="schedule">
-                        <span><b>Будні:</b> 00:00-24:00</span>
-                        <span><b>Вихідні:</b> 01:10-24:00</span>
+                        <span><b>Будні:</b> 09:00-18:00</span>
+                        <span><b>Субота:</b> 09:00-15:00</span>
                     </div>
                 </div>
                 <div className="headerSearchBarContainer" ref={searchRef}>

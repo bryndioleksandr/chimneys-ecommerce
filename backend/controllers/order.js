@@ -3,11 +3,12 @@ import Product from "../models/product.js";
 
 export const createOrder = async (req, res) => {
     try {
-        const { user, phoneNumber, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
+        const { user, phoneNumber, paymentMethod, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
 
         const newOrder = new Order({
             user,
             phoneNumber,
+            paymentMethod,
             deliveryWay,
             products,
             totalPrice,
