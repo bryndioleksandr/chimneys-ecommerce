@@ -302,5 +302,172 @@ h3 {
     gap: 5px;
 }
 
+@media (max-width: 768px) {
+  .headerMain {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 6px;
+    gap: 10px;
+  }
+  .wrapperInfo {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .headerActions {
+    flex-direction: row;
+    margin-right: 0;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .goods {
+    gap: 12px;
+  }
+  .headerMainList {
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px 0;
+  }
+  .logoDiv {
+    padding: 5px 10px;
+    font-size: 1.1rem;
+  }
+  .headerSearchBar {
+    flex-direction: column;
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerMain {
+    padding: 4px 2px;
+    gap: 6px;
+  }
+  .logoDiv {
+    padding: 3px 4px;
+    font-size: 1rem;
+  }
+  .headerMainList li {
+    font-size: 12px;
+  }
+  .headerSearchBar input {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+  .searchButton {
+    font-size: 15px;
+    padding: 6px 8px;
+  }
+}
 
 
+
+@media (max-width: 768px) {
+    .headerMain {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 12px 10px;
+      gap: 12px;
+    }
+  
+    .wrapperInfo {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .headerActions {
+      flex-direction: row;
+      margin-right: 0;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+  
+    .goods {
+      gap: 16px;
+      justify-content: center;
+    }
+  
+    .headerMainList {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 0;
+    }
+  
+    .logoDiv {
+      padding: 6px 12px;
+      font-size: 1.1rem;
+      text-align: center;
+      border-radius: 8px;
+    }
+  
+    .headerSearchBar {
+      flex-direction: row;
+      gap: 6px;
+      padding: 8px;
+      width: 100%;
+    }
+  
+    .headerTop {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 8px 10px;
+      gap: 8px;
+    }
+  
+    .headerTopList {
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .headerMain {
+      padding: 8px 6px;
+      gap: 8px;
+    }
+  
+    .logoDiv {
+      padding: 4px 8px;
+      font-size: 1rem;
+    }
+  
+    .headerMainList li {
+      font-size: 13px;
+    }
+  
+    .headerSearchBar input {
+      font-size: 14px;
+      padding: 6px 8px;
+    }
+  
+    .searchButton {
+      font-size: 15px;
+      padding: 6px 8px;
+    }
+  
+    .headerTop {
+      padding: 4px 6px;
+      gap: 4px;
+    }
+  
+    .headerTopList li {
+      font-size: 12px;
+    }
+  
+    .goods {
+      gap: 12px;
+    }
+  
+    .headerActions {
+      gap: 10px;
+      justify-content: center;
+    }
+  
+    .headerSearchBar {
+      flex-direction: row;
+      gap: 4px;
+      padding: 6px;
+    }
+  }
+  
