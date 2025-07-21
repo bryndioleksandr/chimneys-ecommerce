@@ -36,7 +36,7 @@ const styles = {
         height: "100%",
         margin: "0",
         padding: "0",
-        backgroundColor: "#F8F9FA",
+        backgroundColor: "#FFF7F0",
     },
     contentWrapper: {
         width: "100%",

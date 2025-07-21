@@ -1,5 +1,5 @@
 .headerTop {
-    background-color: #343A40;
+    background-color: var(--nav-bg);
     padding: 10px 0;
     display:flex;
     justify-content: space-between;

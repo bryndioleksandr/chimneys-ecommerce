@@ -223,3 +223,217 @@
     background-color: #0070f3;
     color: white;
 }
+
+.containerCat {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.containerCat h1 {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.containerCat li {
+    background: var(--highlight-color);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.productCardContainer {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.productCardContainer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.productCardName {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.count-reviews {
+    font-size: 0.9rem;
+    color: #7c5f4f;
+}
+
+.card-in-stock {
+    font-size: 0.9rem;
+    color: #5A2D1B;
+    font-weight: 500;
+}
+
+.card-favorites {
+    color: var(--primary-color);
+}
+
+.card-favorites:hover {
+    color: var(--hover-navbtn-color);
+    transform: scale(1.05);
+}
+
+.card-price {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.card-price-cart svg {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.card-price-cart svg:hover {
+    color: var(--hover-navbtn-color);
+    transform: scale(1.05);
+}
+
+.category-page-wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
+    color: var(--text-color);
+}
+
+.sidebar-panel {
+    width: 250px;
+    background-color: var(--filter-bg);
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    color: var(--text-color);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.subcategory-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+    list-style: none;
+    padding: 0;
+}
+
+.subcategory-item {
+    background-color: var(--highlight-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: background-color 0.3s;
+}
+
+.subcategory-item:hover {
+    background-color: var(--highlight-color-hover);
+}
+
+.sort-options-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.sort-label {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.sort-options button {
+    background-color: var(--highlight-color);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.sort-options button:hover {
+    background-color: var(--highlight-color-hover);
+}
+
+.sort-options button.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+@media (max-width: 768px) {
+  .category-page-wrapper {
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+  }
+  .sidebar-panel {
+    width: 100%;
+    position: static;
+    margin-bottom: 16px;
+  }
+  .content-section {
+    padding: 0;
+  }
+  .containerCat {
+    padding: 10px;
+    max-width: 100%;
+  }
+  .productCardContainer {
+    width: 100%;
+    min-width: 0;
+    padding: 10px;
+  }
+  .product-list {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .containerCat h1 {
+    font-size: 1.2rem;
+  }
+  .productCardName {
+    font-size: 1rem;
+  }
+  .productCardContainer img {
+    height: 120px;
+  }
+  .sidebar-panel {
+    padding: 8px;
+  }
+  .subcategory-item {
+    font-size: 0.95rem;
+    padding: 6px 8px;
+  }
+  .sort-options button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}

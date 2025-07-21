@@ -24,3 +24,28 @@ p {
     margin-bottom: 10px;
     color: #555;
 }
+
+@media (max-width: 768px) {
+  .info-page {
+    padding: 20px 5px;
+  }
+  .container {
+    padding: 12px;
+    max-width: 100%;
+  }
+  h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 6px;
+  }
+  h1 {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 0.95rem;
+  }
+}

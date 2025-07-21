@@ -43,3 +43,30 @@
 .order-form button:hover {
     background: #555;
 }
+
+@media (max-width: 768px) {
+  .order-form {
+    padding: 20px 5px;
+    min-height: unset;
+  }
+  .order-form .container {
+    padding: 12px;
+    max-width: 100%;
+  }
+  .order-form h1 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-form .container {
+    padding: 6px;
+  }
+  .order-form h1 {
+    font-size: 1rem;
+  }
+  .order-form button {
+    font-size: 0.95rem;
+    padding: 8px;
+  }
+}

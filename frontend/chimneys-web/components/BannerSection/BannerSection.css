@@ -48,3 +48,29 @@
     transition: all 0.5s ease-in-out;
     border-radius: 20px;
 }
+
+@media (max-width: 768px) {
+  .banner, .banner-swiper {
+    height: 220px;
+    font-size: 1.2rem;
+  }
+  .banner-slider-container {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner, .banner-swiper {
+    height: 120px;
+    font-size: 1rem;
+    border-radius: 6px;
+  }
+  .banner-slide {
+    border-radius: 6px;
+  }
+  .text {
+    padding: 4px;
+    font-size: 0.9rem;
+  }
+}

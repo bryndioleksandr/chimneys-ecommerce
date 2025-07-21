@@ -63,3 +63,30 @@
     font-size: 12px;
     color: #666;
 }
+
+@media (max-width: 768px) {
+  .footerContainer {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0 5px;
+  }
+  .footerSection {
+    min-width: 140px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    font-size: 12px;
+    padding: 10px 0;
+  }
+  .footerSection h4 {
+    font-size: 14px;
+  }
+  .footerBottom {
+    font-size: 10px;
+    padding-top: 4px;
+  }
+}

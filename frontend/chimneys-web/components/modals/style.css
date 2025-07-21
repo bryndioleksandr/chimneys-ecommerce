@@ -67,3 +67,73 @@
 .form-container .cancel-btn:hover {
     background: #c82333;
 }
+
+.form-container {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.form-container input,
+.form-container select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--highlight-color-hover);
+    border-radius: 5px;
+    font-size: 16px;
+    background: var(--highlight-color);
+    color: var(--text-color);
+}
+
+.form-container label {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 0 5px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-container select {
+    background: var(--highlight-color);
+}
+
+.form-container button {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+.form-container button:hover {
+    background: var(--hover-navbtn-color);
+}
+
+.form-container .cancel-btn {
+    background: var(--discount-color);
+    color: white;
+    margin-top: 10px;
+}
+
+.form-container .cancel-btn:hover {
+    background: #b32a00;
+}

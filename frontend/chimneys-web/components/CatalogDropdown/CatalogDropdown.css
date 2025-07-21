@@ -9,9 +9,9 @@
     align-items: center;
     width: 200px;
     padding: 10px 20px;
-    background-color: #0056b3;
+    background-color: var(--primary-color);
     border: none;
-    color: #F8F9FA;
+    color: #ffffff;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -21,7 +21,7 @@
 .catalog-button:hover {
     transform: translateX(5px);
 ;
-    background-color: #016de5;
+    background-color: var(--hover-navbtn-color);
 }
 
 .catalog-button span {
@@ -39,7 +39,7 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: #fff;
+    background-color: var(--background-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     z-index: 10;
@@ -54,12 +54,12 @@
     text-decoration: none;
     padding: 10px;
     cursor: pointer;
-    color: #333;
+    color: var(--text-color);
     transition: background 0.2s ease;
 }
 
 .catalog-dropdown li:hover {
-    background-color: #f4f4f4;
+    background-color: var(--highlight-color);
 }
 
 @keyframes dropdown-fade {
