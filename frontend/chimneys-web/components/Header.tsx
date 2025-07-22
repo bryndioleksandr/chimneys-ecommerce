@@ -18,13 +18,13 @@ export default function Header() {
 
 const styles = {
     nav: {
-        backgroundColor: "#333",
+        backgroundColor: "var(--nav-bg)",
         padding: "10px",
         display: "flex",
         justifyContent: "space-around",
     },
     link: {
-        color: "#fff",
+        color: "var(--highlight-color)",
         textDecoration: "none",
         fontSize: "18px",
     },

@@ -49,3 +49,11 @@
     font-size: 12px;
   }
 }
+
+.headerTopList li {
+    color: var(--highlight-color);
+}
+
+.headerTopList li:hover {
+    color: var(--primary-color);
+}

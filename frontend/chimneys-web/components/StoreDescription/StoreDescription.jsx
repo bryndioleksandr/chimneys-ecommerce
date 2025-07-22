@@ -39,13 +39,13 @@ export default function StoreDescription() {
 const styles = {
     wrapper: {
         marginTop: "40px",
-        backgroundColor: "#ffffff",
+        backgroundColor: "var(--card-bg)",
         padding: "30px",
         borderRadius: "12px",
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
         lineHeight: 1.75,
         fontSize: "17px",
-        color: "#222",
+        color: "var(--text-color)",
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
         maxWidth: "800px",
         marginLeft: "auto",
@@ -58,8 +58,8 @@ const styles = {
         marginBottom: "10px",
     },
     button: {
-        background: "#0070f3",
-        color: "#fff",
+        background: "var(--primary-color)",
+        color: "var(--card-bg)",
         border: "none",
         padding: "10px 18px",
         borderRadius: "6px",

@@ -2,6 +2,9 @@
 
 import { useRef, useEffect, useState } from 'react';
 import '../style.css';
+import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
+import { useDispatch } from 'react-redux';
+import { addItemToCart } from '@/redux/slices/cart';
 
 const AREAS = [
     {
@@ -35,9 +38,40 @@ const AREAS = [
     { id: 26, coords: "146,885,147,937,184,935,182,962,213,951,214,930,270,930,270,910,196,886" },
 ];
 
+const AREA_INFO = {
+    1: { name: 'Деталь 1', price: 100 },
+    2: { name: 'Деталь 2', price: 120 },
+    3: { name: 'Деталь 3', price: 90 },
+    4: { name: 'Деталь 4', price: 110 },
+    5: { name: 'Деталь 5', price: 80 },
+    6: { name: 'Деталь 6', price: 95 },
+    7: { name: 'Деталь 7', price: 130 },
+    8: { name: 'Деталь 8', price: 105 },
+    9: { name: 'Деталь 9', price: 115 },
+    10: { name: 'Деталь 10', price: 140 },
+    11: { name: 'Деталь 11', price: 150 },
+    12: { name: 'Деталь 12', price: 160 },
+    13: { name: 'Деталь 13', price: 170 },
+    14: { name: 'Деталь 14', price: 180 },
+    15: { name: 'Деталь 15', price: 190 },
+    16: { name: 'Деталь 16', price: 200 },
+    17: { name: 'Деталь 17', price: 210 },
+    18: { name: 'Деталь 18', price: 220 },
+    19: { name: 'Деталь 19', price: 230 },
+    20: { name: 'Деталь 20', price: 240 },
+    21: { name: 'Деталь 21', price: 250 },
+    22: { name: 'Деталь 22', price: 260 },
+    23: { name: 'Деталь 23', price: 270 },
+    24: { name: 'Деталь 24', price: 280 },
+    25: { name: 'Деталь 25', price: 290 },
+    26: { name: 'Деталь 26', price: 300 },
+};
+
 export default function ChimneyMapOne() {
     const imgRef = useRef(null);
     const [size, setSize] = useState({ width: 0, height: 0 });
+    const [selectedArea, setSelectedArea] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const updateSize = () => {
@@ -52,41 +86,74 @@ export default function ChimneyMapOne() {
         return () => window.removeEventListener('resize', updateSize);
     }, []);
 
-    return (
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-            <img
-                ref={imgRef}
-                src="/one_sided.jpg"
-                useMap="#image-map-one_sided"
-                alt="One sided"
-                className="chimney-image"
-            />
-            <map name="image-map-one_sided">
-                {AREAS.map(area => (
-                    <area
-                        key={area.id}
-                        data-area={area.id}
-                        shape="poly"
-                        coords={area.coords}
-                        alt={`Area ${area.id}`}
-                    />
-                ))}
-            </map>
+    const handlePolygonClick = (areaId) => {
+        setSelectedArea(areaId);
+    };
 
-            {size.width > 0 && (
-                <svg
-                    width={size.width}
-                    height={size.height}
-                    className="overlay"
-                >
+    const handleAddToCart = () => {
+        if (selectedArea) {
+            const info = AREA_INFO[selectedArea];
+            dispatch(addItemToCart({
+                _id: `one-${selectedArea}`,
+                name: info.name,
+                price: info.price,
+                quantity: 1,
+            }));
+            setSelectedArea(null);
+        }
+    };
+
+    return (
+        <div style={{ maxWidth: 700, margin: '0 auto' }}>
+            <h2 style={{ marginBottom: 16, textAlign: 'center' }}>
+                Це конструктор одностінного димоходу. Наведіть курсор на елемент, натисніть — і з’явиться вікно з інформацією про деталь. Ви можете додати обрану деталь до кошика.
+            </h2>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+                <img
+                    ref={imgRef}
+                    src="/one_sided.jpg"
+                    useMap="#image-map-one_sided"
+                    alt="One sided"
+                    className="chimney-image"
+                />
+                <map name="image-map-one_sided">
                     {AREAS.map(area => (
-                        <polygon
+                        <area
                             key={area.id}
-                            points={area.coords}
-                            className="hover-region"
+                            data-area={area.id}
+                            shape="poly"
+                            coords={area.coords}
+                            alt={`Area ${area.id}`}
                         />
                     ))}
-                </svg>
+                </map>
+
+                {size.width > 0 && (
+                    <svg
+                        width={size.width}
+                        height={size.height}
+                        className="overlay"
+                    >
+                        {AREAS.map(area => (
+                            <polygon
+                                key={area.id}
+                                points={area.coords}
+                                className="hover-region"
+                                onClick={() => handlePolygonClick(area.id)}
+                                style={{ cursor: 'pointer' }}
+                            />
+                        ))}
+                    </svg>
+                )}
+            </div>
+            {selectedArea && (
+                <ModalWrapper onClose={() => setSelectedArea(null)}>
+                    <h3>{AREA_INFO[selectedArea]?.name || `Деталь ${selectedArea}`}</h3>
+                    <p>Ціна: {AREA_INFO[selectedArea]?.price || 100} грн</p>
+                    <button onClick={handleAddToCart} style={{ marginTop: 16 }}>
+                        Додати до кошика
+                    </button>
+                </ModalWrapper>
             )}
         </div>
     );

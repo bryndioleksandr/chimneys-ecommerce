@@ -368,106 +368,178 @@ h3 {
       padding: 12px 10px;
       gap: 12px;
     }
-  
+
     .wrapperInfo {
       flex-direction: column;
       gap: 10px;
     }
-  
+
     .headerActions {
       flex-direction: row;
       margin-right: 0;
       gap: 12px;
       justify-content: flex-end;
     }
-  
+
     .goods {
       gap: 16px;
       justify-content: center;
     }
-  
+
     .headerMainList {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
       padding: 10px 0;
     }
-  
+
     .logoDiv {
       padding: 6px 12px;
       font-size: 1.1rem;
       text-align: center;
       border-radius: 8px;
     }
-  
+
     .headerSearchBar {
       flex-direction: row;
       gap: 6px;
       padding: 8px;
       width: 100%;
     }
-  
+
     .headerTop {
       flex-direction: column;
       align-items: flex-start;
       padding: 8px 10px;
       gap: 8px;
     }
-  
+
     .headerTopList {
       flex-direction: column;
       gap: 8px;
       padding: 0 10px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .headerMain {
       padding: 8px 6px;
       gap: 8px;
     }
-  
+
     .logoDiv {
       padding: 4px 8px;
       font-size: 1rem;
     }
-  
+
     .headerMainList li {
       font-size: 13px;
     }
-  
+
     .headerSearchBar input {
       font-size: 14px;
       padding: 6px 8px;
     }
-  
+
     .searchButton {
       font-size: 15px;
       padding: 6px 8px;
     }
-  
+
     .headerTop {
       padding: 4px 6px;
       gap: 4px;
     }
-  
+
     .headerTopList li {
       font-size: 12px;
     }
-  
+
     .goods {
       gap: 12px;
     }
-  
+
     .headerActions {
       gap: 10px;
       justify-content: center;
     }
-  
+
     .headerSearchBar {
       flex-direction: row;
       gap: 4px;
       padding: 6px;
     }
   }
-  
+
+.headerMain {
+    background: var(--background-color);
+}
+
+.login, .login svg,
+.sign-out, .sign-out span, .sign-out svg {
+    color: var(--primary-color);
+}
+
+.login:hover,
+.login:hover svg,
+.sign-out:hover svg {
+    color: var(--hover-navbtn-color);
+}
+
+.goods svg {
+    color: var(--primary-color);
+}
+
+.goods svg:hover {
+    color: var(--hover-navbtn-color);
+}
+
+.logoDiv {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+}
+
+.logoDiv:hover {
+    background-color: var(--highlight-color-hover);
+}
+
+h3,
+.contacts span, .address span, .schedule span,
+.headerMainList li {
+    color: var(--text-color);
+}
+
+.headerMainList li:hover {
+    color: var(--discount-color);
+}
+
+.headerSearchBar {
+    background: var(--highlight-color);
+}
+
+.searchResults {
+    background: var(--card-bg);
+}
+
+.searchResultItem:hover {
+    background-color: var(--highlight-color-hover);
+}
+
+.cart-icon:hover {
+    color: var(--primary-color);
+}
+
+.total-price {
+    color: var(--text-color);
+}
+
+.headerSearchBar:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(209, 73, 0, 0.5); /* var(--primary-color) з прозорістю */
+}
+
+.searchButton:hover {
+    background: var(--primary-color);
+    color: var(--card-bg);
+    border-left: var(--hover-navbtn-color) solid 1px;
+}
