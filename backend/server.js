@@ -7,6 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import cookieParser from "cookie-parser";
+import ConstructorOne from "./models/constructorOne.js";
 
 dotenv.config();
 
@@ -30,6 +31,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(router);
 
+
+const initConstructor = async () => {
+    const existing = await ConstructorOne.findOne();
+    if (!existing) {
+        const constructor = new ConstructorOne();
+        await constructor.save();
+        console.log("✅ ConstructorOne документ створено");
+    } else {
+        console.log("ℹ️ ConstructorOne вже існує");
+    }
+};
+
 const startServer = async () => {
     try {
         console.log("Allowed origins: ", allowedOrigins);
@@ -37,7 +50,8 @@ const startServer = async () => {
         const PORT = process.env.PORT || 5501;
         app.listen(PORT, () => {
             console.log(`Server is running at http://localhost:${PORT}`)
-        })
+        });
+        initConstructor();
     } catch (error) {
         console.error('Express server startup error:', error);
     }

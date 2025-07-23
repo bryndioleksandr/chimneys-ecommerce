@@ -12,6 +12,7 @@ import favoritesRouter from "./favorites.js";
 import liqpayRouter from "./payment.js";
 import {verifyEmail} from "../controllers/verifyEmail.js";
 import bannerRouter from "./banner.js";
+import constructorRouter from "./constructorOne.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -29,6 +30,7 @@ router.use('/favorites', favoritesRouter);
 router.post('/verify-email', verifyEmail);
 router.use('/liqpay', liqpayRouter);
 router.use('/banner', bannerRouter);
+router.use('/constructor-one', constructorRouter);
 
 
 export default router;
