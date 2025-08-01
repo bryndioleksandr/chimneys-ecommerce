@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 
 const ConstructorSchemaTwo = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String },
     description: { type: String },
     products: [{
         product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
         area: {
             type: Number,
-            required: true,
             validate: {
                 validator: (v) => v >= 1 && v <= 30,
                 message: props => `${props.value} is not a valid area ID`

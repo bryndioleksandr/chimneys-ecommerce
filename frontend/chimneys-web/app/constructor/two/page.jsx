@@ -5,6 +5,7 @@ import '../style.css';
 import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
 import { useDispatch } from 'react-redux';
 import { addItemToCart } from '@/redux/slices/cart';
+import {FaSearch} from "react-icons/fa";
 
 const AREAS = [
     {
@@ -79,6 +80,13 @@ export default function ChimneyMapTwo() {
     const imgRef = useRef(null);
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [selectedArea, setSelectedArea] = useState(null);
+    const [products, setProducts] = useState([]);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const searchRef = useRef(null);
+    const [attachedProduct, setAttachedProduct] = useState(null);
+    const [selectedAreaForLinking, setSelectedAreaForLinking] = useState(null);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -98,23 +106,99 @@ export default function ChimneyMapTwo() {
         setSelectedArea(areaId);
     };
 
-    const handleAddToCart = () => {
-        if (selectedArea) {
-            const info = AREA_INFO[selectedArea];
-            dispatch(addItemToCart({
-                _id: `two-${selectedArea}`,
-                name: info.name,
-                price: info.price,
-                quantity: 1,
-            }));
-            setSelectedArea(null);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                console.log('now fetch');
+                const res = await fetch(`http://localhost:5501/products/products`);
+                if (!res.ok) throw new Error("Products not found");
+                const data = await res.json();
+                setProducts(data);
+            } catch (err) {
+                console.error(err);
+                setProducts(null);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        const fetchAttachedProduct = async () => {
+            if (!selectedArea) return;
+
+            try {
+                const res = await fetch(`http://localhost:5501/constructor-two/constructor/element/${selectedArea}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setAttachedProduct(data.product);
+                } else {
+                    setAttachedProduct(null);
+                }
+            } catch (err) {
+                console.error("Error fetching attached product:", err);
+                setAttachedProduct(null);
+            }
+        };
+
+        fetchAttachedProduct();
+    }, [selectedArea]);
+
+    const handleSearch = async () => {
+        console.log('search query is:', searchQuery);
+        if (!searchQuery.trim()) return;
+        try {
+            const res = await fetch(`http://localhost:5501/products/search?query=${searchQuery}`);
+            const data = await res.json();
+            console.log('data is:', data);
+            setProducts(data);
+        } catch (error) {
+            console.error("Search error:", error);
         }
+    };
+
+    const handleLinkProduct = async (productId, areaId) => {
+        console.log("Прив'язано продукт:", productId, " || area: ", areaId);
+        if (!productId || !areaId) return;
+
+        try {
+            const res = await fetch(`http://localhost:5501/constructor-two/constructor/element`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    area: areaId,
+                    product: productId
+                })
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                console.error("Error response:", errorData);
+                alert("Не вдалося прив'язати продукт");
+                return;
+            }
+
+            const updatedConstructor = await res.json();
+            console.log("Оновлений конструктор:", updatedConstructor);
+        } catch (error) {
+            console.error("Fetch error:", error);
+            alert("Сталася помилка при зверненні до сервера");
+        } finally {
+            setIsProductModalOpen(false);
+            setSelectedAreaForLinking(null);
+        }
+    };
+
+    const handleAddToCart = (product) => {
+        dispatch(addItemToCart(product));
+        setSelectedArea(null);
     };
 
     return (
         <div style={{ maxWidth: 700, margin: '0 auto' }}>
             <h2 style={{ marginBottom: 16, textAlign: 'center' }}>
-                Це конструктор двостінного димоходу. Наведіть курсор на елемент, натисніть — і з’явиться вікно з інформацією про деталь. Ви можете додати обрану деталь до кошика.
+                Це конструктор двостінного димоходу. Наведіть курсор на елемент, натисніть — і з'явиться вікно з інформацією про деталь. Ви можете додати обрану деталь до кошика.
             </h2>
             <div style={{ position: 'relative', display: 'inline-block' }}>
                 <img
@@ -156,11 +240,121 @@ export default function ChimneyMapTwo() {
             </div>
             {selectedArea && (
                 <ModalWrapper onClose={() => setSelectedArea(null)}>
-                    <h3>{AREA_INFO[selectedArea]?.name || `Деталь ${selectedArea}`}</h3>
-                    <p>Ціна: {AREA_INFO[selectedArea]?.price || 100} грн</p>
-                    <button onClick={handleAddToCart} style={{ marginTop: 16 }}>
-                        Додати до кошика
+                    {attachedProduct ? (
+                        <div className="product-details">
+                            <img
+                                src={attachedProduct.images[0]}
+                                alt="Product image"
+                                className="product-image"
+                            />
+                            <div className="product-info">
+                                <p className="product-name">{attachedProduct.name}</p>
+                                <p className="product-price">Ціна: {attachedProduct.price} грн</p>
+                                <button
+                                    className="primary-button"
+                                    onClick={() => handleAddToCart(attachedProduct)}
+                                >
+                                    Додати до кошика
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="not-linked-message">Продукт ще не прив'язаний.</p>
+                    )}
+
+                    <button
+                        className="secondary-button"
+                        onClick={() => {
+                            setIsProductModalOpen(true);
+                            setSelectedAreaForLinking(selectedArea);
+                            setSelectedArea(null);
+                        }}
+                    >
+                        Прив’язати продукт
                     </button>
+                </ModalWrapper>
+            )}
+            {isProductModalOpen && (
+                <ModalWrapper onClose={() => setIsProductModalOpen(false)}>
+                    <h3>Виберіть продукт для прив'язки</h3>
+
+                    <div
+                        className="headerSearchBarContainer"
+                        style={{ marginBottom: 16 }}
+                        ref={searchRef}
+                    >
+                        <div className="headerSearchBar" style={{ display: 'flex', gap: 8 }}>
+                            <input
+                                placeholder="Пошук товарів"
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                style={{
+                                    flex: 1,
+                                    padding: '8px 12px',
+                                    borderRadius: 4,
+                                    border: '1px solid #ccc'
+                                }}
+                            />
+                            <div
+                                className="searchButton"
+                                onClick={handleSearch}
+                                style={{
+                                    padding: '8px 12px',
+                                    backgroundColor: '#D14900',
+                                    color: 'white',
+                                    borderRadius: 4,
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <FaSearch />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        style={{
+                            display: 'grid',
+                            gap: '16px',
+                            maxHeight: '400px',
+                            overflowY: 'auto',
+                            paddingRight: 8
+                        }}
+                    >
+                        {products.map(product => (
+                            <div
+                                key={product._id}
+                                style={{
+                                    border: '1px solid #ccc',
+                                    borderRadius: 8,
+                                    padding: 12,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 16
+                                }}
+                            >
+                                <img
+                                    src={product.images[0]}
+                                    alt={product.name}
+                                    style={{
+                                        width: 80,
+                                        height: 80,
+                                        objectFit: 'cover',
+                                        borderRadius: 4
+                                    }}
+                                />
+                                <div style={{ flexGrow: 1 }}>
+                                    <h4 style={{ margin: 0 }}>{product.name}</h4>
+                                    <p style={{ margin: 0 }}>{product.price} грн</p>
+                                </div>
+                                <button onClick={() => handleLinkProduct(product._id, selectedAreaForLinking)}>
+                                    Прив'язати
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </ModalWrapper>
             )}
         </div>

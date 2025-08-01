@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 // @ts-ignore
 export default function RootLayout({children}) {
     return (
-        <html lang="uk">
+        <html lang="uk" suppressHydrationWarning>
         <head>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"/>
         </head>

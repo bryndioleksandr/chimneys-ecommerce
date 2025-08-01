@@ -1,20 +1,23 @@
 .admin-page {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     padding: 20px;
-    background-color: #f4f6f9;
+    background-color: var(--background-color);
+    min-height: 100vh;
 }
 
 h1 {
     text-align: center;
     font-size: 2.5rem;
-    color: #333;
+    color: var(--text-color);
+    margin-bottom: 10px;
 }
 
 p {
     text-align: center;
     font-size: 1.2rem;
-    color: #666;
+    color: var(--text-color);
     margin-bottom: 20px;
+    opacity: 0.8;
 }
 
 .admin-panel {
@@ -25,27 +28,30 @@ p {
 }
 
 .admin-panel button {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     font-size: 1rem;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .admin-panel button:hover {
-    background-color: #0056b3;
+    background-color: var(--hover-navbtn-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(209, 73, 0, 0.3);
 }
 
 .panel-update {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    padding: 20px;
-    border-radius: 12px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--highlight-color);
+    padding: 30px;
+    border-radius: 16px;
     margin-top: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -54,8 +60,8 @@ p {
 .panel-update p {
     font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 16px;
-    color: #333;
+    margin-bottom: 20px;
+    color: var(--text-color);
     text-align: center;
 }
 
@@ -68,61 +74,104 @@ p {
 .update-btns a {
     display: block;
     text-align: center;
-    background-color: #0070f3;
-    color: #ffffff;
-    padding: 10px 18px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 500;
-    transition: background-color 0.25s ease;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
 }
 
 .update-btns a:hover {
-    background-color: #005bb5;
+    background-color: var(--hover-navbtn-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(209, 73, 0, 0.3);
+}
+
+.manage-banners {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--highlight-color);
+}
+
+.manage-banners a {
+    display: block;
+    text-align: center;
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--highlight-color);
+}
+
+.manage-banners a:hover {
+    background-color: var(--highlight-color-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 
 .form-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     margin: 0 auto 30px;
+    border: 1px solid var(--highlight-color);
 }
 
 .form-container h2 {
     text-align: center;
-    color: #333;
+    color: var(--text-color);
+    margin-bottom: 20px;
 }
 
 .form-container form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .form-container input,
 .form-container textarea {
-    padding: 10px;
+    padding: 12px 16px;
     font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid var(--highlight-color);
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.form-container input:focus,
+.form-container textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(209, 73, 0, 0.1);
 }
 
 .form-container button{
-    background-color: #28a745;
+    background-color: var(--discount-color);
     color: white;
-    font-size: 1.2rem;
-    padding: 12px 20px;
+    font-size: 1.1rem;
+    padding: 14px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .form-container button:hover{
-    background-color: #218838;
+    background-color: #d84315;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(242, 83, 27, 0.3);
 }
 
 @media (max-width: 768px) {

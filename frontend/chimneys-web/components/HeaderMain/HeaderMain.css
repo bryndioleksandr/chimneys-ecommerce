@@ -55,7 +55,7 @@
     transition: color 0.3s ease;
 }
 
-.sign-out svg{
+.sign-out svg {
     font-size: 24px;
     transition: color 0.3s ease;
 }
@@ -104,7 +104,6 @@
 }
 
 
-
 h3 {
     color: var(--text-color);
     padding: 5px 25px;
@@ -120,13 +119,13 @@ h3 {
     display: flex;
     gap: 10px;
     margin: 0;
-    padding:10px;
+    padding: 10px;
 }
 
 .headerMainList ul {
     display: flex;
     justify-content: flex-start;
-    padding:0;
+    padding: 0;
 }
 
 .headerMainList li {
@@ -166,23 +165,22 @@ h3 {
     border: none;
     outline: none;
     font-size: 16px;
-    background: transparent;
+    background: var(--highlight-color);
 }
 
 .searchButton {
     border: none;
-    border-left: #0a0a0a solid 1px;
     cursor: pointer;
+    height:100%;
     padding: 10px 15px;
     background: transparent;
     font-size: 18px;
     transition: all 0.3s ease-in-out;
+    border-radius: 0;
 }
 
 .searchButton:hover {
-    background: #007BFF;
     color: white;
-    border-left: #0056b3 solid 1px;
 }
 
 .headerSearchBarContainer {
@@ -203,7 +201,7 @@ h3 {
     left: 0;
     right: 0;
     background: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 3;
     max-height: 300px;
     overflow-y: auto;
@@ -280,8 +278,8 @@ h3 {
     transform: translateX(5px);
 }
 
-.log-in-out{
-    display:flex;
+.log-in-out {
+    display: flex;
     gap: 10px;
     align-items: center;
 }
@@ -290,6 +288,7 @@ h3 {
     padding: 0;
     margin: 0;
 }
+
 .login svg, .sign-out svg {
     margin: 0;
     padding: 0;
@@ -303,173 +302,185 @@ h3 {
 }
 
 @media (max-width: 768px) {
-  .headerMain {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 8px 6px;
-    gap: 10px;
-  }
-  .wrapperInfo {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .headerActions {
-    flex-direction: row;
-    margin-right: 0;
-    gap: 10px;
-    justify-content: flex-end;
-  }
-  .goods {
-    gap: 12px;
-  }
-  .headerMainList {
-    flex-direction: column;
-    gap: 6px;
-    padding: 6px 0;
-  }
-  .logoDiv {
-    padding: 5px 10px;
-    font-size: 1.1rem;
-  }
-  .headerSearchBar {
-    flex-direction: column;
-    padding: 6px 8px;
-  }
+    .headerMain {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 8px 6px;
+        gap: 10px;
+    }
+
+    .wrapperInfo {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .headerActions {
+        flex-direction: row;
+        margin-right: 0;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .goods {
+        gap: 12px;
+    }
+
+    .headerMainList {
+        flex-direction: column;
+        gap: 6px;
+        padding: 6px 0;
+    }
+
+    .logoDiv {
+        padding: 5px 10px;
+        font-size: 1.1rem;
+    }
+
+    .headerSearchBar {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 480px) {
-  .headerMain {
-    padding: 4px 2px;
-    gap: 6px;
-  }
-  .logoDiv {
-    padding: 3px 4px;
-    font-size: 1rem;
-  }
-  .headerMainList li {
-    font-size: 12px;
-  }
-  .headerSearchBar input {
-    font-size: 14px;
-    padding: 6px 8px;
-  }
-  .searchButton {
-    font-size: 15px;
-    padding: 6px 8px;
-  }
-}
+    .headerMain {
+        padding: 4px 2px;
+        gap: 6px;
+    }
 
+    .logoDiv {
+        padding: 3px 4px;
+        font-size: 1rem;
+    }
+
+    .headerMainList li {
+        font-size: 12px;
+    }
+
+    .headerSearchBar input {
+        font-size: 14px;
+    }
+
+    .searchButton {
+        font-size: 15px;
+    }
+}
 
 
 @media (max-width: 768px) {
     .headerMain {
-      flex-direction: column;
-      align-items: stretch;
-      padding: 12px 10px;
-      gap: 12px;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 10px;
+        gap: 12px;
     }
 
     .wrapperInfo {
-      flex-direction: column;
-      gap: 10px;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .headerActions {
-      flex-direction: row;
-      margin-right: 0;
-      gap: 12px;
-      justify-content: flex-end;
+        flex-direction: row;
+        margin-right: 0;
+        gap: 12px;
+        justify-content: flex-end;
     }
 
     .goods {
-      gap: 16px;
-      justify-content: center;
+        gap: 16px;
+        justify-content: center;
     }
 
     .headerMainList {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 10px 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px 0;
     }
 
     .logoDiv {
-      padding: 6px 12px;
-      font-size: 1.1rem;
-      text-align: center;
-      border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .catalog-button {
+        padding: 6px 12px;
+        text-align: center;
+        border-radius: 0;
     }
 
     .headerSearchBar {
-      flex-direction: row;
-      gap: 6px;
-      padding: 8px;
-      width: 100%;
-    }
-
-    .headerTop {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 8px 10px;
-      gap: 8px;
-    }
-
-    .headerTopList {
-      flex-direction: column;
-      gap: 8px;
-      padding: 0 10px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .headerMain {
-      padding: 8px 6px;
-      gap: 8px;
-    }
-
-    .logoDiv {
-      padding: 4px 8px;
-      font-size: 1rem;
-    }
-
-    .headerMainList li {
-      font-size: 13px;
+        flex-direction: row;
+        padding:0;
+        width: 100%;
     }
 
     .headerSearchBar input {
-      font-size: 14px;
-      padding: 6px 8px;
-    }
-
-    .searchButton {
-      font-size: 15px;
-      padding: 6px 8px;
+        font-size: 14px;
+        padding:0;
     }
 
     .headerTop {
-      padding: 4px 6px;
-      gap: 4px;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .headerTopList {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .headerMain {
+        padding: 8px 6px;
+        gap: 8px;
+    }
+
+    .logoDiv {
+        padding: 4px 8px;
+        font-size: 1rem;
+    }
+
+    .headerMainList li {
+        font-size: 13px;
+    }
+
+    .headerSearchBar input {
+        font-size: 14px;
+    }
+
+    .searchButton {
+        font-size: 15px;
+    }
+
+    .headerTop {
+        padding: 4px 6px;
+        gap: 4px;
     }
 
     .headerTopList li {
-      font-size: 12px;
+        font-size: 12px;
     }
 
     .goods {
-      gap: 12px;
+        gap: 12px;
     }
 
     .headerActions {
-      gap: 10px;
-      justify-content: center;
+        gap: 10px;
+        justify-content: center;
     }
 
     .headerSearchBar {
-      flex-direction: row;
-      gap: 4px;
-      padding: 6px;
+        flex-direction: row;
+        padding: 0;
     }
-  }
+}
 
 .headerMain {
     background: var(--background-color);

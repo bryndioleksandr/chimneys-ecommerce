@@ -10,6 +10,9 @@ import { useSelector, useDispatch } from "@/redux/store";
 import {logoutUser} from "@/services/auth";
 import { logout } from "@/redux/slices/user";
 import { fetchCategories } from "@/services/category";
+import RoleGuard from "@/components/auth/RoleGuard";
+import { useRouter } from "next/navigation";
+import {toast} from "react-toastify";
 
 export default function HeaderMain() {
     const [isAuthOpen, setAuthOpen] = useState(false);
@@ -19,6 +22,14 @@ export default function HeaderMain() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const router = useRouter();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+
 
     const dispatch = useDispatch();
     const searchRef = useRef(null);
@@ -84,6 +95,7 @@ export default function HeaderMain() {
 
         return () => clearTimeout(delayDebounce);
     }, [searchQuery]);
+
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
         try {
@@ -95,6 +107,16 @@ export default function HeaderMain() {
             console.error("Search error:", error);
         }
     };
+
+    const handleFavoritesClick = () => {
+        if (!user) {
+            toast.warning("Увійдіть, щоб переглянути обране");
+            return;
+        }
+
+        router.push("/favorites");
+    };
+    if(!mounted) return null;
     return (
         <div className="headerMain">
             <div className="wrapperLeft">
@@ -128,6 +150,7 @@ export default function HeaderMain() {
                 <div className="headerSearchBarContainer" ref={searchRef}>
                     <div className="headerSearchBar">
                         <input
+                            name={"search input"}
                             placeholder={"Пошук товарів"}
                             type="text"
                             value={searchQuery}
@@ -162,35 +185,56 @@ export default function HeaderMain() {
 
             </div>
 
+            {mounted && (
             <div className="headerActions">
-                {role === "user" ? (
+                {mounted && (
+                <RoleGuard role="user">
                     <>
                         <div className="log-in-out">
-                        <Link href="/admin">
-                            <div className="login">
+                            <Link href="/account" className="login">
                                 <FaUser />
-                                <span>{user.name}</span>
+                                <span>{user?.name}</span>
+                            </Link>
+                            <div className="sign-out">
+                                <FaSignOutAlt onClick={handleLogout} />
+                                <span>Вийти</span>
                             </div>
-                        </Link>
-                        <div className="sign-out">
-                        <FaSignOutAlt onClick={() => handleLogout()} />
-                            <span>Вийти</span>
                         </div>
-                        </div>
-                        <FaClipboardList/>
+                        <FaClipboardList />
                         <Link href="/my-orders">Мої замовлення</Link>
                     </>
-                ) : (
+                </RoleGuard>
+                )}
+                {mounted && (
+                    <RoleGuard role="admin">
+                        <div className="log-in-out">
+                            <Link href="/admin">
+                                <div className="login">
+                                    <FaUser />
+                                    <span>Адмін {user.name}</span>
+                                </div>
+                            </Link>
+                            <div className="sign-out">
+                                <FaSignOutAlt onClick={handleLogout} />
+                                <span>Вийти</span>
+                            </div>
+                        </div>
+                    </RoleGuard>
+                )}
+                <RoleGuard role="guest">
                     <div onClick={() => setAuthOpen(true)}>
                         <div className="login">
-                            <FaUser/>
+                            <FaUser />
                             <span>Увійти</span>
                         </div>
-                        <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)}/>
+                        <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
                     </div>
-                )}
+                </RoleGuard>
+                {mounted && (
                 <div className="goods">
-                    <Link href="/favorites"><FaHeart /></Link>
+                    <div onClick={handleFavoritesClick} style={{cursor: "pointer"}}>
+                        <FaHeart/>
+                    </div>
                     <Link href="/cart">
                         <div className="cart">
                             <div className="icon-with-badge">
@@ -206,7 +250,9 @@ export default function HeaderMain() {
 
                     </Link>
                 </div>
+                )}
             </div>
+            )}
         </div>
     );
 }

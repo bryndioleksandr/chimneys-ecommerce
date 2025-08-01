@@ -13,6 +13,7 @@ import liqpayRouter from "./payment.js";
 import {verifyEmail} from "../controllers/verifyEmail.js";
 import bannerRouter from "./banner.js";
 import constructorRouter from "./constructorOne.js";
+import constructorTwoRouter from "./constructorTwo.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -31,6 +32,7 @@ router.post('/verify-email', verifyEmail);
 router.use('/liqpay', liqpayRouter);
 router.use('/banner', bannerRouter);
 router.use('/constructor-one', constructorRouter);
+router.use('/constructor-two', constructorTwoRouter);
 
 
 export default router;

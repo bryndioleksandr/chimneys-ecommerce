@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import '../style.css';
+import '../../../components/ModalWrapper/modal.css';
 import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
 import { useDispatch } from 'react-redux';
 import { addItemToCart } from '@/redux/slices/cart';
@@ -237,32 +238,37 @@ export default function ChimneyMapOne() {
             {selectedArea && (
                 <ModalWrapper onClose={() => setSelectedArea(null)}>
                     {attachedProduct ? (
-                        <div style={{marginTop: 16}}>
-                            <p>Назва: {attachedProduct.name}</p>
-                            <p>Ціна: {attachedProduct.price} грн</p>
-                            <button
-                                onClick={() => handleAddToCart(attachedProduct)}
-                                style={{marginTop: 16}}
-                            >
-                                Додати до кошика
-                            </button>
-
+                        <div className="product-details">
+                            <img
+                                src={attachedProduct.images[0]}
+                                alt="Product image"
+                                className="product-image"
+                            />
+                            <div className="product-info">
+                                <p className="product-name">{attachedProduct.name}</p>
+                                <p className="product-price">Ціна: {attachedProduct.price} грн</p>
+                                <button
+                                    className="primary-button"
+                                    onClick={() => handleAddToCart(attachedProduct)}
+                                >
+                                    Додати до кошика
+                                </button>
+                            </div>
                         </div>
                     ) : (
-                        <p style={{marginTop: 16}}>Продукт ще не прив'язаний.</p>
+                        <p className="not-linked-message">Продукт ще не прив'язаний.</p>
                     )}
 
                     <button
+                        className="secondary-button"
                         onClick={() => {
                             setIsProductModalOpen(true);
                             setSelectedAreaForLinking(selectedArea);
                             setSelectedArea(null);
                         }}
-                        style={{marginTop: 8, marginLeft: 12}}
                     >
                         Прив’язати продукт
                     </button>
-
                 </ModalWrapper>
             )}
             {isProductModalOpen && (

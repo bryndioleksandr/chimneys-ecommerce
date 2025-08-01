@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import {useEffect, useState, useRef, useCallback} from "react";
 import "./AuthModal.css";
 import {setUser, getUser} from "@/config/config";
 import {loginUser, registerUser} from "@/services/auth";
 import useEscapeKey from "@/hooks/useEscapeClose";
-import useOutsideClick from "@/hooks/useOutsideClick";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useDispatch } from "@/redux/store";
 import { dispUser } from '@/redux/slices/user';
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,7 +15,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     const [isLogin, setIsLogin] = useState(true);
     const dispatch = useDispatch();
     const modalRef = useRef(null);
-    useOutsideClick(modalRef, onClose, isOpen);
+    useOnClickOutside(modalRef, useCallback(onClose, [onClose]));
     useEscapeKey(onClose, isOpen);
 
     const notifyError = (message) => toast.error(message);
@@ -26,6 +26,8 @@ const AuthModal = ({ isOpen, onClose }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
 
     const [isVerifyStep, setIsVerifyStep] = useState(false);
     const [verificationCode, setVerificationCode] = useState("");
@@ -58,21 +60,21 @@ const AuthModal = ({ isOpen, onClose }) => {
     };
 
 
-    // useEffect(() => {
-    //     const handleClickOutside = (event) => {
-    //         if (modalRef.current && !modalRef.current.contains(event.target)) {
-    //             onClose();
-    //         }
-    //     };
-    //
-    //     if (isOpen) {
-    //         document.addEventListener("mousedown", handleClickOutside);
-    //     }
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleClickOutside);
-    //     };
-    // }, [isOpen]);
-    //
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen]);
+
     // useEffect(() => {
     //     const handleKeyDown = (event) => {
     //         if (event.key === "Escape") {
@@ -120,16 +122,21 @@ const AuthModal = ({ isOpen, onClose }) => {
 
         try {
             const data = await loginUser(email, password);
-            console.log('here is user data:', data);
+
+            if (!data?.user) {
+                throw new Error("Невірні дані. Спробуйте ще раз.");
+            }
+
             await setUser(data.user);
             dispatch(dispUser(data.user));
             onClose();
             notifySuccess(`З поверненням!`);
         } catch (err) {
-            console.error("Login error", err);
             notifyError(err.message);
+            console.error("Login error", err);
         }
     };
+
 
     if (!isOpen) return null;
 
@@ -164,7 +171,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
                 <div className="form-container">
                     {isLogin ? (
-                        <div className="login"  key="login">
+                        <div className="login" key="login">
                             <h2>Вхід</h2>
                             <input
                                 type="email"
@@ -174,12 +181,20 @@ const AuthModal = ({ isOpen, onClose }) => {
                                 onChange={e => setEmail(e.target.value)}
                             />
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Пароль"
                                 required
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                             />
+                            <label className="show-password">
+                                <input
+                                    type="checkbox"
+                                    checked={showPassword}
+                                    onChange={() => setShowPassword(!showPassword)}
+                                />
+                                Показати пароль
+                            </label>
                             <button className="auth-btn" onClick={handleLogin}>Увійти</button>
                         </div>
                     ) : isVerifyStep ? (
@@ -219,19 +234,27 @@ const AuthModal = ({ isOpen, onClose }) => {
                                 onChange={e => setEmail(e.target.value)}
                             />
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Пароль"
                                 required
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                             />
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Підтвердьте пароль"
                                 required
                                 value={confirmPassword}
                                 onChange={e => setConfirmPassword(e.target.value)}
                             />
+                            <label className="show-password">
+                                <input
+                                    type="checkbox"
+                                    checked={showPassword}
+                                    onChange={() => setShowPassword(!showPassword)}
+                                />
+                                Показати пароль
+                            </label>
                             <button className="auth-btn" onClick={handleRegister}>Зареєструватися</button>
                         </div>
                     )}
@@ -239,7 +262,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
 
             </div>
-            <ToastContainer />
+            <ToastContainer/>
         </div>
     );
 };
