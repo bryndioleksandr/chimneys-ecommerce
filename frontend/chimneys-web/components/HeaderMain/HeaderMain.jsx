@@ -211,7 +211,7 @@ export default function HeaderMain() {
                             <Link href="/admin">
                                 <div className="login">
                                     <FaUser />
-                                    <span>Адмін {user.name}</span>
+                                    <span>Адмін {user?.name}</span>
                                 </div>
                             </Link>
                             <div className="sign-out">

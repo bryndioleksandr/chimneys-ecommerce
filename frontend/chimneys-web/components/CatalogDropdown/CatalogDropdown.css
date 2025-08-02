@@ -75,3 +75,17 @@
         transform: translateY(0);
     }
 }
+
+@media (max-width: 768px) {
+    .catalog-container {
+        width: 100%;
+    }
+
+    .catalog-button {
+        width: 100%;
+        text-align: center;
+        border-radius: 0;
+        justify-content: end;
+    }
+}
+

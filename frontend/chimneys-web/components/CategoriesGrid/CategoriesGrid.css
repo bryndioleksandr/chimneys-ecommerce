@@ -66,29 +66,34 @@
 }
 
 @media (max-width: 480px) {
-  .categories-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-      text-align: center;
-      justify-content: center;
-  }
-    .link {
+    .categories-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
+        justify-content: center;
         text-align: center;
-        text-decoration: none;
-        color: inherit; /* або твої змінні */
-        display: block;
     }
 
     .category-card {
-    max-width: 100px;
-    max-height: 100px;
-    font-size: 0.9rem;
-    padding: 4px;
-  }
-  .category-card img {
-    height: 40px;
-  }
-  .category-card p {
-    font-size: 0.9rem;
-  }
+        max-width: 120px;
+        max-height: 120px;
+        font-size: 0.95rem;
+        padding: 6px;
+        margin: 0 auto;
+    }
+
+    .category-card img {
+        height: 50px;
+    }
+
+    .category-card p {
+        font-size: 0.9rem;
+    }
+
+    .link {
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
 }
+

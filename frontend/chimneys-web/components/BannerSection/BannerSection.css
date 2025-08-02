@@ -70,20 +70,6 @@
   }
 }
 
-@media (max-width: 480px) {
-  .banner, .banner-swiper {
-    height: 120px;
-    font-size: 1rem;
-    border-radius: 6px;
-  }
-  .banner-slide {
-    border-radius: 6px;
-  }
-  .text {
-    padding: 4px;
-    font-size: 0.9rem;
-  }
-}
 
 
    .swiper-button-next,
