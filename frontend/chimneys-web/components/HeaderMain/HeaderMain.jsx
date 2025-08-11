@@ -24,6 +24,7 @@ export default function HeaderMain() {
     const [error, setError] = useState(null);
     const router = useRouter();
     const [mounted, setMounted] = useState(false);
+    const [ordersCount, setOrdersCount] = useState(0);
 
     useEffect(() => {
         setMounted(true);
@@ -61,6 +62,18 @@ export default function HeaderMain() {
             setRole(savedRole);
         }
     }, [user]);
+
+    useEffect(() => {
+        if(role === 'admin'){
+            const fetchCount = async () => {
+                const res = await fetch(`http://localhost:5501/order/by-status/pending`, {});
+                const data = await res.json();
+                console.log('data is :', data);
+                setOrdersCount(data.length);
+            }
+            fetchCount();
+        }
+    }, [role]);
 
     const handleLogout = async() => {
         await logoutUser();
@@ -136,7 +149,7 @@ export default function HeaderMain() {
                 <div className="wrapperInfo">
                     <div className="address">
                         <span>Тернопіль</span>
-                        <span>вул. Прикладна 11</span>
+                        <span>вул. Степана Будного, 37</span>
                     </div>
                     <div className="contacts">
                         <span>(012) 34-567-89</span>
@@ -212,6 +225,17 @@ export default function HeaderMain() {
                                 <div className="login">
                                     <FaUser />
                                     <span>Адмін {user?.name}</span>
+                                </div>
+                            </Link>
+                            <Link href="/all-orders">
+                                <div className="login">
+                                    <div className="icon-with-badge">
+                                    <FaClipboardList />
+                                    {ordersCount > 0 && (
+                                        <span className="badge">{ordersCount}</span>
+                                    )}
+                                    </div>
+                                    <span>Усі замовлення</span>
                                 </div>
                             </Link>
                             <div className="sign-out">

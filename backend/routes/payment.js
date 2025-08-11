@@ -26,7 +26,7 @@ liqpayRouter.post("/create-payment", (req, res) => {
         order_id,
         version: 3,
         result_url: "http://localhost:3000/payment-success",
-        server_url: "https://682e2a93a40d.ngrok-free.app/liqpay/payment-callback",
+        server_url: "https://d2592229de42.ngrok-free.app/liqpay/payment-callback",
         language: "uk",
         sandbox: 1,
     });
@@ -56,12 +56,29 @@ liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), 
         const { order_id, status } = decodedData;
 
         if (status === "success" || status === "sandbox") {
-            // Знаходимо замовлення по order_id
             const order = await Order.findOne({ _id: order_id.replace("order_", "") });
             if (!order) {
                 return res.status(404).send("Order not found");
             }
 
+            order.paymentInfo = {
+                paymentId: +decodedData.payment_id || '',
+                liqpayOrderId: decodedData.liqpay_order_id || '',
+                liqpayStatus: decodedData.status || '',
+                transactionId: +decodedData.transaction_id || '',
+                amount: +decodedData.amount || '',
+                currency: decodedData.currency || '',
+                payType: decodedData.paytype || '',
+                action: decodedData.action || '',
+                description: decodedData.description || '',
+                senderName: `${decodedData.sender_first_name || ''} ${decodedData.sender_last_name || ''}`.trim(),
+                senderCardType: decodedData.sender_card_type || '',
+                senderCardBank: decodedData.sender_card_bank || '',
+                amountCredit: +decodedData.amount_credit || '',
+                receiverCommission: +decodedData.receiver_commission || '',
+                createdAt: new Date(decodedData.create_date || ''),
+                endedAt: new Date(decodedData.end_date || '')
+            };
             order.isPaid = true;
             order.paidAt = new Date();
             await order.save();

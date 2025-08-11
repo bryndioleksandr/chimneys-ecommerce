@@ -103,7 +103,7 @@ export const getConstructorElement = async (req, res) => {
     try {
         const { area } = req.params;
 
-        const constructor = await ConstructorOne.findOne().populate("products.product");
+        const constructor = await ConstructorOne.findOne().populate("products.product").populate("category subCategory subSubCategory");
 
         if (!constructor) {
             return res.status(404).json({ message: "Constructor not found" });

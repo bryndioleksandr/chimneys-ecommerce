@@ -114,3 +114,13 @@ export const getPaidOrders = async(req, res) => {
     }
 }
 
+// export const getOrdersByStatusCount = async(req, res) => {
+//     try{
+//         const { status } = req.params;
+//         const orders = await Order.find({ status }).;
+//         res.status(200).json(orders);
+//     } catch (err) {
+//         res.status(500).json({ msg: err.message });
+//     }
+// }
+

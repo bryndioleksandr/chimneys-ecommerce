@@ -151,13 +151,21 @@
     color: var(--primary-color);
 }
 
-.footerBottom {
+.footerBottom{
     text-align: center;
     margin-top: 20px;
     padding-top: 10px;
     border-top: 1px solid var(--highlight-color-hover);
     font-size: 12px;
-    color: var(--text-color);
+    color: var(--highlight-color);
+}
+
+.footerBottom a{
+    color: var(--highlight-color);
+}
+
+.footerBottom a:hover{
+    color: var(--highlight-color-hover);
 }
 
 @media (max-width: 768px) {

@@ -272,7 +272,7 @@ export default function CreateOrderPage() {
                     )}
 
                     {formData.deliveryWay === "pickup" && (
-                        <p>Адреса самовивозу: м. Київ, вул. Хрещатик, 10</p>
+                        <p>Адреса самовивозу: м. Тернопіль, вул. Степана Будного, 37</p>
                     )}
 
                     <Select

@@ -1,0 +1,45 @@
+.container {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 250px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.cardTitle {
+    padding: 15px;
+    font-size: 1.2rem;
+    background-color: #f5f5f5;
+}

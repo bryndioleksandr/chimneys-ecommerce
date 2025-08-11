@@ -2,7 +2,6 @@ import './StarRating.css';
 
 const StarRating = ({ rating, totalStars = 5 }) => {
     const stars = [];
-    console.log('rating is:', rating);
 
     let fullStars = Math.floor(rating);
     const decimal = rating - fullStars;
@@ -14,8 +13,6 @@ const StarRating = ({ rating, totalStars = 5 }) => {
         hasHalfStar = true;
     }
 
-    console.log('full stars', fullStars);
-    console.log('has half star:', hasHalfStar);
 
     for (let i = 1; i <= totalStars; i++) {
         if (i <= fullStars) {

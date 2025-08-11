@@ -7,6 +7,7 @@ import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
 import { useDispatch } from 'react-redux';
 import { addItemToCart } from '@/redux/slices/cart';
 import {FaSearch} from "react-icons/fa";
+import {loadCartFromStorage} from "../../../redux/slices/cart";
 
 
 const AREAS = [
@@ -83,6 +84,16 @@ export default function ChimneyMapOne() {
 
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const storedCart = localStorage.getItem('cart');
+            if (storedCart) {
+                const parsedCart = JSON.parse(storedCart);
+                dispatch(loadCartFromStorage(parsedCart));
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const updateSize = () => {
@@ -188,6 +199,7 @@ export default function ChimneyMapOne() {
 
 
     const handleAddToCart = (product) => {
+        console.log('attached product is: ', product);
             dispatch(addItemToCart(product));
             setSelectedArea(null);
     };

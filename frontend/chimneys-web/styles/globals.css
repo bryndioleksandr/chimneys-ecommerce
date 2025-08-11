@@ -48,6 +48,17 @@ body {
     --card-bg: #FFFFFF;                  /* Стандартний білий для товарів */
     --filter-bg: #F0ECE8;                /* Дуже світлий сірий з натяком на тепло */
 }
+
+a[href="/constructor"] {
+    position: relative;
+}
+
+a[href="/constructor"]:hover {
+    background-color: var(--hover-navbtn-color);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
 /*:root {*/
 /*    --primary-color: #B30059;            !* Насичений малиновий, основний колір *!*/
 /*    --background-color: #F9F4F7;         !* Дуже світлий рожево-сірий фон *!*/

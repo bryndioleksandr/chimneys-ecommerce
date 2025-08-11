@@ -23,6 +23,7 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
     const [selectedPrice, setSelectedPrice] = useState({ min: 0, max: 0 });
     const [isInStock, setIsInStock] = useState(false);
     const [isOutStock, setIsOutStock] = useState(false);
+    const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
 
 
     useEffect(() => {
@@ -158,7 +159,17 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
 
     return (
         <div className="filters-panel">
-            <h3>Фільтри</h3>
+            <div className="filters-panel-header">
+                <h3>Фільтри</h3>
+                <button
+                    onClick={() => setIsPanelCollapsed(prev => !prev)}
+                    className="toggle-filters-button"
+                >
+                    {isPanelCollapsed ? "Показати фільтри ▼" : "Сховати фільтри ▲"}
+                </button>
+            </div>
+            {!isPanelCollapsed && (
+                <>
             <button onClick={handleResetFilters} className="reset-button">Скинути фільтри</button>
             {filters.stock && (
                 <div className="filter-group">
@@ -299,6 +310,8 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
             )}
 
             <button onClick={handleApplyFilters} className="apply-btn">Застосувати</button>
+                </>
+                )}
         </div>
     );
 };

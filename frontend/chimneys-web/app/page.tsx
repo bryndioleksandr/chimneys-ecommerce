@@ -3,17 +3,22 @@ import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
 import StoreDescription from "@/components/StoreDescription/StoreDescription";
 import PopularSlider from "@/components/PopularProductsSlider/PopularProductsSlider";
 import SaledProductsSlider from "@/components/SaledProductsSlider/SaledProductsSlider";
+import Link from "next/link";
 
 export default async function Home() {
-
     return (
         <div>
             <div className="contentWrapper" style={styles.contentWrapper}>
-                <BannerSection/>
-                <CategoriesGrid/>
+                <BannerSection />
+                <div style={styles.constructorWrapper}>
+                    <Link href="/constructor" style={styles.constructorBtn}>
+                        🛠 Створи свій димохід
+                    </Link>
+                </div>
+                <CategoriesGrid />
                 <PopularSlider />
                 <SaledProductsSlider />
-                <StoreDescription/>
+                <StoreDescription />
             </div>
         </div>
     );
@@ -26,5 +31,22 @@ const styles = {
         margin: "0 auto",
         padding: "0 15px",
         boxSizing: "border-box" as "border-box",
-    }
-}
+    },
+    constructorWrapper: {
+        display: "flex",
+        justifyContent: "center",
+        margin: "20px 0",
+    },
+    constructorBtn: {
+        display: "inline-block",
+        backgroundColor: "var(--primary-color)",
+        color: "var(--card-bg)",
+        padding: "14px 28px",
+        fontSize: "18px",
+        fontWeight: "600",
+        borderRadius: "50px",
+        textDecoration: "none",
+        boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
+        transition: "all 0.3s ease",
+    },
+} as const;

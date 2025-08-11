@@ -41,7 +41,7 @@ export default function Footer() {
                     <ul>
                         <li>+38 (098) 123-45-67</li>
                         <li>qwerty123@gmail.com</li>
-                        <li>м. Тернопіль, вул. Прикладна, 11</li>
+                        <li>м. Тернопіль, вулиця Степана Будного, 37,</li>
                     </ul>
                 </div>
 
@@ -57,7 +57,7 @@ export default function Footer() {
                     <div className="footer-map">
                         <iframe
                             title="Google Map"
-                            src="https://www.google.com/maps/embed?pb=!1m13!1m11!1m3!1d677.9608190552605!2d25.55965248069879!3d49.54150083472572!2m2!1f0!2f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1suk!2sua!4v1742044306271!5m2!1suk!2sua"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d647.2466794361011!2d25.55979256971989!3d49.541402768455235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473037bc5dec4ee7%3A0x69c2f3c1bbbf2c68!2z0JTQuNC80L7RhdC-0LTQuCDQktC10L3RgtCj0YHRgtGA0ZbQuQ!5e0!3m2!1suk!2sua!4v1754394933372!5m2!1suk!2sua"
                             width="100%"
                             height="300"
                             allowFullScreen=""
@@ -69,7 +69,11 @@ export default function Footer() {
             </div>
 
             <div className="footerBottom">
-                <p>&copy; {new Date().getFullYear()} Інтернет-магазин. Всі права захищено.</p>
+                <p>&copy; {new Date().getFullYear()} Інтернет-магазин. Сайт розробив
+                    <a href="mailto:s.v.bryndo@gmail.com" style={{ marginLeft: 0 }}>
+                        Олександр Бриндьо
+                    </a>
+                </p>
             </div>
         </footer>
     );
