@@ -1,4 +1,4 @@
-import ConstructorOne from "../models/ConstructorOne.js";
+import ConstructorOne from "../models/constructorOne.js";
 
 export const createConstructor = async (req, res) => {
     try {

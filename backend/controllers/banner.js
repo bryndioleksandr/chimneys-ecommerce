@@ -1,4 +1,4 @@
-import { Banner } from "../models/Banner.js";
+import { Banner } from "../models/banner.js";
 import cloudinary from "cloudinary";
 import multer from "multer";
 
