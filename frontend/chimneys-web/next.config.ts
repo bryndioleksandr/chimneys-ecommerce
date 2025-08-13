@@ -1,11 +1,10 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
     async rewrites() {
-    return [
-        { source: '/api/:path*', destination: 'https://YOUR-API.onrender.com/:path*' } // тимчасово пусто
-    ];
+        return [
+            { source: '/api/:path*', destination: 'https://YOUR-API.onrender.com/:path*' }
+        ]
+    },
 }
-};
 
-export default nextConfig;
+module.exports = nextConfig
