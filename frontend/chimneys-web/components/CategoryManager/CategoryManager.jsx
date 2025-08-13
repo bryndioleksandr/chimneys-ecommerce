@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 import './style.css'
 
 const CategoryManager = () => {
@@ -12,7 +13,7 @@ const CategoryManager = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:5501/category/categories');
+            const response = await axios.get(`${backUrl}/category/categories`);
             setCategories(response.data);
         } catch (error) {
             console.error('Помилка при отриманні категорій:', error);
@@ -22,7 +23,7 @@ const CategoryManager = () => {
     const handleDelete = async (id) => {
         if (!confirm('Точно видалити категорію?')) return;
         try {
-            await axios.delete(`http://localhost:5501/category/${id}`);
+            await axios.delete(`${backUrl}/category/${id}`);
             fetchCategories();
         } catch (error) {
             console.error('Помилка при видаленні:', error);
@@ -35,7 +36,7 @@ const CategoryManager = () => {
             if (newName) formData.append('name', newName);
             if (newImage) formData.append('categoryImage', newImage);
 
-            await axios.patch(`http://localhost:5501/category/update/${id}`, formData, {
+            await axios.patch(`${backUrl}/category/update/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

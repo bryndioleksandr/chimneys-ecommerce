@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -16,7 +17,7 @@ const PopularSlider = () => {
     useEffect(() => {
         const fetchPopular = async () => {
             try {
-                const res = await axios.get("http://localhost:5501/products/popular");
+                const res = await axios.get(`${backUrl}/products/popular`);
                 setProducts(res.data);
             } catch (err) {
                 console.error("Помилка при отриманні популярних товарів", err);

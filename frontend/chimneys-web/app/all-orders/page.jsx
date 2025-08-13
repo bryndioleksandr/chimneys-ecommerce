@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import "./style.css";
 
 const deliveryWayMap = {
@@ -30,12 +31,12 @@ export default function AllOrdersPage() {
 
     const fetchOrders = async () => {
         try {
-            let url = "http://localhost:5501/order/all-orders";
+            let url = `${backUrl}/order/all-orders`;
 
             if (statusFilter) {
-                url = `http://localhost:5501/order/by-status/${statusFilter}`;
+                url = `${backUrl}/order/by-status/${statusFilter}`;
             } else if (showPaidOnly) {
-                url = `http://localhost:5501/order/paid-orders/true`;
+                url = `${backUrl}/order/paid-orders/true`;
             }
 
             const res = await axios.get(url);
@@ -75,7 +76,7 @@ export default function AllOrdersPage() {
 
     const updateStatus = async (orderId, status) => {
         try {
-            await axios.patch(`http://localhost:5501/order/update-status/${orderId}`, { status });
+            await axios.patch(`${backUrl}/order/update-status/${orderId}`, { status });
             alert("Статус оновлено!");
         } catch (err) {
             console.error("Помилка при оновленні статусу:", err);

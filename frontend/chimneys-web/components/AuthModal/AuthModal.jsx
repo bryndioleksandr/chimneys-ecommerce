@@ -2,7 +2,7 @@
 
 import {useEffect, useState, useRef, useCallback} from "react";
 import "./AuthModal.css";
-import {setUser, getUser} from "@/config/config";
+import {setUser, getUser, backUrl} from "../../config/config";
 import {loginUser, registerUser} from "@/services/auth";
 import useEscapeKey from "@/hooks/useEscapeClose";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
@@ -142,7 +142,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
     const verifyEmailCode = async () => {
         try {
-            const res = await fetch("http://localhost:5501/verify-email", {
+            const res = await fetch(`${backUrl}/verify-email`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, code: verificationCode }),

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -16,7 +17,7 @@ const SaledSlider = () => {
     useEffect(() => {
         const fetchSaled = async () => {
             try {
-                const res = await axios.get("http://localhost:5501/products/for-sale");
+                const res = await axios.get(`${backUrl}/products/for-sale`);
                 setProducts(res.data);
             } catch (err) {
                 console.error("Помилка при отриманні знижкових товарів", err);

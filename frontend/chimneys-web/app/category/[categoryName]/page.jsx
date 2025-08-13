@@ -9,6 +9,7 @@ import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "../category.css";
 import Link from "next/link";
 import ProductCard from "../../../components/ProductCard/ProductCard";
+import { backUrl } from '../../../config/config';
 import FiltersPanel from "../../../components/FiltersPanel/FiltersPanel";
 
 const CategoryPage = () => {
@@ -50,7 +51,7 @@ const CategoryPage = () => {
     };
 
     const getFiltersByCategory = async (categoryId) => {
-        const res = await fetch(`http://localhost:5501/filters/${categoryId}`);
+        const res = await fetch(`${backUrl}/filters/${categoryId}`);
         if (!res.ok) throw new Error('Не вдалося отримати фільтри');
         const data = await res.json();
         return data.filters;

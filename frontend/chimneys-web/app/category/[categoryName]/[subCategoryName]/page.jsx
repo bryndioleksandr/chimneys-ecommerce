@@ -13,6 +13,7 @@ import "../../category.css";
 import {searchCategoryBySlug} from "../../../../services/category";
 import Link from "next/link";
 import {searchSubSubCategoriesBySlug} from "../../../../services/subsubcategory";
+import { backUrl } from '../../../../config/config';
 
 const SubCategoryPage = () => {
     const { categoryName, subCategoryName } = useParams();
@@ -30,7 +31,7 @@ const SubCategoryPage = () => {
 
     const getFiltersByCategory = async (categoryId, subCategoryId) => {
         console.log('filters id:', categoryId, "and as well ", subCategoryId);
-        const res = await fetch(`http://localhost:5501/filters/${categoryId}/${subCategoryId}`);
+        const res = await fetch(`${backUrl}/filters/${categoryId}/${subCategoryId}`);
         if (!res.ok) throw new Error('Не вдалося отримати фільтри');
         const data = await res.json();
         return data.filters;

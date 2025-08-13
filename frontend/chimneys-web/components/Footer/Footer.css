@@ -186,6 +186,11 @@
         font-size: 12px;
         padding: 10px 0;
     }
+    .footerContainer {
+        justify-content: start;
+        text-align: center;
+        align-items: center;
+    }
     .footerSection h4 {
         font-size: 14px;
     }

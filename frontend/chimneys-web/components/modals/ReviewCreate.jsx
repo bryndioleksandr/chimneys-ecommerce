@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 import Rating from "../ReviewStars/ReviewStars";
 import "./style.css"
 
@@ -12,7 +13,7 @@ const ReviewForm = ({product}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5501/reviews/create', {
+            const response = await axios.post(`${backUrl}/reviews/create`, {
                 name,
                 email,
                 rating,
@@ -26,15 +27,15 @@ const ReviewForm = ({product}) => {
             alert('Помилка при додаванні відгуку');
         }
         try{
-            const res = await fetch(`http://localhost:5501/reviews/product-reviews/${product}`);
+            const res = await fetch(`${backUrl}/reviews/product-reviews/${product}`);
             const data = await res.json();
             const validReviews = Array.isArray(data) ? data : [];
 
             const sum = validReviews.reduce((acc, review) => acc + review.rating, 0);
             const averageRating = validReviews.length > 0 ? sum / validReviews.length : 0;
 
-            await axios.patch(`http://localhost:5501/products/update-rating/${product}/${averageRating}`, {})
-            await axios.patch(`http://localhost:5501/products/update-reviews/${product}`, {
+            await axios.patch(`${backUrl}/products/update-rating/${product}/${averageRating}`, {})
+            await axios.patch(`${backUrl}/products/update-reviews/${product}`, {
                 reviews: validReviews.map(review => review._id)
             });        } catch(error) {
             console.error('Помилка при оновленні рейтингу товару:', error);

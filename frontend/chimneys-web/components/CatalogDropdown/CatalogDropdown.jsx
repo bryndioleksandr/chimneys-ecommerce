@@ -3,6 +3,7 @@ import {useState, useEffect, useRef} from "react";
 import {FaBars, FaTimes} from "react-icons/fa";
 import "./CatalogDropdown.css";
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 import Link from "next/link";
 
 const CatalogDropdown = () => {
@@ -14,7 +15,7 @@ const CatalogDropdown = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await axios.get("http://localhost:5501/category/categories");
+            const response = await axios.get(`${backUrl}/category/categories`);
             setCategories(response.data);
         };
 

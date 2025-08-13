@@ -11,6 +11,7 @@ import {logoutUser} from "@/services/auth";
 import { logout } from "@/redux/slices/user";
 import { fetchCategories } from "@/services/category";
 import RoleGuard from "@/components/auth/RoleGuard";
+import { backUrl } from '../../config/config';
 import { useRouter } from "next/navigation";
 import {toast} from "react-toastify";
 
@@ -38,7 +39,6 @@ export default function HeaderMain() {
 
     const user = useSelector((state) => state.user.user);
     const cart = useSelector((state) => state.cart);
-    console.log('cart is:', cart);
     useEffect(() => {
         const loadCategories = async () => {
             try {
@@ -66,7 +66,7 @@ export default function HeaderMain() {
     useEffect(() => {
         if(role === 'admin'){
             const fetchCount = async () => {
-                const res = await fetch(`http://localhost:5501/order/by-status/pending`, {});
+                const res = await fetch(`${backUrl}/order/by-status/pending`, {});
                 const data = await res.json();
                 console.log('data is :', data);
                 setOrdersCount(data.length);
@@ -112,7 +112,7 @@ export default function HeaderMain() {
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
         try {
-            const res = await fetch(`http://localhost:5501/products/search?query=${searchQuery}`);
+            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
             const data = await res.json();
             console.log('data is:', data);
             setSearchResults(data);

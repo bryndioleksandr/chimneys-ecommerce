@@ -8,7 +8,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-// @ts-ignore
+//@ts-expect-error: компонент не має типів
 export default function RootLayout({children}) {
     return (
         <html lang="uk" suppressHydrationWarning>
@@ -43,6 +43,6 @@ const styles = {
         maxWidth: "1200px",
         margin: "0 auto",
         padding: "0 15px",
-        boxSizing: "border-box" as "border-box",
+        boxSizing: "border-box" as const,
     }
 }

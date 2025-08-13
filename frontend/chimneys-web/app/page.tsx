@@ -30,7 +30,7 @@ const styles = {
         maxWidth: "1200px",
         margin: "0 auto",
         padding: "0 15px",
-        boxSizing: "border-box" as "border-box",
+        boxSizing: "border-box" as const,
     },
     constructorWrapper: {
         display: "flex",

@@ -1,6 +1,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import "./style.css";
 
 const deliveryWayMap = {
@@ -41,7 +42,7 @@ export default function MyOrdersPage() {
                 if (userRaw) {
                     const user = JSON.parse(userRaw);
                     const userId = user.id;
-                    const res = await axios.get(`http://localhost:5501/order/user/${userId}`);
+                    const res = await axios.get(`${backUrl}/order/user/${userId}`);
                     const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                     setOrders(sorted);
                 }

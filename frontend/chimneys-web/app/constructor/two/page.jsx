@@ -6,6 +6,7 @@ import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
 import { useDispatch } from 'react-redux';
 import { addItemToCart } from '@/redux/slices/cart';
 import {FaSearch} from "react-icons/fa";
+import { backUrl } from '../../../config/config';
 import {loadCartFromStorage} from "../../../redux/slices/cart";
 
 const AREAS = [
@@ -121,7 +122,7 @@ export default function ChimneyMapTwo() {
         const fetchProducts = async () => {
             try {
                 console.log('now fetch');
-                const res = await fetch(`http://localhost:5501/products/products`);
+                const res = await fetch(`${backUrl}/products/products`);
                 if (!res.ok) throw new Error("Products not found");
                 const data = await res.json();
                 setProducts(data);
@@ -138,7 +139,7 @@ export default function ChimneyMapTwo() {
             if (!selectedArea) return;
 
             try {
-                const res = await fetch(`http://localhost:5501/constructor-two/constructor/element/${selectedArea}`);
+                const res = await fetch(`${backUrl}/constructor-two/constructor/element/${selectedArea}`);
                 if (res.ok) {
                     const data = await res.json();
                     setAttachedProduct(data.product);
@@ -158,7 +159,7 @@ export default function ChimneyMapTwo() {
         console.log('search query is:', searchQuery);
         if (!searchQuery.trim()) return;
         try {
-            const res = await fetch(`http://localhost:5501/products/search?query=${searchQuery}`);
+            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
             const data = await res.json();
             console.log('data is:', data);
             setProducts(data);
@@ -172,7 +173,7 @@ export default function ChimneyMapTwo() {
         if (!productId || !areaId) return;
 
         try {
-            const res = await fetch(`http://localhost:5501/constructor-two/constructor/element`, {
+            const res = await fetch(`${backUrl}/constructor-two/constructor/element`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5501';
+import { backUrl as API_BASE } from '../config/config';
 
 export const fetchSubCategories = async () => {
     try {
@@ -13,7 +13,7 @@ export const fetchSubCategories = async () => {
 
 export const searchSubCategories = async (name) => {
     try {
-        const response = await fetch(`http://localhost:5501/subcategory/search?name=${name}`);
+        const response = await fetch(`${API_BASE}/subcategory/search?name=${name}`);
         console.log('response from search:', response);
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
@@ -25,7 +25,7 @@ export const searchSubCategories = async (name) => {
 
 export const searchSubCategoriesBySlug = async (slug) => {
     try {
-        const response = await fetch(`http://localhost:5501/subcategory/search-slug?slug=${slug}`);
+        const response = await fetch(`${API_BASE}/subcategory/search-slug?slug=${slug}`);
         console.log('response from search:', response);
         if (!response.ok) throw new Error("Search failed");
         return await response.json();

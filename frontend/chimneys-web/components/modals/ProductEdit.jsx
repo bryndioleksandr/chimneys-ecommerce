@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 import { searchSubCategories } from '../../services/subcategory';
 import { searchSubSubCategories } from '../../services/subsubcategory';
 import ReactDOM from 'react-dom';
@@ -54,7 +55,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
     }, [product]);
 
     useEffect(() => {
-        axios.get('http://localhost:5501/category/categories')
+        axios.get(`${backUrl}/category/categories`)
             .then(res => setCategories(res.data))
             .catch(err => console.error('Помилка при завантаженні категорій:', err));
     }, []);
@@ -108,7 +109,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
         }
 
         try {
-            const res = await axios.put(`http://localhost:5501/products/update/${product._id}`, formData, {
+            const res = await axios.put(`${backUrl}/products/update/${product._id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             alert('Продукт оновлено');

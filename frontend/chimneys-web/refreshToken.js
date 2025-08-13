@@ -1,4 +1,4 @@
-export const backUrl = "http://localhost:5501";
+import { backUrl } from './config/config';
 
 export const refreshToken = async () => {
     console.log("🔄 Refresh token started...");

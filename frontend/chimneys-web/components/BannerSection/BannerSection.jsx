@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
+import { backUrl } from '../../config/config';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -13,7 +14,7 @@ export default function BannerSection() {
     useEffect(() => {
         const fetchBanners = async () => {
             try {
-                const res = await fetch('http://localhost:5501/banner/banners');
+                const res = await fetch(`${backUrl}/banner/banners`);
                 const data = await res.json();
                 setBanners(data);
             } catch (error) {

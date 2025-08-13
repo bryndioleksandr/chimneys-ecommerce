@@ -7,6 +7,7 @@ import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
 import { useDispatch } from 'react-redux';
 import { addItemToCart } from '@/redux/slices/cart';
 import {FaSearch} from "react-icons/fa";
+import { backUrl } from '../../../config/config';
 import {loadCartFromStorage} from "../../../redux/slices/cart";
 
 
@@ -116,7 +117,7 @@ export default function ChimneyMapOne() {
         const fetchProducts = async () => {
             try {
                 console.log('now fetch');
-                const res = await fetch(`http://localhost:5501/products/products`);
+                const res = await fetch(`${backUrl}/products/products`);
                 if (!res.ok) throw new Error("Products not found");
                 const data = await res.json();
                 setProducts(data);
@@ -133,7 +134,7 @@ export default function ChimneyMapOne() {
             if (!selectedArea) return;
 
             try {
-                const res = await fetch(`http://localhost:5501/constructor-one/constructor/element/${selectedArea}`);
+                const res = await fetch(`${backUrl}/constructor-one/constructor/element/${selectedArea}`);
                 if (res.ok) {
                     const data = await res.json();
                     setAttachedProduct(data.product);
@@ -153,7 +154,7 @@ export default function ChimneyMapOne() {
         console.log('search query is:', searchQuery);
         if (!searchQuery.trim()) return;
         try {
-            const res = await fetch(`http://localhost:5501/products/search?query=${searchQuery}`);
+            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
             const data = await res.json();
             console.log('data is:', data);
             setProducts(data);
@@ -168,7 +169,7 @@ export default function ChimneyMapOne() {
         if (!productId || !areaId) return;
 
         try {
-            const res = await fetch(`http://localhost:5501/constructor-one/constructor/element`, {
+            const res = await fetch(`${backUrl}/constructor-one/constructor/element`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -289,34 +290,18 @@ export default function ChimneyMapOne() {
 
                     <div
                         className="headerSearchBarContainer"
-                        style={{ marginBottom: 16 }}
                         ref={searchRef}
                     >
-                        <div className="headerSearchBar" style={{ display: 'flex', gap: 8 }}>
+                        <div className="headerSearchBar">
                             <input
                                 placeholder="Пошук товарів"
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                style={{
-                                    flex: 1,
-                                    padding: '8px 12px',
-                                    borderRadius: 4,
-                                    border: '1px solid #ccc'
-                                }}
                             />
                             <div
                                 className="searchButton"
                                 onClick={handleSearch}
-                                style={{
-                                    padding: '8px 12px',
-                                    backgroundColor: '#D14900',
-                                    color: 'white',
-                                    borderRadius: 4,
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
                             >
                                 <FaSearch />
                             </div>

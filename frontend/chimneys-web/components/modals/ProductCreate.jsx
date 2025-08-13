@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 import {searchSubCategories} from "../../services/subcategory";
 import {searchSubSubCategories} from "../../services/subsubcategory";
 
@@ -68,7 +69,7 @@ const ProductForm = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5501/products/product', formData, {
+            const response = await axios.post(`${backUrl}/products/product`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -83,7 +84,7 @@ const ProductForm = () => {
 
 
     useEffect(() => {
-        axios.get('http://localhost:5501/category/categories')
+        axios.get(`${backUrl}/category/categories`)
             .then(response => {
                 setCategories(response.data);
             })

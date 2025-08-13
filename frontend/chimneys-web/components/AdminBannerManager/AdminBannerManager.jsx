@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { backUrl } from '../../config/config';
 
 export default function AdminBannerManager() {
     const [banners, setBanners] = useState([]);
@@ -9,7 +10,7 @@ export default function AdminBannerManager() {
 
     const fetchBanners = async () => {
         try {
-            const res = await fetch('http://localhost:5501/banner/banners');
+            const res = await fetch(`${backUrl}/banner/banners`);
             const data = await res.json();
             setBanners(data);
         } catch (error) {
@@ -31,7 +32,7 @@ export default function AdminBannerManager() {
 
         try {
             setIsLoading(true);
-            const res = await fetch('http://localhost:5501/banner/banners', {
+            const res = await fetch(`${backUrl}/banner/banners`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include',
@@ -55,7 +56,7 @@ export default function AdminBannerManager() {
         if (!confirm('Точно видалити банер?')) return;
 
         try {
-            await fetch(`http://localhost:5501/banner/banners/${id}`, {
+            await fetch(`${backUrl}/banner/banners/${id}`, {
                 method: 'DELETE',
                 credentials: 'include',
             });

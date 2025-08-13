@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import "./style.css";
 import {fetchCities, fetchWarehouses} from "../../services/novapost";
 import Select from 'react-select';
@@ -25,6 +26,8 @@ export default function CreateOrderPage() {
     const [someCities, setSomeCities] = useState([]);
     const [someWarehouses, setSomeWarehouses] = useState([]);
     const [liqpayFormHtml, setLiqpayFormHtml] = useState("");
+    const [userId, setUserId] = useState(null);
+
 
 
     const validatePhoneNumber = (number) => {
@@ -33,6 +36,12 @@ export default function CreateOrderPage() {
     };
 
     useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+        if (storedUser?.id) setUserId(storedUser.id);
+
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        setCartItems(storedCart);
+
         const fetchAndLogCities = async () => {
             try {
                 const citiess = await fetchCities();
@@ -86,9 +95,6 @@ export default function CreateOrderPage() {
         }
     };
 
-
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId = user.id;
     const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     useEffect(() => {
@@ -148,7 +154,7 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
-            const orderResponse = await axios.post("http://localhost:5501/order/make", {
+            const orderResponse = await axios.post(`${backUrl}/order/make`, {
                 user: userId,
                 ...formData,
                 deliveryWay: formData.deliveryWay,
@@ -163,7 +169,7 @@ export default function CreateOrderPage() {
 
 
             if (formData.paymentMethod === "liqpay") {
-                const liqpayRes = await axios.post("http://localhost:5501/liqpay/create-payment", {
+                const liqpayRes = await axios.post(`${backUrl}/liqpay/create-payment`, {
                     amount: totalPrice,
                     description: `Оплата замовлення "${productNames}"`,
                     orderId: orderResponse.data._id,

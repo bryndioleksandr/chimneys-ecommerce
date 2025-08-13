@@ -10,6 +10,7 @@ import StarRating from "../../../components/StarRating/StarRating";
 import LiqPayButton from "../../../components/LiqPayBtn/LiqPayBtn";
 import {addItemToCart} from "../../../redux/slices/cart";
 import axios from "axios";
+import { backUrl } from '../../../config/config';
 import {useDispatch} from "../../../redux/store";
 
 const ProductPage = () => {
@@ -44,7 +45,7 @@ const ProductPage = () => {
             return;
         }
         try {
-            const res = await axios.post(`http://localhost:5501/favorites/${userId}`, {
+            const res = await axios.post(`${backUrl}/favorites/${userId}`, {
                 productId: product._id
             });
 
@@ -62,7 +63,7 @@ const ProductPage = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await fetch(`http://localhost:5501/products/by-slug/${slug}`);
+                const res = await fetch(`${backUrl}/products/by-slug/${slug}`);
                 if (!res.ok) throw new Error("Product not found");
                 const data = await res.json();
                 setProduct(data);
@@ -81,7 +82,7 @@ const ProductPage = () => {
         const fetchReviews = async () => {
             if (!product?._id) return;
             try {
-                const res = await fetch(`http://localhost:5501/reviews/product-reviews/${product._id}`);
+                const res = await fetch(`${backUrl}/reviews/product-reviews/${product._id}`);
                 const data = await res.json();
                 console.log("reviews data:", data);
                 setReviews(Array.isArray(data) ? data : []);

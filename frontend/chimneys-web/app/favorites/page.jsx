@@ -3,6 +3,7 @@
 import React, {useState, useEffect} from "react";
 import "./favorites.css";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import {useSelector} from "react-redux";
 import Link from "next/link";
 
@@ -27,7 +28,7 @@ export default function FavoritesPage() {
 
         const fetchFavorites = async () => {
             try {
-                const res = await axios.get(`http://localhost:5501/favorites/${userId}`);
+                const res = await axios.get(`${backUrl}/favorites/${userId}`);
                 console.log('response from favorites is:', res.data);
                 setFavorites(res.data || []);
             } catch (error) {
@@ -42,7 +43,7 @@ export default function FavoritesPage() {
 
     const removeFromFavorites = async (productId) => {
         try {
-            const res = await axios.delete(`http://localhost:5501/favorites/${userId}/${productId}`);
+            const res = await axios.delete(`${backUrl}/favorites/${userId}/${productId}`);
             if (res.status === 200) {
                 setFavorites((prev) => prev.filter((item) => item._id !== productId));
             } else {

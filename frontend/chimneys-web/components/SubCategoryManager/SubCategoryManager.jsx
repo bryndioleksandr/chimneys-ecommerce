@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 import '../CategoryManager/style.css';
 
 const SubCategoryManager = () => {
@@ -12,7 +13,7 @@ const SubCategoryManager = () => {
 
     const fetchSubCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:5501/subcategory/subcategories');
+            const response = await axios.get(`${backUrl}/subcategory/subcategories`);
             setSubCategories(response.data);
         } catch (error) {
             console.error('Помилка при отриманні категорій:', error);
@@ -22,7 +23,7 @@ const SubCategoryManager = () => {
     const handleDelete = async (id) => {
         if (!confirm('Точно видалити категорію?')) return;
         try {
-            await axios.delete(`http://localhost:5501/subcategory/${id}`);
+            await axios.delete(`${backUrl}/subcategory/${id}`);
             fetchSubCategories();
         } catch (error) {
             console.error('Помилка при видаленні:', error);
@@ -35,7 +36,7 @@ const SubCategoryManager = () => {
             if (newName) formData.append('name', newName);
             if (newImage) formData.append('subcategoryImage', newImage);
 
-            await axios.patch(`http://localhost:5501/subcategory/update/${id}`, formData, {
+            await axios.patch(`${backUrl}/subcategory/update/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -117,39 +117,46 @@ export const userRegister = async (req, res) => {
     }
 };
 
-
 export const refreshToken = async (req, res) => {
     try {
         console.log('refreshing token back');
+
         const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) {
+            return res.status(401).json({ msg: "Помилка оновлення токена. Refresh token відсутній" });
+        }
 
-        if (!refreshToken)  return res.status(401).json({ msg: "Помилка оновлення токена. Refreshtoken відсутній" });
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                if (err.name === "TokenExpiredError") {
+                    return res.status(401).json({ message: "Refresh token прострочений" });
+                }
+                return res.status(401).json({ message: "Invalid refresh token" });
+            }
 
-        new Promise((resolve, reject) => {
-            jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-                if (err) { reject(err);} else {resolve(decoded);}
+            const userId = decoded._id;
+
+            const accessToken = jwt.sign(
+                { _id: userId },
+                process.env.ACCESS_TOKEN_SECRET,
+                { expiresIn: '15m' }
+            );
+
+            res.cookie('accessToken', accessToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax'
             });
-        })
-            .then(decoded => {
-                const userId = decoded._id;
 
-                const accessToken = jwt.sign({ _id: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-
-                res.cookie('accessToken', accessToken, { httpOnly: true, secure: false, sameSite: 'lax' });
-                res.status(200).json({ msg: 'Token updated successful' });
-
-            })
-            .catch(err => {
-                res.status(401).json({ message: 'Invalid access token' });
-            });
-
-        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            return res.status(200).json({ msg: 'Token updated successful' });
+        });
 
     } catch (error) {
         console.error('Помилка перевірки або оновлення токена:', error);
-        res.status(401).json({ msg: 'Недійсний оновлювальний токен' });
+        return res.status(500).json({ msg: 'Помилка сервера при оновленні токена' });
     }
-}
+};
+
 
 export const userLogin = async (req, res) => {
     try {

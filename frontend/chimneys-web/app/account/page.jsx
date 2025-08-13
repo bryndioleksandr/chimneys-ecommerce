@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import './style.css';
+import { backUrl } from '../../config/config';
 
 export default function AccountPage() {
     const user = useSelector(state => state.user.user);
@@ -39,7 +40,7 @@ export default function AccountPage() {
     const handleSave = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5501/user/update-profile', {
+            const response = await fetch(`${backUrl}/user/update-profile`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

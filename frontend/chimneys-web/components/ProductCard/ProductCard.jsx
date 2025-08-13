@@ -8,6 +8,7 @@ import "./ProductCard.css";
 import { addItemToCart } from "@/redux/slices/cart";
 import { useDispatch } from "@/redux/store";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import {deleteProductRequest} from "@/services/product";
 import EditProductModal from "../modals/ProductEdit";
 
@@ -40,7 +41,7 @@ const ProductCard = ({ product }) => {
             return;
         }
         try {
-            const res = await axios.post(`http://localhost:5501/favorites/${userId}`, {
+            const res = await axios.post(`${backUrl}/favorites/${userId}`, {
                 productId: product._id
             });
 

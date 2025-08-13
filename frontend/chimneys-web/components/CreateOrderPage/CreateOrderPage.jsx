@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 import "./order.css";
 
 export default function CreateOrderPage() {
@@ -35,7 +36,7 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
-            await axios.post("http://localhost:5501/order/make", {
+            await axios.post(`${backUrl}/order/make`, {
                 user: null,
                 ...formData,
                 deliveryWay: formData.deliveryWay,

@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from "react";
 import RoleGuard from "../../components/auth/RoleGuard";
 import "./style.css";
+import { backUrl } from '../../config/config';
 
-const API_URL = "http://localhost:5501/info-page";
+const API_URL = `${backUrl}/info-page`;
 
 export default function AboutPage() {
 

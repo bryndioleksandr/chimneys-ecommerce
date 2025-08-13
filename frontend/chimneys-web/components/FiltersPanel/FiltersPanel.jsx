@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import './FiltersPanel.css';
 import axios from "axios";
+import { backUrl } from '../../config/config';
 
 const FILTER_LABELS = {
     diameter: "Діаметр(мм)",
@@ -99,7 +100,7 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
         }
         console.log('final filters are: ', finalFilters)
         try {
-            const response = await axios.get(`http://localhost:5501/products/filtered-products?${queryParams.toString()}`);
+            const response = await axios.get(`${backUrl}/products/filtered-products?${queryParams.toString()}`);
             const data = response.data;
             if (onFilter) {
                 onFilter(data);
@@ -143,7 +144,7 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
         }
 
         axios
-            .get(`http://localhost:5501/products/filtered-products?${queryParams.toString()}`)
+            .get(`${backUrl}/products/filtered-products?${queryParams.toString()}`)
             .then((response) => {
                 const data = response.data;
                 if (onFilter) {

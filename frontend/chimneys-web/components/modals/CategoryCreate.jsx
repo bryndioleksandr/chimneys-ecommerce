@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 
 const CategoryForm = () => {
     const [name, setName] = useState('');
@@ -14,7 +15,7 @@ const CategoryForm = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5501/category/category',
+                `${backUrl}/category/category`,
                 formData,
                 {
                     headers: {

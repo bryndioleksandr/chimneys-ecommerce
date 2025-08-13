@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const API_BASE = 'http://localhost:5501';
+import { backUrl as API_BASE } from '../config/config';
 
 export const updateProductRequest = async(productId, data) => {
     try{

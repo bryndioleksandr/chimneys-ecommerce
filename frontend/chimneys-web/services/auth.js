@@ -1,5 +1,7 @@
+import { backUrl } from '../config/config';
+
 export const registerUser = async (userData) => {
-    const response = await fetch("http://localhost:5501/user/register", {
+    const response = await fetch(`${backUrl}/user/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -10,7 +12,7 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (email, password) => {
-    const response = await fetch("http://localhost:5501/user/login", {
+    const response = await fetch(`${backUrl}/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -28,7 +30,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const logoutUser = async () => {
-    return fetch(`http://localhost:5501/user/logout`, {
+    return fetch(`${backUrl}/user/logout`, {
         method: 'GET',
         mode: 'cors',
         credentials: 'include'

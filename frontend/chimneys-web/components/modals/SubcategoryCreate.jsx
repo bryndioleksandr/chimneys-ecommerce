@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { backUrl } from '../../config/config';
 
 const SubCategoryForm = () => {
     const [category, setCategory] = useState('');
@@ -17,7 +18,7 @@ const SubCategoryForm = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5501/subcategory/subcategory',
+                `${backUrl}/subcategory/subcategory`,
                 formData,
                 {
                     headers: {
@@ -33,7 +34,7 @@ const SubCategoryForm = () => {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:5501/category/categories')
+        axios.get(`${backUrl}/category/categories`)
             .then(response => {
                 setCategories(response.data);
             })

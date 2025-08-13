@@ -19,4 +19,80 @@
     cursor: pointer;
 }
 
+.chimney-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.hover-region {
+    fill: transparent;
+    stroke: transparent;
+    stroke-width: 2;
+    pointer-events: all;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.hover-region:hover {
+    fill: rgba(0, 123, 255, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Адаптив для вузьких екранів */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+
+    .product-details {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .product-image {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+    }
+
+    .product-info {
+        margin-top: 10px;
+    }
+
+    .primary-button, .secondary-button {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 0.9rem;
+    }
+
+    .headerSearchBar {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .headerSearchBar input {
+        width: 100%;
+    }
+
+    .searchButton {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 

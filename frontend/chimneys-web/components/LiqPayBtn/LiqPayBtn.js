@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { backUrl } from '../../config/config';
 
 const LiqPayButton = ({ product }) => {
     const [htmlForm, setHtmlForm] = useState("");
 
     const handleClick = async () => {
         console.log('we are in click liqpay');
-        const res = await axios.post("http://localhost:5501/liqpay/create-payment", {
+        const res = await axios.post(`${backUrl}/liqpay/create-payment`, {
             amount: product.price,
             description: `Оплата за товар: ${product.name}`,
         });
