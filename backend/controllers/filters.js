@@ -1,4 +1,4 @@
-import Product from '../models/Product.js';
+import Product from '../models/product.js';
 
 export const getFiltersByCategory = async (req, res) => {
     const { categoryId, subCategoryId, subSubCategoryId } = req.params;
