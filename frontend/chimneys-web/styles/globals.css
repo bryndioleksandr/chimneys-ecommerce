@@ -49,11 +49,11 @@ body {
     --filter-bg: #F0ECE8;                /* Дуже світлий сірий з натяком на тепло */
 }
 
-a[href="/constructor"] {
+a[href="/constructor-dym"] {
     position: relative;
 }
 
-a[href="/constructor"]:hover {
+a[href="/constructor-dym"]:hover {
     background-color: var(--hover-navbtn-color);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);

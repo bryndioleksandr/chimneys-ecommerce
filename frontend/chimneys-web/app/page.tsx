@@ -11,7 +11,7 @@ export default async function Home() {
             <div className="contentWrapper" style={styles.contentWrapper}>
                 <BannerSection />
                 <div style={styles.constructorWrapper}>
-                    <Link href="/constructor" style={styles.constructorBtn}>
+                    <Link href="/constructor-dym" style={styles.constructorBtn}>
                         🛠 Створи свій димохід
                     </Link>
                 </div>

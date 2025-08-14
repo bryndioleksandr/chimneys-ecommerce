@@ -7,7 +7,7 @@ export default function ConstructorPage() {
             <h1 className={styles.title}>Обери тип димоходу</h1>
 
             <div className={styles.cards}>
-                <Link href="/constructor/one" className={styles.card}>
+                <Link href="/constructor-dym/one" className={styles.card}>
                     <img
                         src="/one_sided.jpg"
                         alt="Одностінний димохід"
@@ -16,7 +16,7 @@ export default function ConstructorPage() {
                     <h2 className={styles.cardTitle}>Одностінний димохід</h2>
                 </Link>
 
-                <Link href="/constructor/two" className={styles.card}>
+                <Link href="/constructor-dym/two" className={styles.card}>
                     <img
                         src="/two_sided.jpg"
                         alt="Двостінний димохід"
