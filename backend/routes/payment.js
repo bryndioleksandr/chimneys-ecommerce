@@ -25,8 +25,8 @@ liqpayRouter.post("/create-payment", (req, res) => {
         description,
         order_id,
         version: 3,
-        result_url: "http://localhost:3000/payment-success",
-        server_url: "https://d2592229de42.ngrok-free.app/liqpay/payment-callback",
+        result_url: "https://chimneys-ecommerce-bi38.vercel.app/payment-success",
+        server_url: "https://chimneys-ecommerce.onrender.com/liqpay/payment-callback",
         language: "uk",
         sandbox: 1,
     });
