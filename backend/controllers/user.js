@@ -1,6 +1,5 @@
 import User from "../models/user.js";
 import bcrypt from 'bcrypt';
-import err from "multer/lib/multer-error.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
@@ -174,7 +173,6 @@ export const userLogin = async (req, res) => {
 
         const accessToken = createAccessToken({_id: user._id});
         const refreshToken = createRefreshToken({_id: user._id});
-        console.log('Tokens are:', accessToken, "and refresh:", refreshToken);
         res.cookie('accessToken', accessToken, { httpOnly: true, secure:false, sameSite: 'lax' });
         res.cookie('refreshToken', refreshToken, { httpOnly: true, secure:false, sameSite: 'lax' });
 

@@ -38,21 +38,6 @@
     outline: none;
 }
 
-.apply-btn{
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.apply-btn:hover {
-    background-color: #005bb5;
-}
 
 .filter-group {
     margin-bottom: 1rem;
@@ -101,6 +86,7 @@ input[type="checkbox"] {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    background-color: red;
 }
 
 .filter-buttons {
@@ -210,4 +196,27 @@ input[type="checkbox"] {
     width: 100%;
     max-width: 100px;
     padding: 4px 6px;
+}
+
+.toggle-filters-button {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 8px 14px;
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    border: 1px solid var(--highlight-color-hover);
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-filters-button:hover {
+    background-color: var(--highlight-color-hover);
+    color: var(--text-color);
+}
+
+.toggle-filters-button:active {
+    transform: scale(0.97);
 }

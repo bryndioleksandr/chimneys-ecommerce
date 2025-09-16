@@ -78,17 +78,17 @@ const ProductCard = ({ product }) => {
                             <span className="count-reviews">({product.reviews?.length || 0})</span>
                         </div>
                         {product.stock !== 0 ? (
-                            <span className="card-in-stock">В наявності: {product.stock}</span>
+                            <span className="card-in-stock">В наявності</span>
                         ) : (
                             <span className="card-in-stock" style={{color: 'red'}}>Немає в наявності</span>
                         )}
                     </div>
                 </Link>
 
-                <div className="card-favorites" onClick={handleAddToFavorites}>
-                    <FaHeart/>
-                    <span className="card-heart">До вішлісту</span>
-                </div>
+                {/*<div className="card-favorites" onClick={handleAddToFavorites}>*/}
+                {/*    <FaHeart/>*/}
+                {/*    <span className="card-heart">До вішлісту</span>*/}
+                {/*</div>*/}
 
                 <div className="card-bottom">
                     <div className="card-price-cart">
@@ -100,7 +100,11 @@ const ProductCard = ({ product }) => {
                         ) : (
                             <span className="card-price">{product.price}₴</span>
                         )}
-                        <FaShoppingCart onClick={() => handleAddToCart(product)}/>
+                        <div className="heart-cart">
+                            <FaHeart/>
+                            <FaShoppingCart onClick={() => handleAddToCart(product)}/>
+                        </div>
+
                     </div>
                     {role === "user" && (
                         <div className="admin-buttons">

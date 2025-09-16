@@ -115,7 +115,6 @@
     }
 }
 
-/* Responsive */
 @media (max-width: 480px) {
     .modal-content {
         padding: 24px 16px;
@@ -164,10 +163,18 @@
 }
 
 .show-password {
-    margin-top: 8px;
     display: flex;
     align-items: center;
-    font-size: 14px;
+    justify-content: flex-start;
     gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #444;
+    text-align: left;
+}
+.show-password input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #007bff;
 }
 

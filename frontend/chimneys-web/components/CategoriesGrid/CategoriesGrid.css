@@ -17,11 +17,12 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     max-width:220px;
     max-height:220px;
+    box-sizing:border-box;
 }
 
 .category-card img {
     width: 100%;
-    height: 100px;
+    height: 100%;
     object-fit: contain;
 }
 
@@ -50,6 +51,48 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.category-card {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.category-card {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.category-card p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1px 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    box-sizing:border-box;
+}
+
 @media (max-width: 768px) {
   .categories-grid {
     gap: 10px;
@@ -61,8 +104,12 @@
     font-size: 1rem;
   }
   .category-card img {
-    height: 60px;
+      object-fit: contain;
   }
+    .category-card p {
+        font-size: 0.8rem;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -76,20 +123,21 @@
     .category-card {
         max-width: 120px;
         max-height: 120px;
-        font-size: 0.95rem;
         padding: 6px;
         margin: 0 auto;
     }
 
     .category-card img {
-        height: 50px;
+        object-fit: contain;
     }
 
     .category-card p {
-        font-size: 0.9rem;
+        padding:1px 3px;
+        font-size: 0.7rem;
     }
 
     .link {
+        padding:0;
         text-align: center;
         text-decoration: none;
         color: inherit;

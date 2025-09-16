@@ -162,6 +162,7 @@ h3 {
 .headerSearchBar input {
     flex: 1;
     padding: 10px 15px;
+    margin-right: 20px;
     border: none;
     outline: none;
     font-size: 16px;
@@ -301,6 +302,10 @@ h3 {
     gap: 5px;
 }
 
+.info{
+    display: none;
+}
+
 
 @media (max-width: 768px) {
     .headerMain {
@@ -353,7 +358,7 @@ h3 {
 
     .headerSearchBar input {
         font-size: 14px;
-        padding:0;
+        padding-left:10px;
     }
 
     .headerTop {
@@ -394,6 +399,7 @@ h3 {
 
     .headerSearchBar input {
         font-size: 14px;
+        padding-left:10px;
     }
 
     .searchButton {
@@ -410,17 +416,32 @@ h3 {
     }
 
     .goods {
+        width:100%;
         gap: 12px;
+        justify-content: flex-end;
     }
 
     .headerActions {
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0 10px;
     }
 
     .headerSearchBar {
         flex-direction: row;
         padding: 0;
+    }
+    .headerSearchBarContainer{
+
+    }
+    .info{
+        display: inline-block;
+    }
+    .wrapperInfo {
+        display:none;
+    }
+    .categories{
+        display:none;
     }
 }
 
@@ -496,3 +517,5 @@ h3,
     color: var(--card-bg);
     border-left: var(--hover-navbtn-color) solid 1px;
 }
+
+

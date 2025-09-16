@@ -108,6 +108,8 @@ const ProductPage = () => {
     return (
         <div className="container mx-auto px-4 py-8 productContainer">
             <div className="flex flex-col md:flex-row gap-6">
+                <h1 className="product-title">{product.name}</h1>
+
                 <div className="flex-1">
                     {images.length > 0 ? (
                         <ImageGallery items={images} showPlayButton={false} showFullscreenButton={true}/>
@@ -117,17 +119,20 @@ const ProductPage = () => {
                 </div>
 
                 <div className="flex-1 space-y-4 productInfo">
-                    <h1 className="font-bold">{product.name}</h1>
-                    <p className="productPrice">{product.price} грн</p>
-                    <div className="flex gap-4">
-                        <button onClick={() => handleAddToCart(product)} className="buyButton px-4 py-2">Купити</button>
-                        <button onClick={handleAddToFavorites} className="wishlistButton px-4 py-2 rounded">Додати до вішлисту</button>
+                    <p className="productPrice">{product.price} ₴</p>
+                    <div className="btns-buy-wish flex gap-4">
+                        <button onClick={() => handleAddToCart(product)} className="buyButton">Купити</button>
+                        <button onClick={handleAddToFavorites} className="wishlistButton px-4 py-2 rounded">Додати до
+                            вішлисту
+                        </button>
                     </div>
                     <p className="productMeta">Код товару: {product.productCode}</p>
+                    <hr/>
                     <div className="space-y-2">
                         <h2 className="sectionTitle">Опис</h2>
                         <p>{product.description}</p>
                     </div>
+                    <hr/>
                     <div className="space-y-2">
                         <h2 className="sectionTitle">Характеристики</h2>
                         <ul className="list-disc list-inside text-sm characteristicsList">
@@ -144,6 +149,7 @@ const ProductPage = () => {
                             {product.stock != null && <li>В наявності: {product.stock} шт</li>}
                         </ul>
                     </div>
+                    <hr/>
                 </div>
             </div>
 
@@ -168,7 +174,7 @@ const ProductPage = () => {
             </div>
 
             <button
-                className="leaveReviewButton px-4 py-2 mt-4"
+                className="leaveReviewButton"
                 onClick={() => setShowReviewForm(prev => !prev)}
             >
                 {showReviewForm ? 'Сховати форму відгуку' : 'Залишити відгук'}

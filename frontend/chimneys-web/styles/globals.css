@@ -59,6 +59,54 @@ a[href="/constructor-dym"]:hover {
     transform: translateY(-2px);
 }
 
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--primary-color) !important;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    color: var(--hover-navbtn-color) !important;
+}
+
+.swiper-pagination-bullet {
+    background: var(--highlight-color-hover) !important;
+    opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--primary-color) !important;
+    opacity: 1;
+}
+
+.swiper-scrollbar-drag {
+    background: var(--primary-color);
+}
+
+.image-gallery-icon {
+    color: var(--primary-color) !important;
+    transition: color 0.3s ease;
+}
+
+.image-gallery-icon:hover {
+    color: var(--hover-navbtn-color) !important;
+}
+
+.image-gallery-bullet.active {
+    background: var(--primary-color) !important;
+}
+
+.image-gallery-bullet {
+    background: var(--highlight-color) !important;
+}
+
+.image-gallery-thumbnail.active, .image-gallery-thumbnail:focus {
+    border: 3px solid var(--primary-color) !important;
+}
+
+
+
+
 /*:root {*/
 /*    --primary-color: #B30059;            !* Насичений малиновий, основний колір *!*/
 /*    --background-color: #F9F4F7;         !* Дуже світлий рожево-сірий фон *!*/

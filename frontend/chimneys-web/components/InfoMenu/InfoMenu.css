@@ -1,9 +1,9 @@
-.catalog-container {
+.info-container {
     position: relative;
     display: inline-block;
 }
 
-.catalog-button {
+.info-button {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,25 +19,30 @@
     border-radius: 0;
 }
 
-.catalog-button:hover {
+.info-div{
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-button:hover {
     transform: translateX(5px);
 ;
     background-color: var(--hover-navbtn-color);
 }
 
-.catalog-button span {
+.info-button span {
     flex-grow: 1;
     text-align: left;
     font-size: 14px;
     padding-right: 5px;
 }
 
-.catalog-button svg {
+.info-button svg {
     font-size: 20px;
     transition: transform 0.2s ease-in-out;
 }
 
-.catalog-dropdown {
+.info-dropdown {
     position: absolute;
     top: 100%;
     left: 0;
@@ -53,24 +58,23 @@
     animation: dropdown-fade 0.3s ease-in-out;
 }
 
-.catalog-dropdown li, a {
+
+.info-dropdown li, .info-dropdown a {
     text-decoration: none;
-    padding: 10px;
     cursor: pointer;
     color: var(--text-color);
     transition: background 0.2s ease;
+    padding: 0 10px;
 }
 
-.catalog-dropdown li{
-    border-bottom: 1px solid black;
-}
 
-.catalog-dropdown li:last-child{
-    border-bottom: none;
-}
 
-.catalog-dropdown li:hover {
+.info-item:hover {
     background-color: var(--highlight-color);
+}
+
+#wrapper-info-dropdown{
+    text-align: center;
 }
 
 @keyframes dropdown-fade {
@@ -85,11 +89,11 @@
 }
 
 @media (max-width: 768px) {
-    .catalog-container {
+    .info-container {
         width: 100%;
     }
 
-    .catalog-button {
+    .info-button {
         width: 100%;
         text-align: center;
         border-radius: 0;
@@ -98,8 +102,13 @@
 }
 
 @media (max-width: 480px) {
-    .catalog-dropdown li{
-        padding:10px;
+    .info-dropdown li, .info-dropdown a {
+        padding: 10px 0;
+        margin: 0 10px;
     }
+    .info-dropdown li:last-child {
+        border:none;
+    }
+
 }
 

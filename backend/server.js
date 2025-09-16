@@ -51,7 +51,7 @@ const startServer = async () => {
         app.listen(PORT, () => {
             console.log(`Server is running at http://localhost:${PORT}`)
         });
-        initConstructor();
+        await initConstructor();
     } catch (error) {
         console.error('Express server startup error:', error);
     }

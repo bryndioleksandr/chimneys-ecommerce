@@ -75,6 +75,13 @@
     }
 }
 
+/*
+734 - good
+573 - good
+< 560 - bad
+*/
+
+
 @media (max-width: 480px) {
     h2 {
         font-size: 0.9rem;

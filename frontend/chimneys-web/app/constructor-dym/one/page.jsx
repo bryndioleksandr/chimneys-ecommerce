@@ -82,7 +82,8 @@ export default function ChimneyMapOne() {
     const searchRef = useRef(null);
     const [attachedProduct, setAttachedProduct] = useState(null);
     const [selectedAreaForLinking, setSelectedAreaForLinking] = useState(null);
-
+    const ORIGINAL_WIDTH = 550;
+    const ORIGINAL_HEIGHT = 1073;
 
     const dispatch = useDispatch();
 
@@ -163,6 +164,17 @@ export default function ChimneyMapOne() {
         }
     };
 
+    const scaleCoords = (coords) => {
+        if (!size.width || !size.height) return coords;
+        const scaleX = size.width / ORIGINAL_WIDTH;
+        const scaleY = size.height / ORIGINAL_HEIGHT;
+
+        return coords
+            .split(",")
+            .map((c, i) => (i % 2 === 0 ? c * scaleX : c * scaleY))
+            .join(",");
+    };
+
 
     const handleLinkProduct = async (productId, areaId) => {
         console.log("Прив’язано продукт:", productId, " || area: ", areaId);
@@ -239,7 +251,8 @@ export default function ChimneyMapOne() {
                         {AREAS.map(area => (
                             <polygon
                                 key={area.id}
-                                points={area.coords}
+                                //points={area.coords}
+                                points={scaleCoords(area.coords)}
                                 className="hover-region"
                                 onClick={() => handlePolygonClick(area.id)}
                                 style={{ cursor: 'pointer' }}

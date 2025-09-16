@@ -24,28 +24,6 @@
     margin-bottom: 10px;
 }
 
-.productPrice {
-    font-size: 24px;
-    color: #28a745;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.buyButton {
-    background-color: #007bff;
-    color: #fff;
-    transition: background 0.3s ease;
-    padding: 10px 20px;
-    margin-right: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    font-weight: 500;
-}
-
-.buyButton:hover {
-    background-color: #0056b3;
-}
 
 .wishlistButton {
     background-color: #dee2e6;
@@ -148,7 +126,7 @@
     margin: 0 auto;
 }
 
-button{
+button {
     cursor: pointer;
 }
 
@@ -179,7 +157,7 @@ button{
 }
 
 .productPrice {
-    font-size: 24px;
+    font-size: 2rem;
     color: var(--discount-color);
     font-weight: 600;
     margin-bottom: 12px;
@@ -188,10 +166,10 @@ button{
 .buyButton {
     background-color: var(--primary-color);
     color: #fff;
-    transition: background 0.3s ease;
+    transition: 0.3s ease;
     padding: 10px 20px;
     margin-right: 8px;
-    border-radius: 6px;
+    border-radius: 16px;
     cursor: pointer;
     border: none;
     font-weight: 500;
@@ -199,14 +177,15 @@ button{
 
 .buyButton:hover {
     background-color: var(--hover-navbtn-color);
+    transform: scale(1.05);
 }
 
 .wishlistButton {
     background-color: var(--highlight-color);
     color: var(--text-color);
-    transition: background 0.3s ease;
+    transition:  0.3s ease;
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 16px;
     border: none;
     cursor: pointer;
     font-weight: 500;
@@ -214,6 +193,7 @@ button{
 
 .wishlistButton:hover {
     background-color: var(--highlight-color-hover);
+    transform: scale(1.05);
 }
 
 .productMeta {
@@ -286,6 +266,7 @@ button{
     padding: 10px 20px;
     font-weight: 500;
     transition: background 0.3s ease;
+    margin: 10px;
 }
 
 .leaveReviewButton:hover {
@@ -308,39 +289,66 @@ button {
     cursor: pointer;
 }
 
+.btns-buy-wish{
+    margin-bottom: 20px;
+}
+
+.buyButton{
+    margin:0;
+    border-bottom-right-radius:0;
+    border-top-right-radius:0;
+}
+
+.wishlistButton{
+    margin:0;
+    border-bottom-left-radius:0;
+    border-top-left-radius:0;
+}
+
+
 @media (max-width: 768px) {
-  .productContainer {
-    padding: 12px;
-    max-width: 100%;
-  }
-  .image-gallery {
-    max-width: 100%;
-  }
-  .reviewsBlock {
-    padding: 10px;
-    margin-top: 20px;
-  }
+    .productContainer {
+        padding: 12px;
+        max-width: 100%;
+    }
+
+    .image-gallery {
+        max-width: 100%;
+    }
+
+    .reviewsBlock {
+        padding: 10px;
+        margin-top: 20px;
+    }
 }
 
 @media (max-width: 480px) {
-  .productInfo h1 {
-    font-size: 1.2rem;
-  }
-  .productPrice {
-    font-size: 1.1rem;
-  }
-  .sectionTitle {
-    font-size: 1rem;
-  }
-  .reviewsTitle {
-    font-size: 1rem;
-  }
-  .productImage {
-    max-width: 100%;
-    height: 160px;
-  }
-  .buyButton, .wishlistButton, .leaveReviewButton {
-    padding: 8px 10px;
-    font-size: 0.95rem;
-  }
+    .productInfo h1 {
+        font-size: 1.2rem;
+    }
+
+    .productPrice {
+        font-size: 1.5rem;
+    }
+
+    .sectionTitle {
+        font-size: 1rem;
+    }
+
+    .reviewsTitle {
+        font-size: 1rem;
+    }
+
+    .productImage {
+        max-width: 100%;
+        height: 160px;
+    }
+
+    .buyButton, .wishlistButton, .leaveReviewButton {
+        font-size: 0.95rem;
+    }
+
+    .product-title {
+        font-size: 2rem;
+    }
 }

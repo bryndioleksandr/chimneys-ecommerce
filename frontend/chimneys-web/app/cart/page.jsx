@@ -2,7 +2,8 @@
 
 import React, {useState, useEffect} from "react";
 import "./cart.css";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
+import productCard from "../../components/ProductCard/ProductCard";
 
 export default function CartPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -62,22 +63,22 @@ export default function CartPage() {
 
                     {cartItems.length > 0 ? (
                         cartItems.map((item) => (
-                            <div key={item._id} className="cart-item">
-                                <img src={item.images[0]} alt={item.name} style={{
+                            <div key={item._id} className="wrapper-card">
+                                <img src={item.images[0]} alt={item.name} className="item-image"/>
+                                <div key={item._id} className="cart-item">
 
-                                    objectFit: "cover"}}
-                                     className="item-image"/>
-                                <div className="item-details">
-                                    <p className="item-category">{item.category.name}</p>
-                                    <h6 className="item-name">{item.name}</h6>
+                                    <div className="item-details">
+                                        <p className="item-category">{item.category.name}</p>
+                                        <h6 className="item-name">{item.name}</h6>
+                                    </div>
+                                    <p className="item-price">{item.price * item.quantity} грн</p>
+                                    <div className="quantity-controls">
+                                        <button className="btn" onClick={() => updateQuantity(item._id, -1)}>-</button>
+                                        <input type="number" value={item.quantity} readOnly className="quantity-input"/>
+                                        <button className="btn" onClick={() => updateQuantity(item._id, 1)}>+</button>
+                                    </div>
+                                    <button className="remove-item" onClick={() => removeItem(item._id)}>×</button>
                                 </div>
-                                <div className="quantity-controls">
-                                    <button className="btn" onClick={() => updateQuantity(item._id, -1)}>-</button>
-                                    <input type="number" value={item.quantity} readOnly className="quantity-input"/>
-                                    <button className="btn" onClick={() => updateQuantity(item._id, 1)}>+</button>
-                                </div>
-                                <p className="item-price">{item.price * item.quantity} грн</p>
-                                <button className="remove-item" onClick={() => removeItem(item._id)}>×</button>
                             </div>
                         ))
                     ) : (

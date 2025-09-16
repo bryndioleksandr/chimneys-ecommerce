@@ -125,40 +125,20 @@ const CategoryPage = () => {
 
                 <div>
                     <div className="sort-options-container">
-                        <span className="sort-label">Сортувати:</span>
-                        <div className="sort-options">
-                            <button
-                                className={sortOption === "default" ? "active" : ""}
-                                onClick={() => setSortOption("default")}
-                            >
-                                За замовчуванням
-                            </button>
-                            <button
-                                className={sortOption === "price-asc" ? "active" : ""}
-                                onClick={() => setSortOption("price-asc")}
-                            >
-                                Від найдешевших
-                            </button>
-                            <button
-                                className={sortOption === "price-desc" ? "active" : ""}
-                                onClick={() => setSortOption("price-desc")}
-                            >
-                                Від найдорожчих
-                            </button>
-                            <button
-                                className={sortOption === "rating-desc" ? "active" : ""}
-                                onClick={() => setSortOption("rating-desc")}
-                            >
-                                Найпопулярніші
-                            </button>
-                            <button
-                                className={sortOption === "newest" ? "active" : ""}
-                                onClick={() => setSortOption("newest")}
-                            >
-                                Новинки
-                            </button>
-                        </div>
+                        <select
+                            id="sortSelect"
+                            value={sortOption}
+                            onChange={(e) => setSortOption(e.target.value)}
+                            className="sort-select"
+                        >
+                            <option value="default">За замовчуванням</option>
+                            <option value="price-asc">Від найдешевших</option>
+                            <option value="price-desc">Від найдорожчих</option>
+                            <option value="rating-desc">Найпопулярніші</option>
+                            <option value="newest">Новинки</option>
+                        </select>
                     </div>
+
 
                     <ul className="product-list">
                         {products.length > 0 ? (

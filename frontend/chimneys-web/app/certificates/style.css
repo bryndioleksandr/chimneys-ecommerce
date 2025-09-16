@@ -1,0 +1,51 @@
+.info-page {
+    padding: 40px 20px;
+    background: #f8f9fa;
+    min-height: 60vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+  .info-page {
+    padding: 20px 5px;
+  }
+  .container {
+    padding: 12px;
+    max-width: 100%;
+  }
+  h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 6px;
+  }
+  h1 {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 0.95rem;
+  }
+}

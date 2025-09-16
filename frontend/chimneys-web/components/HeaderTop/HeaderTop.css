@@ -42,8 +42,9 @@
 
 @media (max-width: 480px) {
   .headerTop {
-    padding: 2px 0;
-    gap: 2px;
+    /*padding: 2px 0;*/
+    /*gap: 2px;*/
+      display:none;
   }
   .headerTopList li {
     font-size: 12px;

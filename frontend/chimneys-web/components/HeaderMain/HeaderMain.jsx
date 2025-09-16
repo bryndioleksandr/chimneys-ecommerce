@@ -14,6 +14,7 @@ import RoleGuard from "@/components/auth/RoleGuard";
 import { backUrl } from '../../config/config';
 import { useRouter } from "next/navigation";
 import {toast} from "react-toastify";
+import InfoMenu from "@/components/InfoMenu/InfoMenu";
 
 export default function HeaderMain() {
     const [isAuthOpen, setAuthOpen] = useState(false);
@@ -140,6 +141,9 @@ export default function HeaderMain() {
                         </div>
                 </div>
                 </Link>
+                <div className="info">
+                    <InfoMenu />
+                </div>
                 <div className="categories">
                     <CatalogDropdown />
                 </div>
