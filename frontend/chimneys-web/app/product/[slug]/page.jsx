@@ -1,7 +1,7 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {useParams} from "next/navigation";
+import React, {useEffect, useState} from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import './style.css';
 import ImageGallery from 'react-image-gallery';
@@ -10,11 +10,11 @@ import StarRating from "../../../components/StarRating/StarRating";
 import LiqPayButton from "../../../components/LiqPayBtn/LiqPayBtn";
 import {addItemToCart} from "../../../redux/slices/cart";
 import axios from "axios";
-import { backUrl } from '../../../config/config';
+import {backUrl} from '../../../config/config';
 import {useDispatch} from "../../../redux/store";
 
 const ProductPage = () => {
-    const { slug } = useParams();
+    const {slug} = useParams();
     const [product, setProduct] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -104,29 +104,43 @@ const ProductPage = () => {
     })) || [];
 
 
-
     return (
         <div className="container mx-auto px-4 py-8 productContainer">
-            <div className="flex flex-col md:flex-row gap-6">
-                <h1 className="product-title">{product.name}</h1>
-
-                <div className="flex-1">
-                    {images.length > 0 ? (
-                        <ImageGallery items={images} showPlayButton={false} showFullscreenButton={true}/>
-                    ) : (
-                        <div className="bg-gray-200 h-64 w-full max-w-md rounded"/>
-                    )}
+            <h1 className="product-title">{product.name}</h1>
+            <div className="product-wrapper">
+                <div className="gallery-main-info">
+                    <div className="gallery-wrapper">
+                        {images.length > 0 ? (
+                            <ImageGallery items={images} showPlayButton={false} showFullscreenButton={true}/>
+                        ) : (
+                            <div className="bg-gray-200 h-64 w-full max-w-md rounded"/>
+                        )}
+                    </div>
+                    <div className="under-image">
+                        {product.discount ? (
+                            <div className="card-price-discount">
+                                <span className="original-price">{product.price}₴</span>
+                                <span className="discounted-price">{product.discountedPrice}₴</span>
+                            </div>
+                        ) : (
+                            <span className="card-price">{product.price}₴</span>
+                        )}
+                        <div className="btns-buy-wish flex gap-4">
+                            <button onClick={() => handleAddToCart(product)} className="buyButton">Купити</button>
+                            <button onClick={handleAddToFavorites} className="wishlistButton px-4 py-2 rounded">Додати
+                                до
+                                вішлисту
+                            </button>
+                        </div>
+                        <div className="rating-wrapper">
+                            <StarRating rating={product.rating} totalStars={5}/>
+                            <span className="prod-rating">({product.reviews.length})</span>
+                        </div>
+                        <p className="productMeta">Код товару: {product.productCode}</p>
+                    </div>
                 </div>
 
                 <div className="flex-1 space-y-4 productInfo">
-                    <p className="productPrice">{product.price} ₴</p>
-                    <div className="btns-buy-wish flex gap-4">
-                        <button onClick={() => handleAddToCart(product)} className="buyButton">Купити</button>
-                        <button onClick={handleAddToFavorites} className="wishlistButton px-4 py-2 rounded">Додати до
-                            вішлисту
-                        </button>
-                    </div>
-                    <p className="productMeta">Код товару: {product.productCode}</p>
                     <hr/>
                     <div className="space-y-2">
                         <h2 className="sectionTitle">Опис</h2>
@@ -182,7 +196,7 @@ const ProductPage = () => {
 
             {showReviewForm && (
                 <div className="reviewFormWrapper mt-4">
-                    <ReviewForm product={product._id} />
+                    <ReviewForm product={product._id}/>
                 </div>
             )}
         </div>

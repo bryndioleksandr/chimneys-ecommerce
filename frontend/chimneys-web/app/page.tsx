@@ -39,7 +39,7 @@ const styles = {
     },
     constructorBtn: {
         display: "inline-block",
-        backgroundColor: "var(--primary-color)",
+        background: "linear-gradient(to bottom, var(--primary-color), var(--hover-navbtn-color))",
         color: "var(--card-bg)",
         padding: "14px 28px",
         fontSize: "18px",

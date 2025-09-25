@@ -95,7 +95,10 @@ export default function CreateOrderPage() {
         }
     };
 
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = cartItems.reduce((total, item) => {
+        const price = item.discountedPrice ?? item.price;
+        return total + price * item.quantity;
+    }, 0);
 
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -154,8 +157,10 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
+            console.log('userid:', userId);
+            console.log('products:', products);
+            console.log('totalprice', totalPrice);
             const orderResponse = await axios.post(`${backUrl}/order/make`, {
-                user: userId,
                 ...formData,
                 deliveryWay: formData.deliveryWay,
                 paymentMethod: formData.paymentMethod,

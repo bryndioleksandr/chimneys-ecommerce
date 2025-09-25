@@ -53,7 +53,7 @@ const CatalogDropdown = () => {
                     {categories.map((category, index) => (
                         <li key={index + 1} onClick={() => setIsOpen(false)}>
                             <Link href={`/category/${category.slug}`}>
-                                ☉ {category.name}
+                                {category.name}
                             </Link>
                         </li>
                     ))}

@@ -16,7 +16,10 @@ export default function CreateOrderPage() {
         deliveryWay: "pickup",
     });
 
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = cartItems.reduce((total, item) => {
+        const price = item.discountedPrice ?? item.price;
+        return total + price * item.quantity;
+    }, 0);
 
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];

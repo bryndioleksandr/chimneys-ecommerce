@@ -44,8 +44,10 @@ export default function CartPage() {
         });
     };
 
-    const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
+    const totalPrice = cartItems.reduce((total, item) => {
+        const price = item.discountedPrice ?? item.price;
+        return total + price * item.quantity;
+    }, 0);
     const handleCheckout = () => {
         if (cartItems.length === 0) {
             alert("Кошик порожній");
@@ -64,14 +66,19 @@ export default function CartPage() {
                     {cartItems.length > 0 ? (
                         cartItems.map((item) => (
                             <div key={item._id} className="wrapper-card">
-                                <img src={item.images[0]} alt={item.name} className="item-image"/>
-                                <div key={item._id} className="cart-item">
-
+                                <div className="wrap-img-name">
+                                    <img src={item.images[0]} alt={item.name} className="item-image"/>
                                     <div className="item-details">
                                         <p className="item-category">{item.category.name}</p>
                                         <h6 className="item-name">{item.name}</h6>
                                     </div>
-                                    <p className="item-price">{item.price * item.quantity} грн</p>
+                                </div>
+                                <div key={item._id} className="cart-item">
+                                {item.discountedPrice ? (
+                                        <p className="item-price" style={{color:"var(--discount-color)"}}>{item.discountedPrice * item.quantity} грн</p>
+                                    ) : (
+                                        <p className="item-price">{item.price * item.quantity} грн</p>
+                                    )}
                                     <div className="quantity-controls">
                                         <button className="btn" onClick={() => updateQuantity(item._id, -1)}>-</button>
                                         <input type="number" value={item.quantity} readOnly className="quantity-input"/>
@@ -85,7 +92,6 @@ export default function CartPage() {
                         <p>Кошик порожній</p>
                     )}
 
-                    <hr/>
                     <div className="summary">
                         <h3>Підсумок</h3>
                         <hr/>

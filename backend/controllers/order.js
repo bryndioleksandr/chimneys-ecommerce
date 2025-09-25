@@ -4,7 +4,7 @@ import Product from "../models/product.js";
 export const createOrder = async (req, res) => {
     try {
         const { user, phoneNumber, paymentMethod, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
-
+        console.log('body is:', req.body);
         const newOrder = new Order({
             user,
             phoneNumber,
@@ -18,6 +18,7 @@ export const createOrder = async (req, res) => {
         });
 
         await newOrder.save();
+        console.log('saved order');
         res.status(201).json(newOrder);
     } catch (err) {
         res.status(500).json({ msg: err.message });

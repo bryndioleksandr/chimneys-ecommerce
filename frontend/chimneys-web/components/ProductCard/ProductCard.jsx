@@ -95,7 +95,7 @@ const ProductCard = ({ product }) => {
                         {hasDiscount ? (
                             <div className="card-price-discount">
                                 <span className="original-price">{product.price}₴</span>
-                                <span className="discounted-price">{discountedPrice}₴</span>
+                                <span className="discounted-price">{product.discountedPrice}₴</span>
                             </div>
                         ) : (
                             <span className="card-price">{product.price}₴</span>
@@ -106,7 +106,7 @@ const ProductCard = ({ product }) => {
                         </div>
 
                     </div>
-                    {role === "user" && (
+                    {role === "admin" && (
                         <div className="admin-buttons">
                             <button onClick={() => {
                                 setSelectedProduct(product);

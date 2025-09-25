@@ -9,20 +9,20 @@
     align-items: center;
     width: 200px;
     padding: 10px 20px;
-    background-color: var(--primary-color);
-    border: none;
-    color: #ffffff;
+    color: var(--nav-bg);
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
     border-radius: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s ease-in;
 }
 
 .catalog-button:hover {
     transform: translateX(5px);
 ;
-    background-color: var(--hover-navbtn-color);
+    background-color: var(--highlight-color-hover);
 }
 
 .catalog-button span {
@@ -43,7 +43,7 @@
     left: 0;
     width: 100%;
     background-color: var(--background-color);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     z-index: 10;
     padding: 0;
@@ -61,8 +61,16 @@
     transition: background 0.2s ease;
 }
 
+.catalog-dropdown li::before{
+    content: "•";
+    color: #009688;
+    margin-right: 8px;
+}
+
 .catalog-dropdown li{
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #c7c7c7;
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
 
 .catalog-dropdown li:last-child{

@@ -137,7 +137,7 @@ export default function HeaderMain() {
                 <Link href="/" className="logoLink">
                 <div className="logoDiv">
                         <div className="logoImg">
-                            <h3>ДИМАРІ</h3>
+                            <img src="/main_logo.png" alt="Logo"/>
                         </div>
                 </div>
                 </Link>

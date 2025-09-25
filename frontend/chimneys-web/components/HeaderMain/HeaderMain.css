@@ -5,6 +5,9 @@
     padding: 10px 20px;
     /*background: #F8F9FA;*/
     background: var(--background-color);
+    /*position: sticky;*/
+    /*top: 0;*/
+    /*z-index: 1000;*/
 }
 
 .wrapperInfo {
@@ -91,18 +94,47 @@
 .logoDiv {
     cursor: pointer;
     padding: 5px 25px;
-    background-color: var(--highlight-color);
+    background-color: var(--nav-bg);
     color: var(--text-color);
     text-align: center;
     transition: transform 0.3s ease;
     will-change: transform;
 }
 
-.logoDiv:hover {
-    transform: translateX(5px);
-    background-color: var(--highlight-color-hover);
+.logoImg img{
+    width: 120px;
 }
 
+.logoDiv:hover {
+    transform: translateX(5px);
+    background-color: var(--hover-navbtn-color);
+}
+
+.logoDiv {
+    cursor: pointer;
+    padding: 15px 25px;
+    background: linear-gradient(to bottom, var(--nav-bg), var(--hover-navbtn-color));
+    color: var(--text-color);
+    text-align: center;
+    transition: transform 0.3s ease;
+    will-change: transform;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoImg {
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.logoImg img {
+    height: 100%;
+    width: auto;
+    max-width: 150px;
+    object-fit: contain;
+}
 
 h3 {
     color: var(--text-color);
@@ -388,11 +420,6 @@ h3 {
         gap: 8px;
     }
 
-    .logoDiv {
-        padding: 4px 8px;
-        font-size: 1rem;
-    }
-
     .headerMainList li {
         font-size: 13px;
     }
@@ -466,15 +493,6 @@ h3 {
 
 .goods svg:hover {
     color: var(--hover-navbtn-color);
-}
-
-.logoDiv {
-    background-color: var(--highlight-color);
-    color: var(--text-color);
-}
-
-.logoDiv:hover {
-    background-color: var(--highlight-color-hover);
 }
 
 h3,
