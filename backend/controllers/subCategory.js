@@ -140,6 +140,7 @@ export const removeSubCategory = async (req, res) => {
 
 export const findSubCategoryByName  = async (req, res) => {
     try {
+        console.log('we are in find subcategories, name is ', name);
         const { name } = req.query;
         if (!name) return res.status(400).json({ msg: "Name is required" });
 

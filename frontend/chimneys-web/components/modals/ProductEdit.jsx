@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { backUrl } from '../../config/config';
-import { searchSubCategories } from '../../services/subcategory';
-import { searchSubSubCategories } from '../../services/subsubcategory';
+import {searchSubCategories, searchSubCategoriesBySlug} from '../../services/subcategory';
+import {searchSubSubCategories, searchSubSubCategoriesBySlug} from '../../services/subsubcategory';
 import ReactDOM from 'react-dom';
 
 // import "./style.css";
@@ -32,13 +32,14 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
     const [subSubCategories, setSubSubCategories] = useState([]);
 
     useEffect(() => {
+        console.log('product update is:', product);
         if (!product) return;
 
         setName(product.name || '');
         setPrice(product.price || '');
-        setCategory(product.category || '');
-        setSubCategory(product.subCategory || '');
-        setSubSubCategory(product.subSubCategory || '');
+        setCategory(product.category?._id || '');
+        setSubCategory(product.subCategory?._id || '');
+        setSubSubCategory(product.subSubCategory?._id || '');
         setDescription(product.description || '');
         setDiscount(product.discount || '');
         setSteelGrade(product.steelGrade || '');
@@ -51,7 +52,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
         setHasMesh(product.hasMesh || false);
         setInsulationThickness(product.insulationThickness || '');
         setStock(product.stock || '');
-        setImages([]); // очистка зображень
+        setImages([]);
     }, [product]);
 
     useEffect(() => {
@@ -64,9 +65,14 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
         const loadSubs = async () => {
             if (category) {
                 const cat = categories.find(c => c._id === category);
-                const sub = await searchSubCategories(cat?.name || '');
+                console.log('cats to find');
+                console.log('cat in state', category);
+                console.log('cat in subcat', cat);
+                const sub = await searchSubCategoriesBySlug(cat?.slug || '');
+                console.log('before setting subcats:', sub);
                 setSubCategories(sub);
             }
+            else setSubCategories([]);
         };
         loadSubs();
     }, [category]);
@@ -74,10 +80,13 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
     useEffect(() => {
         const loadSubSubs = async () => {
             if (subCategory) {
+                console.log('subcats are ', subCategories);
                 const subCat = subCategories.find(s => s._id === subCategory);
-                const subSub = await searchSubSubCategories(subCat?.name || '');
+                console.log('subcat is ', subCat);
+                const subSub = await searchSubSubCategoriesBySlug(subCat?.slug || '');
                 setSubSubCategories(subSub);
             }
+            else setSubSubCategories([]);
         };
         loadSubSubs();
     }, [subCategory]);

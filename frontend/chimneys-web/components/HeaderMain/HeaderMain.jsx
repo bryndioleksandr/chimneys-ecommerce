@@ -96,7 +96,6 @@ export default function HeaderMain() {
         };
     }, []);
 
-
     useEffect(() => {
         if (!searchQuery.trim()) {
             setSearchResults([]);
@@ -258,7 +257,7 @@ export default function HeaderMain() {
                         <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
                     </div>
                 </RoleGuard>
-                {mounted && (
+                {mounted && role !== "admin" && (
                 <div className="goods">
                     <div onClick={handleFavoritesClick} style={{cursor: "pointer"}}>
                         <FaHeart/>

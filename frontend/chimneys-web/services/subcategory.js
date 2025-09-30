@@ -13,6 +13,8 @@ export const fetchSubCategories = async () => {
 
 export const searchSubCategories = async (name) => {
     try {
+        console.log('name before res:', name);
+        console.log(`${API_BASE}/subcategory/search?name=${name}`);
         const response = await fetch(`${API_BASE}/subcategory/search?name=${name}`);
         console.log('response from search:', response);
         if (!response.ok) throw new Error("Search failed");
@@ -25,8 +27,9 @@ export const searchSubCategories = async (name) => {
 
 export const searchSubCategoriesBySlug = async (slug) => {
     try {
+        console.log('slug subcat to send', slug);
         const response = await fetch(`${API_BASE}/subcategory/search-slug?slug=${slug}`);
-        console.log('response from search:', response);
+        console.log('response from search slug:', response);
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
     } catch (err) {

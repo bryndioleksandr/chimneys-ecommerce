@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {searchSubCategories} from "../../services/subcategory";
-import {searchSubSubCategories} from "../../services/subsubcategory";
+import {searchSubCategories, searchSubCategoriesBySlug} from "../../services/subcategory";
+import {searchSubSubCategories, searchSubSubCategoriesBySlug} from "../../services/subsubcategory";
 
 const ProductForm = () => {
    // const [productCode, setProductCode] = useState('');
@@ -120,8 +120,7 @@ const ProductForm = () => {
                     if (selectedCategory) {
                         try {
                             const categoryObj = categories.find(cat => cat._id === selectedCategory);
-                            const categoryName = categoryObj?.name;
-                            const data = await searchSubCategories(categoryName);
+                            const data = await searchSubCategoriesBySlug(categoryObj?.slug);
                             setSubCategories(data);
                         } catch (err) {
                             console.log('Error caught in res:', err);
@@ -145,7 +144,7 @@ const ProductForm = () => {
                         try {
                             const subCategoryObj = subCategories.find(cat => cat._id === selectedSubCategory);
                             const subCategoryName = subCategoryObj?.name;
-                            const data = await searchSubSubCategories(subCategoryName);
+                            const data = await searchSubSubCategoriesBySlug(subCategoryObj?.slug);
                             setSubSubCategories(data);
                         } catch (err) {
                             console.log('Error caught in res:', err);
