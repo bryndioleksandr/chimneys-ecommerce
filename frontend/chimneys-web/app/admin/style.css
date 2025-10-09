@@ -5,14 +5,14 @@
     min-height: 100vh;
 }
 
-h1 {
+.admin-wrapper h1 {
     text-align: center;
     font-size: 2.5rem;
     color: var(--text-color);
     margin-bottom: 10px;
 }
 
-p {
+.admin-wrapper p {
     text-align: center;
     font-size: 1.2rem;
     color: var(--text-color);
@@ -157,7 +157,7 @@ p {
 }
 
 .form-container button{
-    background-color: var(--discount-color);
+    background-color: var(--primary-color);
     color: white;
     font-size: 1.1rem;
     padding: 14px 24px;
@@ -169,7 +169,7 @@ p {
 }
 
 .form-container button:hover{
-    background-color: #d84315;
+    background-color: var(--primary-color);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(242, 83, 27, 0.3);
 }

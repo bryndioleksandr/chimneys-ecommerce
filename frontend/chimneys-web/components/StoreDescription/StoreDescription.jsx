@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from "react";
+import './StoreDescription.css';
 
 export default function StoreDescription() {
     const [expanded, setExpanded] = useState(false);
 
     const fullText = `
-🏪 **Магазин димоходів у Тернополі “Димарі”** — це місце, де ви знайдете надійні рішення для безпечного та ефективного димовідведення. Ми пропонуємо:
+🏪 Магазин димоходів у Тернополі “ДимоHIT” — це місце, де ви знайдете надійні рішення для безпечного та ефективного димовідведення. Ми пропонуємо:
 
 - Димоходи з нержавіючої сталі (одно- і двостінні)
 - Сендвіч-димоходи для котлів, камінів, саун
@@ -19,17 +20,17 @@ export default function StoreDescription() {
     const previewText = fullText.slice(0, 250) + '...';
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.text}>
+        <div style={styles.wrapperDescription}>
+            <div style={styles.textDescription}>
                 {(expanded ? fullText : previewText)
                     .split('\n')
                     .map((line, index) => (
-                        <p key={index} style={styles.paragraph}>
+                        <p key={index} style={styles.paragraphDescription}>
                             {line}
                         </p>
                     ))}
             </div>
-            <button style={styles.button} onClick={() => setExpanded(!expanded)}>
+            <button style={styles.buttonDescription} onClick={() => setExpanded(!expanded)}>
                 {expanded ? "Згорнути" : "Читати далі"}
             </button>
         </div>
@@ -37,7 +38,7 @@ export default function StoreDescription() {
 }
 
 const styles = {
-    wrapper: {
+    wrapperDescription: {
         marginTop: "40px",
         backgroundColor: "var(--card-bg)",
         padding: "30px",
@@ -51,13 +52,13 @@ const styles = {
         marginLeft: "auto",
         marginRight: "auto"
     },
-    text: {
+    textDescription: {
         marginBottom: "15px",
     },
-    paragraph: {
+    paragraphDescription: {
         marginBottom: "10px",
     },
-    button: {
+    buttonDescription: {
         background: "var(--primary-color)",
         color: "var(--card-bg)",
         border: "none",

@@ -139,7 +139,7 @@ h1 {
     cursor: pointer;
 }
 
-.status-control button {
+.all-orders button {
     background-color: var(--primary-color);
     color: #fff;
     border: none;

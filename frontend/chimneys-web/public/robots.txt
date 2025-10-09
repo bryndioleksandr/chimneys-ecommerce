@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://chimneys-shop.com/sitemap.xml
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow important pages
+Allow: /
+Allow: /category/
+Allow: /product/
+Allow: /about
+Allow: /contacts
+Allow: /cart
+Allow: /favorites
+
+# Crawl delay
+Crawl-delay: 1

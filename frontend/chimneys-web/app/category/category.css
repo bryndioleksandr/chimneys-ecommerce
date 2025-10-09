@@ -68,7 +68,7 @@
 .productCardName {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #333;
+    color: var(--text-color);
     text-align: center;
 }
 
@@ -268,7 +268,7 @@
 
 .card-in-stock {
     font-size: 0.9rem;
-    color: #5A2D1B;
+    color: #4CAF50;
     font-weight: 500;
 }
 

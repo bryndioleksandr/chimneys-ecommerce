@@ -4,9 +4,9 @@ import { backUrl } from '../../config/config';
 import Rating from "../ReviewStars/ReviewStars";
 import "./style.css"
 
-const ReviewForm = ({product}) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+const ReviewForm = ({user, product}) => {
+    const [name, setName] = useState(user?.name || '');
+    const [email, setEmail] = useState(user?.email || '');
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
 

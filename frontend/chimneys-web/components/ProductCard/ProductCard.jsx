@@ -80,7 +80,7 @@ const ProductCard = ({ product }) => {
                         {product.stock !== 0 ? (
                             <span className="card-in-stock">В наявності</span>
                         ) : (
-                            <span className="card-in-stock" style={{color: 'red'}}>Немає в наявності</span>
+                            <span className="card-in-stock" style={{color: 'var(--discount-color)'}}>Під замовлення</span>
                         )}
                     </div>
                 </Link>

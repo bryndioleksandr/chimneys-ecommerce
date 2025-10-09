@@ -23,6 +23,7 @@ const ProductPage = () => {
     const dispatch = useDispatch();
     const [userId, setUserId] = useState(null);
     const [role, setUserRole] = useState(null);
+    const [userCurrent, setUserCurrent] = useState(null);
 
     useEffect(() => {
         const userRaw = localStorage.getItem("user");
@@ -30,6 +31,7 @@ const ProductPage = () => {
             const user = JSON.parse(userRaw);
             setUserId(user.id);
             setUserRole(user.role);
+            setUserCurrent(user);
         }
     }, []);
 
@@ -160,7 +162,7 @@ const ProductPage = () => {
                             {product.hasMesh && <li>Сітка: Є</li>}
                             {product.insulationThickness &&
                                 <li>Товщина утеплювача: {product.insulationThickness} мм</li>}
-                            {product.stock != null && <li>В наявності: {product.stock} шт</li>}
+                            {product.stock > 0 ? (<li>В наявності</li>) : (<li>Під замовлення (Термін постачання 3-5 днів)</li>)}
                         </ul>
                     </div>
                     <hr/>
@@ -178,6 +180,12 @@ const ProductPage = () => {
                             <div key={index} className="reviewCard">
                                 <div className="reviewHeader">
                                     <strong>{review.name}</strong>
+                                    {role === "admin" ? (
+                                            <div className="user-email">
+                                                {review.email}
+                                            </div>
+                                        ) : null
+                                    }
                                     <StarRating rating={review.rating} totalStars={5}/>
                                 </div>
                                 <p>{review.comment}</p>
@@ -196,7 +204,7 @@ const ProductPage = () => {
 
             {showReviewForm && (
                 <div className="reviewFormWrapper mt-4">
-                    <ReviewForm product={product._id}/>
+                    <ReviewForm user={userCurrent} product={product._id}/>
                 </div>
             )}
         </div>

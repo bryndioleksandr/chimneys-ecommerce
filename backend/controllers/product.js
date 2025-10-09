@@ -275,6 +275,11 @@ export const searchBySubSubCategory = async (req, res) => {
     }
 };
 
+export const searchSimilarProducts = async (req, res) => {
+    const { name } = req.params;
+
+}
+
 export const getFilteredProducts = async (req, res) => {
     const { diameter, steelGrade, price, thickness, weight, categoryId, subCategoryId, subSubCategoryId } = req.query;
     let { hasMesh, revision, stock } = req.query;

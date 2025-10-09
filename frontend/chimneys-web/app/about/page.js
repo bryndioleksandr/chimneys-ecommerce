@@ -7,6 +7,11 @@ import { backUrl } from '../../config/config';
 
 const API_URL = `${backUrl}/info-page`;
 
+// export const metadata = {
+//     title: "Про нас | Димарі",
+//     description: "Дізнайтесь більше про магазин димоходів Димарі у Тернополі.",
+// };
+
 export default function AboutPage() {
 
     const [page, setPage] = useState(null);

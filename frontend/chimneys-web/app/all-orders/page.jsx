@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { backUrl } from '../../config/config';
+import {backUrl} from '../../config/config';
 import "./style.css";
 
 const deliveryWayMap = {
@@ -61,7 +61,7 @@ export default function AllOrdersPage() {
     const handleStatusChange = (orderId, newStatus) => {
         setOrders((prev) =>
             prev.map((order) =>
-                order._id === orderId ? { ...order, status: newStatus } : order
+                order._id === orderId ? {...order, status: newStatus} : order
             )
         );
     };
@@ -76,7 +76,7 @@ export default function AllOrdersPage() {
 
     const updateStatus = async (orderId, status) => {
         try {
-            await axios.patch(`${backUrl}/order/update-status/${orderId}`, { status });
+            await axios.patch(`${backUrl}/order/update-status/${orderId}`, {status});
             alert("Статус оновлено!");
         } catch (err) {
             console.error("Помилка при оновленні статусу:", err);
@@ -137,7 +137,7 @@ export default function AllOrdersPage() {
                 </div>
 
                 {orders.length === 0 ? (
-                    <p style={{ marginTop: "2rem" }}>Немає замовлень для відображення.</p>
+                    <p style={{marginTop: "2rem"}}>Немає замовлень для відображення.</p>
                 ) : (
                     orders.map((order) => (
                         <div key={order._id} className="order-card">
@@ -154,7 +154,8 @@ export default function AllOrdersPage() {
                             <p>
                                 <strong>Адреса:</strong> {`${order.address}, ${order.city}`}
                             </p>
-                            <p><strong>Спосіб оплати:</strong> {paymentMethodLabels[order.paymentMethod] || order.paymentMethod}</p>
+                            <p><strong>Спосіб
+                                оплати:</strong> {paymentMethodLabels[order.paymentMethod] || order.paymentMethod}</p>
                             <p><strong>Оплата:</strong> {order.isPaid ? "✅ Оплачено" : "❌ Не оплачено"}</p>
 
                             <button
@@ -169,10 +170,24 @@ export default function AllOrdersPage() {
                                     {order.products.map((item, index) => (
                                         <div key={index} className="product-item">
                                             <h5>Товар №{index + 1}</h5>
+                                            <img src={item.product?.images[0]} alt="" width={80} height={80}/>
                                             <p><strong>Назва:</strong> {item.product?.name || "Невідомо"}</p>
-                                            <p><strong>Ціна:</strong> {item.product?.price} грн</p>
-                                            <p><strong>Кількість:</strong> {item.quantity}</p>
-                                            <p><strong>Разом:</strong> {item.product?.price * item.quantity} грн</p>
+                                            {item.product?.discountedPrice ? (
+                                                <>
+                                                    <p><strong>Ціна зі знижкою:</strong> {item.product?.discountedPrice} грн</p>
+                                                    <p><strong>Кількість:</strong> {item.quantity}</p>
+                                                    <p>
+                                                        <strong>Разом:</strong> {item.product?.discountedPrice * item.quantity} грн
+                                                    </p>
+                                                </>) : (
+                                                <>
+                                                    <p><strong>Ціна:</strong> {item.product?.price} грн</p>
+                                                    <p><strong>Кількість:</strong> {item.quantity}</p>
+                                                    <p><strong>Разом:</strong> {item.product?.price * item.quantity} грн
+                                                    </p>
+                                                </>
+                                            )}
+
                                         </div>
                                     ))}
                                 </div>
@@ -199,5 +214,6 @@ export default function AllOrdersPage() {
                 )}
             </div>
         </section>
-    );
+    )
+        ;
 }

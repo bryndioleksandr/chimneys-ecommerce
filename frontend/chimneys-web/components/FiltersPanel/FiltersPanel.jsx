@@ -4,6 +4,7 @@ import './FiltersPanel.css';
 import axios from "axios";
 import { backUrl } from '../../config/config';
 
+
 const FILTER_LABELS = {
     diameter: "Діаметр(мм)",
     hasMesh: "Наявність сітки",
@@ -14,7 +15,8 @@ const FILTER_LABELS = {
     price: "Ціна",
     stock: "У наявності",
     length: "Довжина(мм)",
-    angle: "Кут(°)"
+    angle: "Кут(°)",
+    insulationThickness: "Товщина утеплювача(мм)"
 };
 
 const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSubCategoryId }) => {

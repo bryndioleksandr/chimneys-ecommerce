@@ -71,7 +71,6 @@
 
 .noReviewsText {
     color: #6c757d;
-    font-style: italic;
 }
 
 .reviewsList {
@@ -229,7 +228,6 @@ button {
 .noReviewsText {
     color: var(--text-color);
     opacity: 0.6;
-    font-style: italic;
 }
 
 .reviewsList {
@@ -282,6 +280,14 @@ button {
 
 }
 
+.product-wrapper .image-gallery-left-nav{
+    left:-60px;
+}
+
+.product-wrapper .image-gallery-right-nav{
+    right:-60px;
+}
+
 button {
     cursor: pointer;
 }
@@ -319,6 +325,27 @@ button {
     justify-content: center;
     border-left: 1px solid black;
     padding-left:30px;
+    gap:20px;
+}
+
+.product-title{
+    text-align: left;
+}
+
+.space-y-2 p{
+    text-align: left;
+}
+
+.original-price {
+    font-size: 1rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.discounted-price {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--discount-color);
 }
 
 @media (max-width: 768px) {

@@ -32,7 +32,6 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
     const [subSubCategories, setSubSubCategories] = useState([]);
 
     useEffect(() => {
-        console.log('product update is:', product);
         if (!product) return;
 
         setName(product.name || '');
@@ -79,7 +78,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
 
     useEffect(() => {
         const loadSubSubs = async () => {
-            if (subCategory) {
+            if (subCategory && subCategories.length > 0) {
                 console.log('subcats are ', subCategories);
                 const subCat = subCategories.find(s => s._id === subCategory);
                 console.log('subcat is ', subCat);
@@ -89,7 +88,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
             else setSubSubCategories([]);
         };
         loadSubSubs();
-    }, [subCategory]);
+    }, [subCategory, subCategories]);
 
     const handleUpdate = async (e) => {
         e.preventDefault();

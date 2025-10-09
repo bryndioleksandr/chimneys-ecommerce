@@ -69,8 +69,8 @@ export default function Footer() {
             </div>
 
             <div className="footerBottom">
-                <p>&copy; {new Date().getFullYear()} Інтернет-магазин. Сайт розробив
-                    <a href="mailto:s.v.bryndo@gmail.com" style={{ marginLeft: 0 }}>
+                <p className="p-footer-bottom">&copy; {new Date().getFullYear()} Інтернет-магазин. Сайт розробив
+                    <a className="a-footer-bottom" href="mailto:s.v.bryndo@gmail.com" style={{ marginLeft: 0 }}>
                         Олександр Бриндьо
                     </a>
                 </p>

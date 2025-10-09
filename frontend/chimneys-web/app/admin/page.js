@@ -20,7 +20,7 @@ export default function AdminPage() {
     const handleSubsubcategoryFormToggle = () => setSubsubcategoryFormVisible(!isSubsubcategoryFormVisible);
 
     return (
-        <div>
+        <div className="admin-wrapper">
             <h1>Адмінка магазину</h1>
             <p>Додай новий товар або змінюй існуючі!</p>
 
