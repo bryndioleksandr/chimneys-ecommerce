@@ -3,6 +3,8 @@ import axios from 'axios';
 import {searchSubCategories, searchSubCategoriesBySlug} from "../../services/subcategory";
 import {searchSubSubCategories, searchSubSubCategoriesBySlug} from "../../services/subsubcategory";
 
+import {backUrl} from "../../config/config";
+
 const ProductForm = () => {
    // const [productCode, setProductCode] = useState('');
     const [name, setName] = useState('');
@@ -68,7 +70,7 @@ const ProductForm = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5501/products/product', formData, {
+            const response = await axios.post(`${backUrl}/products/product`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -83,7 +85,7 @@ const ProductForm = () => {
 
 
     useEffect(() => {
-        axios.get('http://localhost:5501/category/categories')
+        axios.get(`${backUrl}/category/categories`)
             .then(response => {
                 setCategories(response.data);
             })

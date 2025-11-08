@@ -15,6 +15,7 @@ import bannerRouter from "./banner.js";
 import constructorRouter from "./constructorOne.js";
 import constructorTwoRouter from "./constructorTwo.js";
 import infoRouter from "./infoPage.js";
+import exchangeRouter from "./dataExchange.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -35,6 +36,6 @@ router.use('/banner', bannerRouter);
 router.use('/constructor-one', constructorRouter);
 router.use('/constructor-two', constructorTwoRouter);
 router.use('/info-page', infoRouter);
-
+router.use('/data-exchange', exchangeRouter);
 
 export default router;

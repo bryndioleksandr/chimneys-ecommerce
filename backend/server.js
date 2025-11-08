@@ -24,6 +24,7 @@ app.use(cors({
     credentials: true
 }));
 
+
 app.use(express.static(path.join(__dirname, '../front')));
 
 app.use(express.json());
