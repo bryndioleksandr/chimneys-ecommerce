@@ -69,7 +69,6 @@ export default function HeaderMain() {
             const fetchCount = async () => {
                 const res = await fetch(`${backUrl}/order/by-status/pending`, {});
                 const data = await res.json();
-                console.log('data is :', data);
                 setOrdersCount(data.length);
             }
             fetchCount();
@@ -114,7 +113,6 @@ export default function HeaderMain() {
         try {
             const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
             const data = await res.json();
-            console.log('data is:', data);
             setSearchResults(data);
         } catch (error) {
             console.error("Search error:", error);

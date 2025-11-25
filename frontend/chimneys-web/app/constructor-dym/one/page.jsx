@@ -152,12 +152,10 @@ export default function ChimneyMapOne() {
     }, [selectedArea]);
 
     const handleSearch = async () => {
-        console.log('search query is:', searchQuery);
         if (!searchQuery.trim()) return;
         try {
             const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
             const data = await res.json();
-            console.log('data is:', data);
             setProducts(data);
         } catch (error) {
             console.error("Search error:", error);

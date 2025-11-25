@@ -17,7 +17,6 @@ import { backUrl } from '../../../../config/config';
 
 const SubCategoryPage = () => {
     const { categoryName, subCategoryName } = useParams();
-    console.log('category name from params:', categoryName);
     const router = useRouter();
     const [products, setProducts] = useState([]);
     const [filters, setFilters] = useState({});
@@ -47,11 +46,8 @@ const SubCategoryPage = () => {
                 const subCategoryData = await searchOneSubCategoryBySlug(subCategoryName);
                 const subCategoryId = subCategoryData[0]._id;
                 setCurrentSubCat(subCategoryId);
-                console.log('subcat id:', subCategoryId);
                 const productData = await searchSubCategoryProducts(subCategoryId);
                 const parentCategory = await searchCategoryBySlug(categoryName);
-                console.log('parent category:', parentCategory);
-                console.log('parent category id:', parentCategory[0]._id);
                 setParentCat(parentCategory[0]._id);
                 const filtersData = await getFiltersByCategory(parentCategory[0]._id, subCategoryId);
 

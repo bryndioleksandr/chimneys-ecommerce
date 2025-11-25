@@ -33,7 +33,6 @@ export const createCategory = async (categoryData) => {
 export const searchCategoryByName = async (name) => {
     try {
         const response = await fetch(`${API_BASE}/category/by-name/${name}`);
-        console.log('res onecat:', response);
         if (!response.ok) throw new Error('Failed to fetch category');
         return await response.json();
     } catch (error) {
@@ -45,7 +44,6 @@ export const searchCategoryByName = async (name) => {
 export const searchCategoryBySlug = async (slug) => {
     try {
         const response = await fetch(`${API_BASE}/category/by-slug/${slug}`);
-        console.log('res onecat:', response);
         if (!response.ok) throw new Error('Failed to fetch category');
         return await response.json();
     } catch (error) {
@@ -57,7 +55,6 @@ export const searchCategoryBySlug = async (slug) => {
 export const searchCategoryProducts = async (categoryId) => {
     try {
         const response = await fetch(`${API_BASE}/products/by-category/${categoryId}`);
-        console.log('res prod:', response);
         if (!response.ok) throw new Error('Failed to fetch products');
         return await response.json();
     } catch (error) {

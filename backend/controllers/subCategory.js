@@ -163,11 +163,9 @@ export const findSubCategoryBySlug  = async (req, res) => {
 
         const category = await Category.findOne({ slug: slug });
         if (!category) return res.status(404).json({ msg: "Category not found" });
-        console.log('sub cat from cat', category);
 
         console.log('_id isisis', category._id);
         const subCategories = await SubCategory.find({ category: category._id }).populate("category");
-        console.log('result find is:', subCategories);
         res.status(200).json(subCategories);
     } catch (err) {
         return res.status(500).json({ msg: err.message });
@@ -178,7 +176,6 @@ export const findSubCategoryBySlug  = async (req, res) => {
 export const searchBySlug = async (req, res) => {
     try {
         const subCategory = await SubCategory.find({ slug: req.params.slug});
-        console.log('onecat back:', subCategory);
         res.json(subCategory);
     }
     catch(error) {

@@ -78,13 +78,10 @@ export const userRegister = async (req, res) => {
     try {
         const { name, surname, email, password } = req.body;
 
-        console.log('register backend works here');
-        console.log('перевірка на існування користувача');
+
         const userExists = await User.exists({ email });
-        console.log('userExists:', userExists);
         if (userExists) return res.json({ msg: "This email is already in use" });
 
-        console.log('valid checked');
         const salt = await bcrypt.genSalt(10);
         const hashPw = await bcrypt.hash(password, salt);
 

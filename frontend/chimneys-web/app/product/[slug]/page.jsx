@@ -86,7 +86,6 @@ const ProductPage = () => {
             try {
                 const res = await fetch(`${backUrl}/reviews/product-reviews/${product._id}`);
                 const data = await res.json();
-                console.log("reviews data:", data);
                 setReviews(Array.isArray(data) ? data : []);
             } catch (err) {
                 console.error("Помилка при завантаженні відгуків:", err);

@@ -9,7 +9,6 @@ export const fetchCities = async () => {
             methodProperties: {}
         });
 
-        console.log('Отримана cities data:', response.data.data);
         return response.data.data;
     } catch (error) {
         console.error('Помилка при запиті:', error);
@@ -27,7 +26,6 @@ export const fetchWarehouses = async (cityName) => {
             }
         });
 
-        console.log('Отримана warehouses data:', response.data.data);
         return response.data.data;
     } catch (error) {
         console.error('Помилка при запиті:', error);

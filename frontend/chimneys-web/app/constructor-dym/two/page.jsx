@@ -123,7 +123,6 @@ export default function ChimneyMapTwo() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                console.log('now fetch');
                 const res = await fetch(`${backUrl}/products/products`);
                 if (!res.ok) throw new Error("Products not found");
                 const data = await res.json();
@@ -158,7 +157,6 @@ export default function ChimneyMapTwo() {
     }, [selectedArea]);
 
     const handleSearch = async () => {
-        console.log('search query is:', searchQuery);
         if (!searchQuery.trim()) return;
         try {
             const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);

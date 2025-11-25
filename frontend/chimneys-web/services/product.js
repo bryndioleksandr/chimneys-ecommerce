@@ -4,7 +4,6 @@ import { backUrl as API_BASE } from '../config/config';
 export const updateProductRequest = async(productId, data) => {
     try{
         const response = await axios.put(`${API_BASE}/products/update/${productId}`, data);
-        console.log('updated data is:', response);
     }catch (error) {
         console.error('Помилка при оновленні товару:', error);
     }

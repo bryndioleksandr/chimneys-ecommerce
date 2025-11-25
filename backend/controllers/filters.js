@@ -4,9 +4,6 @@ export const getFiltersByCategory = async (req, res) => {
     const { categoryId, subCategoryId, subSubCategoryId } = req.params;
     // if (!subCategoryId) subCategoryId = null;
     // if (!subSubCategoryId) subSubCategoryId = null;
-    console.log('cat id:', categoryId);
-    console.log('subcat id:', subCategoryId);
-    console.log('subsubcat id:', subSubCategoryId);
     try {
         const products = await Product.find({ category: categoryId, subCategory: subCategoryId ?? null, subSubCategory: subSubCategoryId ?? null });
 
@@ -55,7 +52,6 @@ export const getFiltersByCategory = async (req, res) => {
             filters[key] = Array.from(valueSet);
         }
 
-        console.log('filters are : ', filters);
         res.json({ filters });
 
     } catch (err) {

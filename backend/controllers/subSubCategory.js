@@ -159,7 +159,6 @@ export const findSubSubCategoryBySlug  = async (req, res) => {
 
         const subCategory = await SubCategory.findOne({ slug: slug });
         if (!subCategory) return res.status(404).json({ msg: "subCategory not found" });
-        console.log('sub cat from cat', subCategory);
 
         console.log('_id isisis', subCategory._id);
         const subSubCategories = await SubSubCategory.find({ subCategory: subCategory._id });

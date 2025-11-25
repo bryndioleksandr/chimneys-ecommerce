@@ -37,7 +37,6 @@ export const logoutUser = async () => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             localStorage.clear();
         })
         .catch(err => console.error(err));

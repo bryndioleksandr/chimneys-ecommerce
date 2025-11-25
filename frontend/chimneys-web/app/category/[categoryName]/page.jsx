@@ -60,9 +60,7 @@ const CategoryPage = () => {
     useEffect(() => {
         const fetchSubcategories = async () => {
             const currentCategory = await searchCategoryBySlug(categoryId);
-            console.log('current category:', currentCategory);
             setCurrentCat(currentCategory[0]);
-            console.log('_id:', currentCategory[0]._id);
             if (categoryId) {
                 setLoading(true);
                 setError(null);
@@ -70,12 +68,9 @@ const CategoryPage = () => {
                     const data = await searchSubCategoriesBySlug(categoryId);
                     const productData = await searchCategoryProducts(currentCategory[0]._id);
                     const filtersData = await getFiltersByCategory(currentCategory[0]._id);
-                    console.log('filters received are: ', filtersData);
                     setFilters(filtersData);
-                    console.log('response products category:', productData);
                     setProducts(productData);
                     setSubcategories(data);
-                    console.log('response:', data);
                 } catch (err) {
                     setError("Не вдалося завантажити підкатегорії.");
                 } finally {

@@ -100,14 +100,12 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
                 queryParams.append(key, value);
             }
         }
-        console.log('final filters are: ', finalFilters)
         try {
             const response = await axios.get(`${backUrl}/products/filtered-products?${queryParams.toString()}`);
             const data = response.data;
             if (onFilter) {
                 onFilter(data);
             }
-            console.log("Отримані продукти:", data);
         } catch (error) {
             console.error("Помилка при запиті на бекенд:", error);
         }

@@ -50,7 +50,6 @@ export const createCategory = [
                     imagePath = result.secure_url;
                     cloudinaryPublicId = result.public_id;
 
-                    console.log('cat image is:', imagePath);
                 } catch (error) {
                     console.error("Error uploading image to Cloudinary:", error);
                     return res.status(500).json({ msg: "Error uploading image" });
@@ -157,9 +156,7 @@ export const removeCategory = async (req, res) => {
 
 export const searchByName = async (req, res) => {
     try {
-        console.log('params cateogry:', req.params);
         const category = await Category.find({ slug: req.params.name});
-        console.log('onecat back:', category);
         res.json(category);
     }
     catch(error) {
@@ -170,7 +167,6 @@ export const searchByName = async (req, res) => {
 export const searchBySlug = async (req, res) => {
     try {
         const category = await Category.find({ slug: req.params.slug});
-        console.log('onecat back:', category);
         res.json(category);
     }
     catch(error) {

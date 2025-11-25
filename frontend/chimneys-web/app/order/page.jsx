@@ -157,9 +157,6 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
-            console.log('userid:', userId);
-            console.log('products:', products);
-            console.log('totalprice', totalPrice);
             const orderResponse = await axios.post(`${backUrl}/order/make`, {
                 ...formData,
                 deliveryWay: formData.deliveryWay,

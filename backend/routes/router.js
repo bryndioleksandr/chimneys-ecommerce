@@ -37,5 +37,8 @@ router.use('/constructor-one', constructorRouter);
 router.use('/constructor-two', constructorTwoRouter);
 router.use('/info-page', infoRouter);
 router.use('/data-exchange', exchangeRouter);
+router.get('/health', (req, res) => {
+    res.status(200).send('Server is alive');
+});
 
 export default router;

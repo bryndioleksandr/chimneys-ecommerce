@@ -34,16 +34,11 @@ const SubSubCategoryPage = () => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                console.log('subsubname:', subSubCategoryName);
                 const subSubCategoryData = await searchOneSubSubCategoryBySlug(subSubCategoryName);
                 const subSubCategoryId = subSubCategoryData[0]._id;
-                console.log('subsub data:', subSubCategoryData);
-                console.log('subsub id:', subSubCategoryId);
                 const productData = await searchSubSubCategoryProducts(subSubCategoryId);
                 const parentCategory = await searchCategoryBySlug(categoryName);
                 const parentSubCategory = await searchOneSubCategoryBySlug(subCategoryName);
-                console.log('parent category:', parentCategory);
-                console.log('parent category id:', parentCategory[0]._id);
                 const filtersData = await getFiltersByCategory(parentCategory[0]._id, parentSubCategory[0]._id, subSubCategoryId);
 
                 setProducts(productData);

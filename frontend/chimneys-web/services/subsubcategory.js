@@ -33,8 +33,6 @@ export const searchSubSubCategories = async (name) => {
         const formattedName = name.replace(/-/g, ' ');
         console.log('formatted name:', formattedName);
         const response = await fetch(`${API_BASE}/subsubcategory/search?name=${formattedName}`);
-        console.log('response from search sub:', response);
-        console.log("searchSubSubCategories response body:", await response.clone().json());
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
     } catch (err) {
@@ -46,7 +44,6 @@ export const searchSubSubCategories = async (name) => {
 export const searchSubSubCategoriesBySlug = async (slug) => {
     try {
         const response = await fetch(`${API_BASE}/subsubcategory/search-all?slug=${slug}`);
-        console.log('response from search:', response);
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
     } catch (err) {
@@ -58,7 +55,6 @@ export const searchSubSubCategoriesBySlug = async (slug) => {
 export const searchOneSubSubCategoryBySlug = async (slug) => {
     try {
         const response = await fetch(`${API_BASE}/subsubcategory/search-one?slug=${slug}`);
-        console.log('response from search:', response);
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
     } catch (err) {

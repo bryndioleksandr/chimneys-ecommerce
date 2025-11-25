@@ -10,7 +10,6 @@ export const getFavorites = async (req, res) => {
             return res.status(200).json({ products: [] });
         }
 
-        console.log('favorites for user are:', favorites);
         res.status(200).json(favorites.products);
     } catch (error) {
         res.status(500).json({ message: "Помилка при отриманні улюблених", error });

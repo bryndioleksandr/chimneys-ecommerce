@@ -29,7 +29,6 @@ export default function FavoritesPage() {
         const fetchFavorites = async () => {
             try {
                 const res = await axios.get(`${backUrl}/favorites/${userId}`);
-                console.log('response from favorites is:', res.data);
                 setFavorites(res.data || []);
             } catch (error) {
                 console.error(error);

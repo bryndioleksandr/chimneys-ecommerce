@@ -20,7 +20,6 @@ export default function CertificatesPage() {
         fetch(API_URL + '/certificates')
             .then((res) => res.json())
             .then((data) => {
-                console.log('data is: ', data);
                 setPage(data);
                 setTitle(data.title ?? "");
                 setContent(data.content ?? "");

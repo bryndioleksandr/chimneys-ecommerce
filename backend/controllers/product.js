@@ -27,7 +27,6 @@ export const createProduct = async (req, res) => {
             console.log('images received:', req.body.images);
             console.log('files received:', req.files);
             productData.slug = slugify(productData.name, { lower: true });
-            console.log('product data is:', productData);
             let uploadedImages = [];
 
             if (req.files && req.files.length > 0) {
@@ -70,7 +69,6 @@ export const searchProducts = async (req, res) => {
         const products = await Product.find({
             name: { $regex: query, $options: "i" }
         });
-        console.log('results search are:', products);
         res.status(200).json(products);
     } catch (err) {
         res.status(500).json({ msg: err.message });
@@ -115,7 +113,6 @@ export const getHotProducts = async (req, res) => {
             .sort({discount: -1})
             .limit(10)
             .populate("category subCategory subSubCategory");
-        console.log('saled products are:', hotProducts);
         res.status(200).json(hotProducts);
     } catch (err) {
         return res.status(500).json({ msg: err.message });
@@ -146,9 +143,6 @@ export const updateProduct = async (req, res) => {
 
             const updatedData = req.body;
             updatedData.slug = slugify(updatedData.name, { lower: true });
-
-            console.log('update body:', updatedData);
-            console.log('update files:', req.files);
 
             let uploadedImages = [];
 
@@ -243,7 +237,6 @@ export const searchByCategory = async (req, res) => {
     try {
         console.log('params:', req.params);
         const products = await Product.find({ category: req.params.categoryid, subCategory: null, subSubCategory: null });
-        console.log('received products:', products);
         res.json(products);
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
@@ -254,9 +247,7 @@ export const searchBySubCategory = async (req, res) => {
     try {
         const subCategoryId = new mongoose.Types.ObjectId(req.params.subcategoryid);
         console.log('params search products subCat:', req.params);
-        console.log('converted id subcat is:', subCategoryId);
         const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null });
-        console.log('searched products are:', products);
         res.json(products);
     } catch (err){
         console.log('error is', err);
@@ -329,9 +320,7 @@ export const getFilteredProducts = async (req, res) => {
     filters.hasMesh = hasMesh;
     if(revision)
     filters.revision = revision;
-    console.log('final filters in backend:', filters);
     const products = await Product.find(filters);
-    console.log('received products:', products);
     res.json(products);
 }
 
