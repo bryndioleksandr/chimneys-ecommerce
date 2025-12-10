@@ -79,7 +79,7 @@
     gap: 15px;
 }
 
-.product-link {
+.product-link-fav {
     display: flex;
     align-items: center;
     flex-grow: 1;

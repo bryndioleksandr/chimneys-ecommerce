@@ -214,8 +214,6 @@ export default function HeaderMain() {
                                 <span>Вийти</span>
                             </div>
                         </div>
-                        <FaClipboardList />
-                        <Link href="/my-orders">Мої замовлення</Link>
                     </>
                 </RoleGuard>
                 )}

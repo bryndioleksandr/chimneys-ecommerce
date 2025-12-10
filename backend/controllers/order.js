@@ -4,6 +4,7 @@ import Product from "../models/product.js";
 export const createOrder = async (req, res) => {
     try {
         const { user, phoneNumber, paymentMethod, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
+        console.log('we are creating order here man');
         const newOrder = new Order({
             user,
             phoneNumber,

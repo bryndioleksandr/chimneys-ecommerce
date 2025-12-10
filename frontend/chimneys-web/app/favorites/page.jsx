@@ -68,7 +68,7 @@ export default function FavoritesPage() {
                     {favorites.length > 0 ? (
                         favorites.map((item) => (
                             <div key={item._id} className="favorite-item">
-                                <Link className="product-link" href={`/product/${item.slug}`}>
+                                <Link className="product-link-fav" href={`/product/${item.slug}`}>
                                     <img src={item.images[0]} alt={item.name} className="item-image"/>
                                     <div className="item-details">
                                         <p className="item-category">{item.category.name}</p>

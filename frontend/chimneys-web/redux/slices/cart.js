@@ -24,8 +24,7 @@ const cartSlice = createSlice({
             }
 
             state.totalQuantity += quantityToAdd;
-            state.totalPrice += newItem.price * quantityToAdd;
-
+            newItem.discountedPrice ? state.totalPrice += newItem.discountedPrice * quantityToAdd : state.totalPrice += newItem.price * quantityToAdd;
             if (typeof window !== 'undefined') {
                 localStorage.setItem('cart', JSON.stringify(state.items));
             }
@@ -37,7 +36,8 @@ const cartSlice = createSlice({
             if (itemIndex !== -1) {
                 const item = state.items[itemIndex];
                 state.totalQuantity -= item.quantity;
-                state.totalPrice -= item.price * item.quantity;
+                item.discountedPrice ? state.totalPrice -= item.discountedPrice * item.quantity : state.totalPrice -= item.price * item.quantity;
+
                 state.items.splice(itemIndex, 1);
 
                 if (typeof window !== 'undefined') {
@@ -51,11 +51,13 @@ const cartSlice = createSlice({
 
             if (item) {
                 state.totalQuantity -= item.quantity;
-                state.totalPrice -= item.price * item.quantity;
+
+                item.discountedPrice ? state.totalPrice -= item.discountedPrice * item.quantity : state.totalPrice -= item.price * item.quantity;
 
                 item.quantity = quantity;
                 state.totalQuantity += quantity;
-                state.totalPrice += item.price * quantity;
+
+                item.discountedPrice ? state.totalPrice += item.discountedPrice * quantity : state.totalPrice += item.price * quantity;
 
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('cart', JSON.stringify(state.items));
@@ -74,7 +76,7 @@ const cartSlice = createSlice({
         loadCartFromStorage: (state, action) => {
             state.items = action.payload;
             state.totalQuantity = action.payload.reduce((sum, item) => sum + item.quantity, 0);
-            state.totalPrice = action.payload.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            state.totalPrice = action.payload.reduce((sum, item) => sum + item.discountedPrice ? item.discountedPrice * item.quantity : item.price * item.quantity, 0);
         },
     },
 });

@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+    cloneProduct,
     createProduct,
     deleteProduct,
     getFilteredProducts,
@@ -23,6 +24,7 @@ const productRouter = express.Router();
 
 productRouter.get('/products', cookieParser(), getProducts);
 productRouter.post('/product', createProduct);
+productRouter.post('/product-clone', cloneProduct);
 productRouter.get('/by-category/:categoryid', searchByCategory);
 productRouter.get('/by-subcategory/:subcategoryid', searchBySubCategory);
 productRouter.get('/by-subsubcategory/:subsubcategoryid', searchBySubSubCategory);

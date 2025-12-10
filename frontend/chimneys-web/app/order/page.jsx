@@ -157,8 +157,10 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
+            console.log('trying to create req to backend');
             const orderResponse = await axios.post(`${backUrl}/order/make`, {
                 ...formData,
+                user: userId || null,
                 deliveryWay: formData.deliveryWay,
                 paymentMethod: formData.paymentMethod,
                 products,

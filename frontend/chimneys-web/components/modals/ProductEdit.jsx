@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { backUrl } from '../../config/config';
+import {backUrl} from '../../config/config';
 import {searchSubCategories, searchSubCategoriesBySlug} from '../../services/subcategory';
 import {searchSubSubCategories, searchSubSubCategoriesBySlug} from '../../services/subsubcategory';
 import ReactDOM from 'react-dom';
@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 // import "./style.css";
 import "./edit.css";
 
-const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
+const EditProductModal = ({isOpen, onClose, product, onSave}) => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
@@ -70,8 +70,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
                 const sub = await searchSubCategoriesBySlug(cat?.slug || '');
                 console.log('before setting subcats:', sub);
                 setSubCategories(sub);
-            }
-            else setSubCategories([]);
+            } else setSubCategories([]);
         };
         loadSubs();
     }, [category]);
@@ -84,8 +83,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
                 console.log('subcat is ', subCat);
                 const subSub = await searchSubSubCategoriesBySlug(subCat?.slug || '');
                 setSubSubCategories(subSub);
-            }
-            else setSubSubCategories([]);
+            } else setSubSubCategories([]);
         };
         loadSubSubs();
     }, [subCategory, subCategories]);
@@ -118,7 +116,7 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
 
         try {
             const res = await axios.put(`${backUrl}/products/update/${product._id}`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+                headers: {'Content-Type': 'multipart/form-data'}
             });
             alert('Продукт оновлено');
             onSave(res.data);
@@ -134,53 +132,133 @@ const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
     return ReactDOM.createPortal(
         <div className="modal-backdrop">
             <div className="modal-content">
-                <h3>Редагувати продукт</h3>
-                <form onSubmit={handleUpdate}>
-                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Назва" />
-                    <input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="Ціна" />
+                <div className="wrap-head">
+                    <h3>Редагувати продукт</h3>
+                    <button className="close-btn" type="button" onClick={onClose}>&times;</button>
+                </div>
 
-                    <select value={category} onChange={e => setCategory(e.target.value)}>
-                        <option value="">Категорія</option>
-                        {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                    </select>
+                <form onSubmit={handleUpdate} className="clone-form-grid">
 
-                    <select value={subCategory} onChange={e => setSubCategory(e.target.value)}>
-                        <option value="">Підкатегорія</option>
-                        {subCategories.map(sc => <option key={sc._id} value={sc._id}>{sc.name}</option>)}
-                    </select>
+                    {/* --- НАЗВА (На всю ширину) --- */}
+                    <div className="form-group full-width">
+                        <label>Назва товару</label>
+                        <input type="text" value={name} onChange={e => setName(e.target.value)} />
+                    </div>
 
-                    <select value={subSubCategory} onChange={e => setSubSubCategory(e.target.value)}>
-                        <option value="">Підпідкатегорія</option>
-                        {subSubCategories.map(ssc => <option key={ssc._id} value={ssc._id}>{ssc.name}</option>)}
-                    </select>
+                    {/* --- КАТЕГОРІЇ (Окремий блок) --- */}
+                    <div className="form-group full-width">
+                        <label>Категорія (Головна)</label>
+                        <select value={category} onChange={e => setCategory(e.target.value)}>
+                            <option value="">Оберіть категорію</option>
+                            {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                        </select>
+                    </div>
 
-                    <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Опис" />
+                    <div className="form-group">
+                        <label>Підкатегорія</label>
+                        <select value={subCategory} onChange={e => setSubCategory(e.target.value)}>
+                            <option value="">Не обрано</option>
+                            {subCategories.map(sc => <option key={sc._id} value={sc._id}>{sc.name}</option>)}
+                        </select>
+                    </div>
 
-                    <input type="number" value={discount} onChange={e => setDiscount(e.target.value)} placeholder="Знижка" />
-                    <input type="text" value={steelGrade} onChange={e => setSteelGrade(e.target.value)} placeholder="Марка сталі" />
-                    <input type="number" value={thickness} onChange={e => setThickness(e.target.value)} placeholder="Товщина" />
-                    <input type="number" value={diameter} onChange={e => setDiameter(e.target.value)} placeholder="Діаметр" />
-                    <input type="number" value={length} onChange={e => setLength(e.target.value)} placeholder="Довжина" />
-                    <input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="Вага" />
-                    <input type="number" value={insulationThickness} onChange={e => setInsulationThickness(e.target.value)} placeholder="Утеплювач" />
-                    <input type="number" value={stock} onChange={e => setStock(e.target.value)} placeholder="Наявність" />
+                    <div className="form-group">
+                        <label>Під-підкатегорія</label>
+                        <select value={subSubCategory} onChange={e => setSubSubCategory(e.target.value)}>
+                            <option value="">Не обрано</option>
+                            {subSubCategories.map(ssc => <option key={ssc._id} value={ssc._id}>{ssc.name}</option>)}
+                        </select>
+                    </div>
 
-                    <select value={angle} onChange={e => setAngle(e.target.value)}>
-                        <option value="">Кут</option>
-                        <option value={30}>30°</option>
-                        <option value={45}>45°</option>
-                        <option value={60}>60°</option>
-                        <option value={90}>90°</option>
-                    </select>
+                    {/* --- ХАРАКТЕРИСТИКИ --- */}
+                    <div className="form-group">
+                        <label>Діаметр (мм)</label>
+                        <input type="number" value={diameter} onChange={e => setDiameter(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label>Товщина (мм)</label>
+                        <input type="number" value={thickness} onChange={e => setThickness(e.target.value)} />
+                    </div>
 
-                    <label><input type="checkbox" checked={revision} onChange={e => setRevision(e.target.checked)} /> Ревізія</label>
-                    <label><input type="checkbox" checked={hasMesh} onChange={e => setHasMesh(e.target.checked)} /> Сітка</label>
+                    <div className="form-group">
+                        <label>Марка сталі</label>
+                        <input type="text" value={steelGrade} onChange={e => setSteelGrade(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label>Кут (градуси)</label>
+                        <select value={angle} onChange={e => setAngle(e.target.value)}>
+                            <option value="">Без кута</option>
+                            <option value={30}>30°</option>
+                            <option value={45}>45°</option>
+                            <option value={60}>60°</option>
+                            <option value={90}>90°</option>
+                        </select>
+                    </div>
 
-                    <input type="file" accept="image/*" multiple onChange={(e) => setImages([...e.target.files])} />
+                    <div className="form-group">
+                        <label>Довжина (мм)</label>
+                        <input type="number" value={length} onChange={e => setLength(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label>Утеплювач (мм)</label>
+                        <input type="number" value={insulationThickness} onChange={e => setInsulationThickness(e.target.value)} />
+                    </div>
 
-                    <div className="modal-buttons">
-                        <button type="submit">Оновити</button>
-                        <button type="button" onClick={onClose}>Закрити</button>
+                    {/* --- ЦІНА ТА СКЛАД --- */}
+                    <div className="form-group">
+                        <label>Ціна (грн)</label>
+                        <input type="number" value={price} onChange={e => setPrice(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label>Знижка (%)</label>
+                        <input type="number" value={discount} onChange={e => setDiscount(e.target.value)} />
+                    </div>
+
+                    <div className="form-group">
+                        <label>В наявності (шт)</label>
+                        <input type="number" value={stock} onChange={e => setStock(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label>Вага (кг)</label>
+                        <input type="number" value={weight} onChange={e => setWeight(e.target.value)} />
+                    </div>
+
+                    {/* --- ЧЕКБОКСИ --- */}
+                    <div className="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" checked={revision} onChange={e => setRevision(e.target.checked)}/>
+                            Ревізія
+                        </label>
+                    </div>
+                    <div className="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" checked={hasMesh} onChange={e => setHasMesh(e.target.checked)}/>
+                            Сітка
+                        </label>
+                    </div>
+
+                    {/* --- ОПИС --- */}
+                    <div className="form-group full-width">
+                        <label>Опис</label>
+                        <textarea rows="4" value={description} onChange={e => setDescription(e.target.value)} />
+                    </div>
+
+                    {/* --- ФОТО --- */}
+                    <div className="form-group full-width">
+                        <label>Фотографії (Завантажити нові)</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={(e) => setImages([...e.target.files])}
+                            style={{border: 'none', padding: '10px 0'}} // Трохи фіксу для інпута файлу
+                        />
+                    </div>
+
+                    {/* --- КНОПКИ --- */}
+                    <div className="form-actions full-width" style={{display: 'flex', gap: '10px'}}>
+                        <button type="submit" className="submit-btn">Оновити</button>
+                        <button type="button" className="submit-btn" onClick={onClose} style={{backgroundColor: '#6c757d'}}>Закрити</button>
                     </div>
                 </form>
             </div>

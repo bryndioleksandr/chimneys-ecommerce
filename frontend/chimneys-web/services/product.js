@@ -16,3 +16,4 @@ export const deleteProductRequest = async(productId) => {
         console.error('Помилка при видаленні товару:', error);
     }
 }
+

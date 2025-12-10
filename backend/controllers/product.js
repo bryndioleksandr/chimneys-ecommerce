@@ -16,6 +16,43 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+function generateSmartGroupId(slug) {
+    const units = ['mm', 'm', 'cm', 'g', 'kg'];
+
+    const safeKeywords = ['aisi', 'ss'];
+
+    const parts = slug.split('-');
+
+    const cleanParts = parts.filter((part, index) => {
+
+        const prevPart = parts[index - 1];
+        if (prevPart && safeKeywords.includes(prevPart)) {
+            return true;
+        }
+
+
+        const endsWithUnit = units.some(unit => part.endsWith(unit));
+        const hasDigits = /\d/.test(part);
+
+        if (hasDigits && endsWithUnit) {
+            return false;
+        }
+
+        if (/^[a-z]{1,2}\d+$/.test(part)) {
+            return false;
+        }
+        if (/^\d+$/.test(part)) {
+            return false;
+        }
+
+        return !units.includes(part);
+
+
+    });
+
+    return cleanParts.join('-');
+}
+
 export const createProduct = async (req, res) => {
     try {
         upload.array("images", 5)(req, res, async (err) => {
@@ -49,9 +86,11 @@ export const createProduct = async (req, res) => {
             const price = parseFloat(productData.price);
             const discount = parseFloat(productData.discount || 0);
             productData.discountedPrice = Math.round(price - (price * discount / 100));
-
+            const groupId = generateSmartGroupId(productData.slug);
+            console.log('group id is: ', groupId);
             const newProduct = new Product({
                 ...productData,
+                groupId: groupId,
                 images: uploadedImages,
             });
 
@@ -62,6 +101,46 @@ export const createProduct = async (req, res) => {
         return res.status(500).json({ msg: err.message });
     }
 };
+
+
+export const cloneProduct = async (req, res) => {
+    try {
+        upload.array("images")(req, res, async (err) => {
+            if (err) return res.status(400).json({msg: "Form data parsing error"});
+            if (!req.body.subCategory) req.body.subCategory = null;
+            if (!req.body.subSubCategory) req.body.subSubCategory = null;
+            const productData = req.body;
+            productData.slug = slugify(productData.name, {lower: true});
+
+            let imageLinks = [];
+
+            if (productData.images) {
+                if (Array.isArray(productData.images)) {
+                    imageLinks = productData.images;
+                } else {
+                    imageLinks = [productData.images];
+                }
+            }
+
+            const price = parseFloat(productData.price);
+            const discount = parseFloat(productData.discount || 0);
+            productData.discountedPrice = Math.round(price - (price * discount / 100));
+            const groupId = generateSmartGroupId(productData.slug);
+            console.log('group id is: ', groupId);
+            const newProduct = new Product({
+                ...productData,
+                images: imageLinks,
+                groupId: groupId,
+            });
+
+            await newProduct.save();
+            res.status(200).json(newProduct);
+        });
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+};
+
 
 export const searchProducts = async (req, res) => {
     try {

@@ -3,21 +3,23 @@
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import StarRating from "../StarRating/StarRating";
-import { FaHeart, FaShoppingCart } from "react-icons/fa";
+import {FaHeart, FaShoppingCart} from "react-icons/fa";
 import "./ProductCard.css";
-import { addItemToCart } from "@/redux/slices/cart";
-import { useDispatch } from "@/redux/store";
+import {addItemToCart} from "@/redux/slices/cart";
+import {useDispatch} from "@/redux/store";
 import axios from "axios";
-import { backUrl } from '../../config/config';
+import {backUrl} from '../../config/config';
 import {deleteProductRequest} from "@/services/product";
 import EditProductModal from "../modals/ProductEdit";
+import ProductCloneModal from "@/components/modals/ProductClone";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({product}) => {
     const dispatch = useDispatch();
     const [userId, setUserId] = useState(null);
     const [role, setUserRole] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [isCloning, setIsCloning] = useState(false);
 
 
     useEffect(() => {
@@ -80,7 +82,8 @@ const ProductCard = ({ product }) => {
                         {product.stock !== 0 ? (
                             <span className="card-in-stock">В наявності</span>
                         ) : (
-                            <span className="card-in-stock" style={{color: 'var(--discount-color)'}}>Під замовлення</span>
+                            <span className="card-in-stock"
+                                  style={{color: 'var(--discount-color)'}}>Під замовлення</span>
                         )}
                     </div>
                 </Link>
@@ -101,22 +104,30 @@ const ProductCard = ({ product }) => {
                             <span className="card-price">{product.price}₴</span>
                         )}
                         <div className="heart-cart">
-                            <FaHeart/>
+                            <FaHeart onClick={() => handleAddToFavorites()}/>
                             <FaShoppingCart onClick={() => handleAddToCart(product)}/>
                         </div>
 
                     </div>
                     {role === "admin" && (
-                        <div className="admin-buttons">
-                            <button onClick={() => {
+                        <div className="wrapper-buttons">
+                            <div className="admin-buttons">
+                                <button onClick={() => {
+                                    setSelectedProduct(product);
+                                    setIsModalOpen(true);
+                                }}>Оновити
+                                </button>
+                                <button style={{backgroundColor: "#C80106"}} onClick={() => {
+                                    if (confirm("Ви впевнені, що хочете видалити цей товар?")) {
+                                        deleteProductRequest(product._id);
+                                    }
+                                }}>Видалити
+                                </button>
+                            </div>
+                            <button style={{backgroundColor: "blue"}} onClick={() => {
                                 setSelectedProduct(product);
-                                setIsModalOpen(true);
-                            }}>Оновити</button>
-                            <button style={{backgroundColor:"#C80106"}} onClick={() => {
-                                if (confirm("Ви впевнені, що хочете видалити цей товар?")) {
-                                    deleteProductRequest(product._id);
-                                }
-                            }}>Видалити
+                                setIsCloning(true);
+                            }}>Клонувати
                             </button>
                         </div>
                     )}
@@ -130,6 +141,12 @@ const ProductCard = ({ product }) => {
                         setSelectedProduct(updatedProduct);
                     }}
                 />
+                {isCloning && selectedProduct && (
+                    <ProductCloneModal
+                        product={selectedProduct}
+                        onClose={() => setIsCloning(false)}
+                    />
+                )}
                 {/*{isEditing && <ProductForm />}*/}
 
                 {/*{role === "admin" && (*/}

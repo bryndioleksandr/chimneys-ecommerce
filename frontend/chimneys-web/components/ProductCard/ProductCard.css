@@ -116,7 +116,7 @@
     margin-top: 10px;
 }
 
-.admin-buttons button {
+.admin-buttons button, .wrapper-buttons button {
     flex: 1;
     padding: 8px 12px;
     background-color: var(--discount-color);
@@ -128,9 +128,14 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.admin-buttons button:hover {
-    background-color: var(--hover-navbtn-color);
+.admin-buttons button:hover, .wrapper-buttons button:hover {
     transform: scale(1.05);
+}
+
+.wrapper-buttons {
+    display:flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .productCardName {
