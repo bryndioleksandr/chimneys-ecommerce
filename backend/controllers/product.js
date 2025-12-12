@@ -125,12 +125,9 @@ export const cloneProduct = async (req, res) => {
             const price = parseFloat(productData.price);
             const discount = parseFloat(productData.discount || 0);
             productData.discountedPrice = Math.round(price - (price * discount / 100));
-            const groupId = generateSmartGroupId(productData.slug);
-            console.log('group id is: ', groupId);
             const newProduct = new Product({
                 ...productData,
                 images: imageLinks,
-                groupId: groupId,
             });
 
             await newProduct.save();
@@ -141,6 +138,16 @@ export const cloneProduct = async (req, res) => {
     }
 };
 
+export const getProductsByGroupId = async (req, res) => {
+    try {
+        const {groupId} = req.params;
+        const products = await Product.find({ groupId }).select("_id slug steelGrade thickness diameter length weight angle revision hasMesh insulationThickness");
+        res.status(200).json(products);
+    }
+    catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
 
 export const searchProducts = async (req, res) => {
     try {

@@ -48,6 +48,7 @@ const ProductCloneModal = ({product, onClose}) => {
         formData.append("category", category);
         formData.append("subCategory", subCategory || "");
         formData.append("subSubCategory", subSubCategory || "");
+        formData.append("groupId", product.groupId || "");
 
         formData.append("description", description);
         formData.append("discount", discount);

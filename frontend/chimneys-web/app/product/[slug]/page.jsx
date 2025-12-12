@@ -12,6 +12,9 @@ import {addItemToCart} from "../../../redux/slices/cart";
 import axios from "axios";
 import {backUrl} from '../../../config/config';
 import {useDispatch} from "../../../redux/store";
+import {getProductsByGroupId} from "../../../services/product";
+import {ProductVariants} from "../../../components/ProductVariants/ProductVariants";
+
 
 const ProductPage = () => {
     const {slug} = useParams();
@@ -19,7 +22,8 @@ const ProductPage = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showReviewForm, setShowReviewForm] = useState(false);
-
+    const [productGroups, setProductGroup] = useState([]);
+    const [groupId, setGroupId] = useState('');
     const dispatch = useDispatch();
     const [userId, setUserId] = useState(null);
     const [role, setUserRole] = useState(null);
@@ -34,6 +38,58 @@ const ProductPage = () => {
             setUserCurrent(user);
         }
     }, []);
+
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch(`${backUrl}/products/by-slug/${slug}`);
+                if (!res.ok) throw new Error("Product not found");
+                const data = await res.json();
+                setProduct(data);
+                console.log('group id on page:', data?.groupId);
+                setGroupId(data?.groupId);
+            } catch (err) {
+                console.error(err);
+                setProduct(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (slug) fetchProduct();
+    }, [slug]);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            if (!product?._id) return;
+            try {
+                const res = await fetch(`${backUrl}/reviews/product-reviews/${product._id}`);
+                const data = await res.json();
+                setReviews(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error("Помилка при завантаженні відгуків:", err);
+            }
+        };
+
+        fetchReviews();
+    }, [product]);
+
+    useEffect(() => {
+        const fetchProductGroup = async () => {
+            try {
+                if (!groupId) return;
+                const data = await getProductsByGroupId(groupId);
+                console.log('group product is:', data);
+                setProductGroup(data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchProductGroup();
+    }, [groupId]);
+
 
     const handleAddToCart = (product) => {
         dispatch(addItemToCart(product));
@@ -62,38 +118,6 @@ const ProductPage = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const res = await fetch(`${backUrl}/products/by-slug/${slug}`);
-                if (!res.ok) throw new Error("Product not found");
-                const data = await res.json();
-                setProduct(data);
-            } catch (err) {
-                console.error(err);
-                setProduct(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (slug) fetchProduct();
-    }, [slug]);
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            if (!product?._id) return;
-            try {
-                const res = await fetch(`${backUrl}/reviews/product-reviews/${product._id}`);
-                const data = await res.json();
-                setReviews(Array.isArray(data) ? data : []);
-            } catch (err) {
-                console.error("Помилка при завантаженні відгуків:", err);
-            }
-        };
-
-        fetchReviews();
-    }, [product]);
 
     if (loading) return <p>Завантаження...</p>;
     if (!product) return <p>Товар не знайдено</p>;
@@ -125,6 +149,12 @@ const ProductPage = () => {
                             </div>
                         ) : (
                             <span className="card-price">{product.price}₴</span>
+                        )}
+                        {productGroups.length > 1 && (
+                            <ProductVariants
+                                currentProduct={product}
+                                productGroup={productGroups}
+                            />
                         )}
                         <div className="btns-buy-wish flex gap-4">
                             <button onClick={() => handleAddToCart(product)} className="buyButton">Купити</button>
@@ -161,7 +191,8 @@ const ProductPage = () => {
                             {product.hasMesh && <li>Сітка: Є</li>}
                             {product.insulationThickness &&
                                 <li>Товщина утеплювача: {product.insulationThickness} мм</li>}
-                            {product.stock > 0 ? (<li>В наявності</li>) : (<li>Під замовлення (Термін постачання 3-5 днів)</li>)}
+                            {product.stock > 0 ? (<li>В наявності</li>) : (
+                                <li>Під замовлення (Термін постачання 3-5 днів)</li>)}
                         </ul>
                     </div>
                     <hr/>
@@ -180,10 +211,10 @@ const ProductPage = () => {
                                 <div className="reviewHeader">
                                     <strong>{review.name}</strong>
                                     {role === "admin" ? (
-                                            <div className="user-email">
-                                                {review.email}
-                                            </div>
-                                        ) : null
+                                        <div className="user-email">
+                                            {review.email}
+                                        </div>
+                                    ) : null
                                     }
                                     <StarRating rating={review.rating} totalStars={5}/>
                                 </div>

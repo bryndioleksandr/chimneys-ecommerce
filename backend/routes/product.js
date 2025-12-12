@@ -8,7 +8,7 @@ import {
     getNewestProducts,
     getPopularProducts,
     getProductBySlug,
-    getProducts,
+    getProducts, getProductsByGroupId,
     searchByCategory,
     searchBySubCategory,
     searchBySubSubCategory,
@@ -38,5 +38,6 @@ productRouter.delete('/delete/:productId', deleteProduct);
 productRouter.get('/popular', getPopularProducts);
 productRouter.get('/for-sale', getHotProducts);
 productRouter.get('/newest', getNewestProducts);
+productRouter.get('/by-group-id/:groupId', getProductsByGroupId);
 
 export default productRouter;

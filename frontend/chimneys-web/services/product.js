@@ -1,5 +1,5 @@
 import axios from "axios";
-import { backUrl as API_BASE } from '../config/config';
+import {backUrl as API_BASE} from '../config/config';
 
 export const updateProductRequest = async(productId, data) => {
     try{
@@ -17,3 +17,13 @@ export const deleteProductRequest = async(productId) => {
     }
 }
 
+export const getProductsByGroupId = async (groupId) => {
+    try {
+        console.log('groupId here is: ', groupId)
+        const { data } = await axios.get(`${API_BASE}/products/by-group-id/${groupId}`);
+        return data;
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+    }
+};
