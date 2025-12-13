@@ -14,6 +14,13 @@ import {backUrl} from '../../../config/config';
 import {useDispatch} from "../../../redux/store";
 import {getProductsByGroupId} from "../../../services/product";
 import {ProductVariants} from "../../../components/ProductVariants/ProductVariants";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
+
+
+// <Breadcrumbs items={[
+//     { label: 'Каталог', href: '/catalog' },
+//     { label: 'Я', href: '/account' }
+// ]}/>
 
 
 const ProductPage = () => {
@@ -131,6 +138,12 @@ const ProductPage = () => {
 
     return (
         <div className="container mx-auto px-4 py-8 productContainer">
+            <Breadcrumbs items={[
+                { label: product.category?.name, href: `/category/${product.category?.slug}` },
+                { label: product.subCategory?.name, href: `/category/${product.category?.slug}/${product.subCategory?.slug}` },
+                { label: product.subSubCategory?.name, href: `/category/${product.category?.slug}/${product.subCategory?.slug}/${product.subSubCategory?.slug}` },
+                { label: product.name, href: `/product/${product.slug}` }
+            ].filter(item => item.label)}/>
             <h1 className="product-title">{product.name}</h1>
             <div className="product-wrapper">
                 <div className="gallery-main-info">

@@ -172,7 +172,13 @@ export const findSubSubCategoryBySlug  = async (req, res) => {
 export const searchBySlug = async (req, res) => {
     try {
         console.log('params for one subsub:', req.query);
-        const subSubCategory = await SubSubCategory.find({ slug: req.query.slug});
+        const subSubCategory = await SubSubCategory.find({ slug: req.query.slug}).populate({
+            path: "subCategory",
+            populate: {
+                path: "category",
+                select: "name slug"
+            }
+        });
         console.log('onesubsubcat back:', subSubCategory);
         res.json(subSubCategory);
     }

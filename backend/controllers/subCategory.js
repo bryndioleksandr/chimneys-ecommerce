@@ -175,7 +175,7 @@ export const findSubCategoryBySlug  = async (req, res) => {
 //finds one subcategory
 export const searchBySlug = async (req, res) => {
     try {
-        const subCategory = await SubCategory.find({ slug: req.params.slug});
+        const subCategory = await SubCategory.find({ slug: req.params.slug}).populate("category");
         res.json(subCategory);
     }
     catch(error) {

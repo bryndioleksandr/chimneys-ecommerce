@@ -14,10 +14,12 @@ import {searchCategoryBySlug} from "../../../../services/category";
 import Link from "next/link";
 import {searchSubSubCategoriesBySlug} from "../../../../services/subsubcategory";
 import { backUrl } from '../../../../config/config';
+import Breadcrumbs from "../../../../components/Breadcrumbs/Breadcrumbs";
 
 const SubCategoryPage = () => {
     const { categoryName, subCategoryName } = useParams();
     const router = useRouter();
+    const [subCatName, setSubCatName] = useState("");
     const [products, setProducts] = useState([]);
     const [filters, setFilters] = useState({});
     const [sortOption, setSortOption] = useState("default");
@@ -26,6 +28,7 @@ const SubCategoryPage = () => {
     const [subSubCategories, setSubSubCategories] = useState([]);
     const [parentCat, setParentCat] = useState('');
     const [currentSubCat, setCurrentSubCat] = useState('');
+    const [subCatObject, setSubCatObject] = useState({});
 
 
     const getFiltersByCategory = async (categoryId, subCategoryId) => {
@@ -45,7 +48,9 @@ const SubCategoryPage = () => {
                 setSubSubCategories(subSubCategories);
                 const subCategoryData = await searchOneSubCategoryBySlug(subCategoryName);
                 const subCategoryId = subCategoryData[0]._id;
+                setSubCatName(subCategoryData[0].name);
                 setCurrentSubCat(subCategoryId);
+                setSubCatObject(subCategoryData[0]);
                 const productData = await searchSubCategoryProducts(subCategoryId);
                 const parentCategory = await searchCategoryBySlug(categoryName);
                 setParentCat(parentCategory[0]._id);
@@ -95,7 +100,11 @@ const SubCategoryPage = () => {
             </aside>
 
             <main className="content-section">
-                <h1>Підкатегорія: {subCategoryName}</h1>
+                <Breadcrumbs items={[
+                    { label: subCatObject?.category?.name, href: `/category/${subCatObject?.category?.slug}` },
+                    { label: subCatObject?.name, href: `/category/${subCatObject?.category?.slug}/${subCatObject?.slug}/${subCatObject?.slug}` },
+                ].filter(item => item.label)}/>
+                <h1>{subCatName}</h1>
                 {loading && <p>Завантаження...</p>}
                 {error && <p style={{color: "red"}}>{error}</p>}
 

@@ -12,14 +12,17 @@ import {searchCategoryBySlug} from "../../../../../services/category";
 
 import {searchOneSubSubCategoryBySlug, searchSubSubCategoryProducts} from "../../../../../services/subsubcategory";
 import { backUrl } from '../../../../../config/config';
+import Breadcrumbs from "../../../../../components/Breadcrumbs/Breadcrumbs";
 
 const SubSubCategoryPage = () => {
     const { categoryName, subCategoryName, subSubCategoryName } = useParams();
     const [products, setProducts] = useState([]);
+    const [subSubCatName, setSubSubCatName] = useState("");
     const [filters, setFilters] = useState({});
     const [sortOption, setSortOption] = useState("default");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [currentSubSubCat, setCurrentSubSubCat] = useState({});
 
     const getFiltersByCategory = async (categoryId, subCategoryId, subSubCategoryId) => {
         console.log('filters id:', categoryId, "and as well ", subCategoryId, "and as well ", subSubCategoryId);
@@ -36,6 +39,9 @@ const SubSubCategoryPage = () => {
                 setLoading(true);
                 const subSubCategoryData = await searchOneSubSubCategoryBySlug(subSubCategoryName);
                 const subSubCategoryId = subSubCategoryData[0]._id;
+                setSubSubCatName(subSubCategoryData[0].name);
+                setCurrentSubSubCat(subSubCategoryData[0]);
+                console.log(subSubCategoryData);
                 const productData = await searchSubSubCategoryProducts(subSubCategoryId);
                 const parentCategory = await searchCategoryBySlug(categoryName);
                 const parentSubCategory = await searchOneSubCategoryBySlug(subCategoryName);
@@ -82,7 +88,12 @@ const SubSubCategoryPage = () => {
             </aside>
 
             <main className="content-section">
-                <h1>Підпідкатегорія: {subSubCategoryName}</h1>
+                <Breadcrumbs items={[
+                    { label: currentSubSubCat?.subCategory?.category?.name, href: `/category/${currentSubSubCat?.subCategory?.category?.slug}` },
+                    { label: currentSubSubCat?.subCategory?.name, href: `/category/${currentSubSubCat.subCategory?.category?.slug}/${currentSubSubCat?.subCategory?.slug}` },
+                    { label: currentSubSubCat?.name, href: `/category/${currentSubSubCat?.subCategory?.category.slug}/${currentSubSubCat?.subCategory?.slug}/${currentSubSubCat?.slug}` },
+                ].filter(item => item.label)}/>
+                <h1>{subSubCatName}</h1>
                 {loading && <p>Завантаження...</p>}
                 {error && <p style={{color: "red"}}>{error}</p>}
 

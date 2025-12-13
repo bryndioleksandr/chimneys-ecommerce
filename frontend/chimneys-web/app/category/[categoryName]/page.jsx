@@ -11,6 +11,7 @@ import Link from "next/link";
 import ProductCard from "../../../components/ProductCard/ProductCard";
 import { backUrl } from '../../../config/config';
 import FiltersPanel from "../../../components/FiltersPanel/FiltersPanel";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 
 const CategoryPage = () => {
     const params = useParams();
@@ -93,6 +94,9 @@ const CategoryPage = () => {
             </aside>
 
             <main className="content-section">
+                <Breadcrumbs items={[
+                    { label: currentCat?.name, href: null },
+                ].filter(item => item.label)}/>
                 <h1>{currentCat.name}</h1>
                 {loading && <p>Завантаження...</p>}
                 {error && <p style={{ color: "red" }}>{error}</p>}
