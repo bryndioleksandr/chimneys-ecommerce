@@ -26,8 +26,8 @@
 }
 
 .breadcrumb-item a:hover {
-    color: #2563eb;
-    text-decoration: underline;
+    color: var(--primary-color);
+    text-decoration: none;
 }
 
 .breadcrumb-separator {

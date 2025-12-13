@@ -4,8 +4,14 @@ import Product from "../models/product.js";
 export const createOrder = async (req, res) => {
     try {
         const { user, phoneNumber, paymentMethod, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
-        console.log('we are creating order here man');
+        const generateOrderNumber = () => {
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
+            return String(randomNum);
+        };
+        const orderNumber = generateOrderNumber();
+
         const newOrder = new Order({
+            orderNumber,
             user,
             phoneNumber,
             paymentMethod,

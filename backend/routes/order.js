@@ -1,6 +1,6 @@
 import express from "express";
 import {
-    createOrder,
+    createOrder, deleteOrder,
     getOrders,
     getOrdersByStatus,
     getOrdersByUser,
@@ -17,6 +17,7 @@ orderRouter.get("/all-orders", getOrders);
 orderRouter.get("/by-status/:status", getOrdersByStatus);
 orderRouter.get("/paid-orders/:isPaid", getPaidOrders);
 orderRouter.patch("/update-status/:orderId", updateOrderStatus);
+orderRouter.delete("/:orderId", deleteOrder);
 
 
 export default orderRouter;

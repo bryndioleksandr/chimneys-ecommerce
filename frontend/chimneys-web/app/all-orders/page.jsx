@@ -97,6 +97,20 @@ export default function AllOrdersPage() {
     };
 
 
+    const handleOrderDelete = async (orderId) => {
+        try {
+            if(confirm('Чи дійсно видалити замовлення?')) {
+                await axios.delete(`${backUrl}/order/${orderId}`);
+                alert('Замовлення видалено успішно!')
+                setOrders(prevOrders => prevOrders.filter(item => item._id !== orderId));
+            }
+        }
+        catch(e) {
+            console.error("Помилка при видаленні замовлення:", e);
+            alert("Помилка при видаленні замовлення");
+        }
+    }
+
     return (
         <section className="all-orders">
             <div className="container">
@@ -143,7 +157,7 @@ export default function AllOrdersPage() {
                         <div key={order._id} className="order-card">
                             <h3>
                                 {order.status === "pending"
-                                    ? `НОВЕ замовлення №: ${order._id} потребує обробки!`
+                                    ? `НОВЕ замовлення №: ${order.orderNumber || order._id} потребує обробки!`
                                     : `Замовлення №: ${order._id}`}
                             </h3>
                             <p><strong>Дата створення:</strong> {new Date(order.createdAt).toLocaleString()}</p>
@@ -174,7 +188,8 @@ export default function AllOrdersPage() {
                                             <p><strong>Назва:</strong> {item.product?.name || "Невідомо"}</p>
                                             {item.product?.discountedPrice ? (
                                                 <>
-                                                    <p><strong>Ціна зі знижкою:</strong> {item.product?.discountedPrice} грн</p>
+                                                    <p><strong>Ціна зі
+                                                        знижкою:</strong> {item.product?.discountedPrice} грн</p>
                                                     <p><strong>Кількість:</strong> {item.quantity}</p>
                                                     <p>
                                                         <strong>Разом:</strong> {item.product?.discountedPrice * item.quantity} грн
@@ -197,17 +212,26 @@ export default function AllOrdersPage() {
 
                             <div className="status-control">
                                 <p><strong>Поточний статус:</strong> {statusLabels[order.status] || order.status}</p>
-                                <select
-                                    value={order.status}
-                                    onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                                >
-                                    {Object.entries(statusLabels).map(([value, label]) => (
-                                        <option key={value} value={value}>{label}</option>
-                                    ))}
-                                </select>
-                                <button onClick={() => updateStatus(order._id, order.status)}>
-                                    Зберегти
-                                </button>
+                                <div className="wrap-space">
+                                    <div className="manage-status">
+                                        <select
+                                            value={order.status}
+                                            onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                                        >
+                                            {Object.entries(statusLabels).map(([value, label]) => (
+                                                <option key={value} value={value}>{label}</option>
+                                            ))}
+                                        </select>
+                                        <button onClick={() => updateStatus(order._id, order.status)}>
+                                            Зберегти
+                                        </button>
+                                    </div>
+                                    <div className="delete-order">
+                                        <button onClick={() => handleOrderDelete(order._id)}>
+                                            Видалити ❌
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))

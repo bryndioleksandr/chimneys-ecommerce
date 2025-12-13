@@ -33,10 +33,8 @@ const ProductForm = () => {
 
 
     const generateProductCode = () => {
-        const now = new Date();
-        const datePart = now.toISOString().slice(0, 10).replace(/-/g, '');
-        const randomPart = Math.floor(100000 + Math.random() * 900000);
-        return `DMR-TER-${datePart}-${randomPart}`;
+        const randomNum = Math.floor(100000 + Math.random() * 900000);
+        return String(randomNum);
     };
 
     const handleSubmit = async (e) => {

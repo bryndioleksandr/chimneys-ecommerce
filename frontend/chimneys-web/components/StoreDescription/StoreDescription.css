@@ -1,0 +1,100 @@
+.store-desc-section {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: inherit;
+    color: var(--text-color, #333);
+}
+
+.store-desc-content {
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.store-desc-content.collapsed {
+    max-height: 140px;
+}
+
+.store-desc-content.expanded {
+    max-height: 1000px;
+}
+
+.store-desc-text p {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.store-desc-text ul {
+    margin-bottom: 16px;
+    padding-left: 24px;
+    list-style-type: disc;
+}
+
+.store-desc-text li {
+    margin-bottom: 6px;
+    color: var(--text-color, #444);
+    opacity: 0.9;
+}
+
+.store-desc-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--card-bg, #fff) 90%);
+    pointer-events: none;
+}
+
+/* Кнопка */
+.store-desc-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px auto 0;
+    background: none;
+    border: none;
+
+    color: var(--primary-color, #2563eb);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+.store-desc-button:hover {
+    color: var(--hover-navbtn-color, #1d4ed8);
+    background-color: rgba(37, 99, 235, 0.05);
+}
+
+/* Стрілочка на кнопці */
+.arrow {
+    display: inline-block;
+    font-size: 18px;
+    line-height: 1;
+    transition: transform 0.3s ease;
+}
+
+.arrow.down {
+    transform: rotate(90deg);
+}
+
+.arrow.up {
+    transform: rotate(-90deg);
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .store-desc-section {
+        margin: 20px auto;
+    }
+
+    .store-desc-content.collapsed {
+        max-height: 180px; /* Трохи більше тексту на мобільних */
+    }
+}
