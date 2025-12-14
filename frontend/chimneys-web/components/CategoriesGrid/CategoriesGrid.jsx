@@ -1,16 +1,11 @@
 "use client"
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./CategoriesGrid.css";
 import Link from "next/link";
-import { fetchCategories } from "@/services/category";
 import { useDispatch } from 'react-redux';
-import {addItemToCart, loadCartFromStorage} from '@/redux/slices/cart';
+import { loadCartFromStorage } from '@/redux/slices/cart';
 
-const CategoriesGrid = () => {
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const CategoriesGrid = ({ categories = [] }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -19,31 +14,8 @@ const CategoriesGrid = () => {
             const parsedItems = JSON.parse(storedCart);
             dispatch(loadCartFromStorage(parsedItems));
         }
-    }, []);
+    }, [dispatch]);
 
-    useEffect(() => {
-        const loadCategories = async () => {
-            try {
-                const data = await fetchCategories();
-                setCategories(data);
-            } catch (err) {
-                setError("Не вдалося завантажити категорії.");
-                console.error("Error fetching categories:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadCategories();
-    }, []);
-
-    if (loading) {
-        return <p>Завантаження категорій...</p>;
-    }
-
-    if (error) {
-        return <p style={{ color: "red" }}>{error}</p>;
-    }
 
     return (
         <div className="categories-grid">
@@ -51,9 +23,9 @@ const CategoriesGrid = () => {
                 <Link
                     className="link"
                     href={`/category/${category.slug}`}
-                    key={category.name}
+                    key={category._id || index}
                 >
-                    <div className="category-card" key={index}>
+                    <div className="category-card">
                         <img src={category.img} alt={category.name} />
                         <p>{category.name}</p>
                     </div>
@@ -62,5 +34,6 @@ const CategoriesGrid = () => {
         </div>
     );
 };
+
 
 export default CategoriesGrid;

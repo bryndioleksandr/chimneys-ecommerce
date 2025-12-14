@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { backUrl } from '../../config/config';
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -11,25 +9,13 @@ import "swiper/css/pagination";
 import ProductCard from "../ProductCard/ProductCard";
 import "./style.css";
 
-const SaledSlider = () => {
-    const [products, setProducts] = useState([]);
+const SaledSlider = ({ products = [] }) => {
 
-    useEffect(() => {
-        const fetchSaled = async () => {
-            try {
-                const res = await axios.get(`${backUrl}/products/for-sale`);
-                setProducts(res.data);
-            } catch (err) {
-                console.error("Помилка при отриманні знижкових товарів", err);
-            }
-        };
-
-        fetchSaled();
-    }, []);
+    if (!products.length) return null;
 
     return (
-        <div className="sales-slider-wrapper">
-            <h2 className="sales-slider-title">🔥 Товари на знижках</h2>
+        <div className="popular-slider-wrapper">
+            <h2 className="popular-slider-title">🔥 Товари на знижці</h2>
             <Swiper
                 modules={[Navigation, Pagination]}
                 spaceBetween={20}
@@ -43,7 +29,7 @@ const SaledSlider = () => {
                 }}
             >
                 {products.map(product => (
-                    <SwiperSlide key={product._id} className="sales-slider-item">
+                    <SwiperSlide key={product._id} className="popular-slider-item">
                         <ProductCard product={product} />
                     </SwiperSlide>
                 ))}

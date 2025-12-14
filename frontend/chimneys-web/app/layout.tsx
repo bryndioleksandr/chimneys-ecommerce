@@ -7,7 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Inter, Manrope } from 'next/font/google';
+import { Inter } from 'next/font/google';
+import { getCategories } from "@/services/homePageData";
 
 export const metadata = {
     title: "Інтернет-магазин ДимоHIT",
@@ -68,18 +69,19 @@ export const metadata = {
 };
 
 const mainFont = Inter({
-    subsets: ['cyrillic', 'latin'], // Обов'язково додай cyrillic для укр мови
-    weight: ['400', '500', '600', '700'], // Ваги, які тобі треба
-    variable: '--font-main', // Створюємо CSS змінну (зручно для Tailwind або CSS)
+    subsets: ['cyrillic', 'latin'],
+    weight: ['400', '500', '600', '700'],
+    variable: '--font-main',
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    const categories = await getCategories();
     return (
         <html lang="uk" suppressHydrationWarning>
         <body className={mainFont.className} style={styles.body}>
         <ClientProvider>
             <HeaderTop />
-            <HeaderMain />
+            <HeaderMain categories={categories} />
             {children}
             <Footer />
             <ToastContainer />

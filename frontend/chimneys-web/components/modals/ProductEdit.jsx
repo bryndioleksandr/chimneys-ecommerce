@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {backUrl} from '../../config/config';
-import {searchSubCategories, searchSubCategoriesBySlug} from '../../services/subcategory';
-import {searchSubSubCategories, searchSubSubCategoriesBySlug} from '../../services/subsubcategory';
+import {backUrl} from '@/config/config';
+import { searchSubCategoriesBySlug } from '@/services/subcategory';
+import { searchSubSubCategoriesBySlug } from '@/services/subsubcategory';
 import ReactDOM from 'react-dom';
 
-// import "./style.css";
 import "./edit.css";
+
+let globalCategoriesCache = null;
 
 const EditProductModal = ({isOpen, onClose, product, onSave}) => {
     const [name, setName] = useState('');
@@ -30,6 +31,7 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
     const [subSubCategories, setSubSubCategories] = useState([]);
+    const [loadingCats, setLoadingCats] = useState(false);
 
     useEffect(() => {
         if (!product) return;
@@ -55,14 +57,32 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
     }, [product]);
 
     useEffect(() => {
-        axios.get(`${backUrl}/category/categories`)
-            .then(res => setCategories(res.data))
-            .catch(err => console.error('Помилка при завантаженні категорій:', err));
-    }, []);
+        if (!isOpen) return;
+
+        if (globalCategoriesCache) {
+            setCategories(globalCategoriesCache);
+            return;
+        }
+
+        const fetchCats = async () => {
+            setLoadingCats(true);
+            try {
+                const res = await axios.get(`${backUrl}/category/categories`);
+                globalCategoriesCache = res.data;
+                setCategories(res.data);
+            } catch (err) {
+                console.error('Помилка при завантаженні категорій:', err);
+            } finally {
+                setLoadingCats(false);
+            }
+        };
+
+        fetchCats();
+    }, [isOpen]);
 
     useEffect(() => {
         const loadSubs = async () => {
-            if (category) {
+            if (category && categories.length > 0) {
                 const cat = categories.find(c => c._id === category);
                 console.log('cats to find');
                 console.log('cat in state', category);
@@ -73,16 +93,19 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
             } else setSubCategories([]);
         };
         loadSubs();
-    }, [category]);
+    }, [category, categories]);
 
     useEffect(() => {
         const loadSubSubs = async () => {
-            if (subCategory && subCategories.length > 0) {
+            if (subCategory && subCategories.length > 0 && category && categories.length > 0) {
                 console.log('subcats are ', subCategories);
                 const subCat = subCategories.find(s => s._id === subCategory);
                 console.log('subcat is ', subCat);
-                const subSub = await searchSubSubCategoriesBySlug(subCat?.slug || '');
-                setSubSubCategories(subSub);
+                if(subCat?.slug) {
+                    const subSub = await searchSubSubCategoriesBySlug(subCat?.slug || '');
+                    setSubSubCategories(subSub);
+                }
+                else setSubSubCategories([]);
             } else setSubSubCategories([]);
         };
         loadSubSubs();
@@ -139,21 +162,22 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
 
                 <form onSubmit={handleUpdate} className="clone-form-grid">
 
-                    {/* --- НАЗВА (На всю ширину) --- */}
                     <div className="form-group full-width">
                         <label>Назва товару</label>
-                        <input type="text" value={name} onChange={e => setName(e.target.value)} />
+                        <input type="text" value={name} onChange={e => setName(e.target.value)}/>
                     </div>
 
-                    {/* --- КАТЕГОРІЇ (Окремий блок) --- */}
                     <div className="form-group full-width">
                         <label>Категорія (Головна)</label>
-                        <select value={category} onChange={e => setCategory(e.target.value)}>
-                            <option value="">Оберіть категорію</option>
-                            {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                        </select>
+                        {loadingCats ? (
+                            <p className="asd" style={{fontSize: '12px', color: '#656'}}>Завантаження списку...</p>
+                        ) : (
+                            <select value={category} onChange={e => setCategory(e.target.value)}>
+                                <option value="">Оберіть категорію</option>
+                                {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                            </select>
+                        )}
                     </div>
-
                     <div className="form-group">
                         <label>Підкатегорія</label>
                         <select value={subCategory} onChange={e => setSubCategory(e.target.value)}>
@@ -170,19 +194,18 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
                         </select>
                     </div>
 
-                    {/* --- ХАРАКТЕРИСТИКИ --- */}
                     <div className="form-group">
                         <label>Діаметр (мм)</label>
-                        <input type="number" value={diameter} onChange={e => setDiameter(e.target.value)} />
+                        <input type="number" value={diameter} onChange={e => setDiameter(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label>Товщина (мм)</label>
-                        <input type="number" value={thickness} onChange={e => setThickness(e.target.value)} />
+                        <input type="number" value={thickness} onChange={e => setThickness(e.target.value)}/>
                     </div>
 
                     <div className="form-group">
                         <label>Марка сталі</label>
-                        <input type="text" value={steelGrade} onChange={e => setSteelGrade(e.target.value)} />
+                        <input type="text" value={steelGrade} onChange={e => setSteelGrade(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label>Кут (градуси)</label>
@@ -197,33 +220,32 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
 
                     <div className="form-group">
                         <label>Довжина (мм)</label>
-                        <input type="number" value={length} onChange={e => setLength(e.target.value)} />
+                        <input type="number" value={length} onChange={e => setLength(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label>Утеплювач (мм)</label>
-                        <input type="number" value={insulationThickness} onChange={e => setInsulationThickness(e.target.value)} />
+                        <input type="number" value={insulationThickness}
+                               onChange={e => setInsulationThickness(e.target.value)}/>
                     </div>
 
-                    {/* --- ЦІНА ТА СКЛАД --- */}
                     <div className="form-group">
                         <label>Ціна (грн)</label>
-                        <input type="number" value={price} onChange={e => setPrice(e.target.value)} />
+                        <input type="number" value={price} onChange={e => setPrice(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label>Знижка (%)</label>
-                        <input type="number" value={discount} onChange={e => setDiscount(e.target.value)} />
+                        <input type="number" value={discount} onChange={e => setDiscount(e.target.value)}/>
                     </div>
 
                     <div className="form-group">
                         <label>В наявності (шт)</label>
-                        <input type="number" value={stock} onChange={e => setStock(e.target.value)} />
+                        <input type="number" value={stock} onChange={e => setStock(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label>Вага (кг)</label>
-                        <input type="number" value={weight} onChange={e => setWeight(e.target.value)} />
+                        <input type="number" value={weight} onChange={e => setWeight(e.target.value)}/>
                     </div>
 
-                    {/* --- ЧЕКБОКСИ --- */}
                     <div className="form-group checkbox-group">
                         <label>
                             <input type="checkbox" checked={revision} onChange={e => setRevision(e.target.checked)}/>
@@ -237,13 +259,11 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
                         </label>
                     </div>
 
-                    {/* --- ОПИС --- */}
                     <div className="form-group full-width">
                         <label>Опис</label>
-                        <textarea rows="4" value={description} onChange={e => setDescription(e.target.value)} />
+                        <textarea rows="4" value={description} onChange={e => setDescription(e.target.value)}/>
                     </div>
 
-                    {/* --- ФОТО --- */}
                     <div className="form-group full-width">
                         <label>Фотографії (Завантажити нові)</label>
                         <input
@@ -251,14 +271,15 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
                             accept="image/*"
                             multiple
                             onChange={(e) => setImages([...e.target.files])}
-                            style={{border: 'none', padding: '10px 0'}} // Трохи фіксу для інпута файлу
+                            style={{border: 'none', padding: '10px 0'}}
                         />
                     </div>
 
-                    {/* --- КНОПКИ --- */}
                     <div className="form-actions full-width" style={{display: 'flex', gap: '10px'}}>
                         <button type="submit" className="submit-btn">Оновити</button>
-                        <button type="button" className="submit-btn" onClick={onClose} style={{backgroundColor: '#6c757d'}}>Закрити</button>
+                        <button type="button" className="submit-btn" onClick={onClose}
+                                style={{backgroundColor: '#6c757d'}}>Закрити
+                        </button>
                     </div>
                 </form>
             </div>

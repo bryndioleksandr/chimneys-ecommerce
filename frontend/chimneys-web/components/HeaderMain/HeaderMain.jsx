@@ -9,19 +9,17 @@ import AuthModal from "@/components/AuthModal/AuthModal";
 import { useSelector, useDispatch } from "@/redux/store";
 import {logoutUser} from "@/services/auth";
 import { logout } from "@/redux/slices/user";
-import { fetchCategories } from "@/services/category";
 import RoleGuard from "@/components/auth/RoleGuard";
-import { backUrl } from '../../config/config';
+import { backUrl } from '@/config/config';
 import { useRouter } from "next/navigation";
 import {toast} from "react-toastify";
 import InfoMenu from "@/components/InfoMenu/InfoMenu";
 
-export default function HeaderMain() {
+export default function HeaderMain({ categories = [] }) {
     const [isAuthOpen, setAuthOpen] = useState(false);
     const [role, setRole] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
-    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const router = useRouter();
@@ -32,29 +30,12 @@ export default function HeaderMain() {
         setMounted(true);
     }, []);
 
-
-
     const dispatch = useDispatch();
     const searchRef = useRef(null);
 
 
     const user = useSelector((state) => state.user.user);
     const cart = useSelector((state) => state.cart);
-    useEffect(() => {
-        const loadCategories = async () => {
-            try {
-                const data = await fetchCategories();
-                setCategories(data);
-            } catch (err) {
-                setError("Не вдалося завантажити категорії.");
-                console.error("Error fetching categories:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadCategories();
-    }, []);
 
     useEffect(() => {
         if (!user) return;
@@ -142,7 +123,7 @@ export default function HeaderMain() {
                     <InfoMenu />
                 </div>
                 <div className="categories">
-                    <CatalogDropdown />
+                    <CatalogDropdown categories={categories} />
                 </div>
             </div>
 

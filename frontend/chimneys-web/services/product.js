@@ -27,3 +27,41 @@ export const getProductsByGroupId = async (groupId) => {
         throw error;
     }
 };
+
+export async function getProductBySlug(slug) {
+    try {
+        const res = await fetch(`${API_BASE}/products/by-slug/${slug}`, {
+            next: { revalidate: 60 }
+        });
+        if (!res.ok) return null;
+        return res.json();
+    } catch (err) {
+        console.error("Get Product Error", err);
+        return null;
+    }
+}
+
+export async function getProductReviews(productId) {
+    try {
+        const res = await fetch(`${API_BASE}/reviews/product-reviews/${productId}`, {
+            next: { revalidate: 60 }
+        });
+        if (!res.ok) return [];
+        return res.json();
+    } catch (err) {
+        return [];
+    }
+}
+
+export async function getProductGroup(groupId) {
+    if (!groupId) return [];
+    try {
+        const res = await fetch(`${API_BASE}/products/by-group-id/${groupId}`, {
+            next: { revalidate: 3600 }
+        });
+        if (!res.ok) return [];
+        return res.json();
+    } catch (err) {
+        return [];
+    }
+}

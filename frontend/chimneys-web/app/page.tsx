@@ -1,23 +1,33 @@
-import BannerSection from "@/components/BannerSection/BannerSection";
-import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
-import StoreDescription from "@/components/StoreDescription/StoreDescription";
-import PopularSlider from "@/components/PopularProductsSlider/PopularProductsSlider";
-import SaledProductsSlider from "@/components/SaledProductsSlider/SaledProductsSlider";
-import Link from "next/link";
+import Link from 'next/link';
+import BannerSection from '../components/BannerSection/BannerSection';
+import CategoriesGrid from '../components/CategoriesGrid/CategoriesGrid';
+import PopularSlider from '../components/PopularProductsSlider/PopularProductsSlider';
+import SaledProductsSlider from '../components/SaledProductsSlider/SaledProductsSlider';
+import StoreDescription from '../components/StoreDescription/StoreDescription';
+import { getBanners, getCategories, getPopularProducts, getSaleProducts } from '@/services/homePageData';
 
 export default async function Home() {
+    const [banners, categories, popularProducts, saleProducts] = await Promise.all([
+        getBanners(),
+        getCategories(),
+        getPopularProducts(),
+        getSaleProducts()
+    ]);
+
     return (
         <div>
             <div className="contentWrapper" style={styles.contentWrapper}>
-                <BannerSection />
+                <BannerSection banners={banners} />
+
                 <div style={styles.constructorWrapper}>
                     <Link href="/constructor-dym" style={styles.constructorBtn}>
                         🛠 Створи свій димохід
                     </Link>
                 </div>
-                <CategoriesGrid />
-                <PopularSlider />
-                <SaledProductsSlider />
+
+                <CategoriesGrid categories={categories} />
+                <SaledProductsSlider products={saleProducts} />
+                <PopularSlider products={popularProducts} />
                 <StoreDescription />
             </div>
         </div>

@@ -1,28 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
-import { backUrl } from '../../config/config';
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import './BannerSection.css';
 
-export default function BannerSection() {
-    const [banners, setBanners] = useState([]);
-
-    useEffect(() => {
-        const fetchBanners = async () => {
-            try {
-                const res = await fetch(`${backUrl}/banner/banners`);
-                const data = await res.json();
-                setBanners(data);
-            } catch (error) {
-                console.error('Помилка при завантаженні банерів', error);
-            }
-        };
-        fetchBanners();
-    }, []);
+export default function BannerSection({ banners = [] }) {
+    if (!banners.length) return null;
 
     return (
         <div className="banner-slider-container">

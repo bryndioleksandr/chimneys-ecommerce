@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { backUrl } from '../../config/config';
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -11,25 +9,13 @@ import "swiper/css/pagination";
 import ProductCard from "../ProductCard/ProductCard";
 import "./style.css";
 
-const PopularSlider = () => {
-    const [products, setProducts] = useState([]);
+const PopularSlider = ({ products = [] }) => {
 
-    useEffect(() => {
-        const fetchPopular = async () => {
-            try {
-                const res = await axios.get(`${backUrl}/products/popular`);
-                setProducts(res.data);
-            } catch (err) {
-                console.error("Помилка при отриманні популярних товарів", err);
-            }
-        };
-
-        fetchPopular();
-    }, []);
+    if (!products.length) return null;
 
     return (
         <div className="popular-slider-wrapper">
-            <h2 className="popular-slider-title">🔥 Найпопулярніші товари</h2>
+            <h2 className="popular-slider-title">⭐ Найпопулярніші товари</h2>
             <Swiper
                 modules={[Navigation, Pagination]}
                 spaceBetween={20}
