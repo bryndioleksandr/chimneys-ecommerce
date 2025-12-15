@@ -1,7 +1,10 @@
 import Order from "../models/order.js";
 import Product from "../models/product.js";
+import mongoose from "mongoose";
 
 export const createOrder = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const { user, phoneNumber, paymentMethod, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
         const generateOrderNumber = () => {
@@ -9,6 +12,23 @@ export const createOrder = async (req, res) => {
             return String(randomNum);
         };
         const orderNumber = generateOrderNumber();
+
+        for (const item of products) {
+            const updatedProduct = await Product.findOneAndUpdate(
+                {
+                    _id: item.product,
+                    stock: { $gte: item.quantity }
+                },
+                {
+                    $inc: { quantity: -item.quantity }
+                },
+                { session, new: true }
+            );
+
+            if (!updatedProduct) {
+                throw new Error(`Товару з ID ${item.product} недостатньо на складі або він не існує.`);
+            }
+        }
 
         const newOrder = new Order({
             orderNumber,
@@ -23,9 +43,17 @@ export const createOrder = async (req, res) => {
             address
         });
 
-        await newOrder.save();
+        await newOrder.save({session});
+
+        await session.commitTransaction();
+
+        await session.endSession();
         res.status(201).json(newOrder);
     } catch (err) {
+        await session.abortTransaction();
+        await session.endSession();
+
+        console.error("Transaction aborted:", err.message);
         res.status(500).json({ msg: err.message });
     }
 };

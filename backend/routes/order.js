@@ -7,6 +7,7 @@ import {
     getPaidOrders,
     updateOrderStatus
 } from "../controllers/order.js";
+import {isAdmin, verifyToken} from "../middleware/auth.js";
 
 const orderRouter = express.Router();
 const jsonParser = express.json();

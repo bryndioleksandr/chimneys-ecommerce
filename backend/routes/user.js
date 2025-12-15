@@ -5,9 +5,9 @@ import {verifyToken} from "../middleware/auth.js";
 
 const userRouter  = express.Router();
 
-userRouter.post("/register", cookieParser(), userRegister);
-userRouter.post("/login", cookieParser(), userLogin);
-userRouter.post("/refreshToken", cookieParser(), refreshToken);
+userRouter.post("/register", userRegister);
+userRouter.post("/login", userLogin);
+userRouter.post("/refreshToken", refreshToken);
 userRouter.get("/logout", userLogout);
 
 export default userRouter;

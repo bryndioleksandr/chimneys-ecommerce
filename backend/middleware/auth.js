@@ -4,22 +4,20 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const verifyToken = (req, res, next) => {
-    console.log('working in verify token');
-    // const token1 = req.headers.authorization?.split(" ")[1];
-    console.log('cookies:', req.cookies);
     const token = req.cookies.accessToken;
-    console.log('token with cookies is:', token);
+
+    console.log('cookies are:', req.cookies);
+    console.log('token is:', token);
     if (!token) {
-        return res.status(401).json({ msg: "No token, authorization denied" });
+        return res.status(401).json({ msg: "Not Authenticated!" });
     }
 
-    try {
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        req.user = decoded;
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+        if (err) return res.status(403).json({ msg: "Token is not valid!" });
+
+        req.user = payload;
         next();
-    } catch (err) {
-        return res.status(403).json({ msg: "Invalid token" });
-    }
+    });
 };
 
     export const verifyRole = (role) => (req, res, next) => {
@@ -27,4 +25,14 @@ export const verifyToken = (req, res, next) => {
         return res.status(403).json({ msg: "Access denied" });
     }
     next();
+};
+
+export const isAdmin = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.user.role === 'admin') {
+            next();
+        } else {
+            res.status(403).json({ msg: "You are not allowed to do that!" });
+        }
+    });
 };

@@ -5,12 +5,12 @@ import jwt from "jsonwebtoken";
 
 dotenv.config();
 
-const createAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+const createAccessToken = (payload) => {
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
 }
 
-const createRefreshToken = (user) => {
-    return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'})
+const createRefreshToken = (payload) => {
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'})
 }
 
 // export const userRegister = async(req, res) => {
@@ -98,9 +98,7 @@ export const userRegister = async (req, res) => {
             emailVerificationExpires: Date.now() + 10 * 60 * 1000 // 10 хв
         });
 
-        console.log('before user saving');
         await newUser.save();
-        console.log('after user saving');
 
         await sendVerificationEmail(email, verificationCode);
 
@@ -122,22 +120,18 @@ export const refreshToken = async (req, res) => {
             return res.status(401).json({ msg: "Помилка оновлення токена. Refresh token відсутній" });
         }
 
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
             if (err) {
                 if (err.name === "TokenExpiredError") {
                     return res.status(401).json({ message: "Refresh token прострочений" });
                 }
                 return res.status(401).json({ message: "Invalid refresh token" });
             }
+            const foundUser = await User.findById(decoded._id);
+            if (!foundUser) return res.status(401).json({ message: "User not found" });
 
-            const userId = decoded._id;
-
-            const accessToken = jwt.sign(
-                { _id: userId },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '15m' }
-            );
-
+            const payload = { _id: foundUser._id, role: foundUser.role }
+            const accessToken = createAccessToken(payload);
             res.cookie('accessToken', accessToken, {
                 httpOnly: true,
                 secure: false,
@@ -168,8 +162,10 @@ export const userLogin = async (req, res) => {
         const isMatchPassword = await bcrypt.compare(password, user.password);
         if (!isMatchPassword) return res.status(400).json({ msg: "Invalid password" });
 
-        const accessToken = createAccessToken({_id: user._id});
-        const refreshToken = createRefreshToken({_id: user._id});
+        const payload = { _id: user._id, role: user.role }
+
+        const accessToken = createAccessToken(payload);
+        const refreshToken = createRefreshToken(payload);
         res.cookie('accessToken', accessToken, { httpOnly: true, secure:false, sameSite: 'lax' });
         res.cookie('refreshToken', refreshToken, { httpOnly: true, secure:false, sameSite: 'lax' });
 

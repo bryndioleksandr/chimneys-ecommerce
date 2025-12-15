@@ -39,7 +39,7 @@ export default function AllOrdersPage() {
                 url = `${backUrl}/order/paid-orders/true`;
             }
 
-            const res = await axios.get(url);
+            const res = await axios.get(url, {withCredentials: true});
             let fetchedOrders = res.data;
 
             fetchedOrders.sort((a, b) =>
