@@ -10,7 +10,7 @@ const LiqPayButton = ({ product }) => {
         const res = await axios.post(`${backUrl}/liqpay/create-payment`, {
             amount: product.price,
             description: `Оплата за товар: ${product.name}`,
-        });
+        }, {withCredentials: true});
 
         setHtmlForm(res.data.html);
     };

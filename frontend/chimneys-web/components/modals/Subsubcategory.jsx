@@ -24,6 +24,7 @@ const SubSubCategoryForm = () => {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
+                    withCredentials: true
                 }
             );
             alert('Підпідкатегорія додана!');
@@ -34,7 +35,7 @@ const SubSubCategoryForm = () => {
     };
 
     useEffect(() => {
-        axios.get(`${backUrl}/subcategory/subcategories`)
+        axios.get(`${backUrl}/subcategory/subcategories`, {withCredentials: true})
             .then(response => {
                 setSubCategories(response.data);
             })

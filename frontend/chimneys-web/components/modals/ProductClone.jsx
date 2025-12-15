@@ -72,7 +72,8 @@ const ProductCloneModal = ({product, onClose}) => {
             const response = await axios.post(`${backUrl}/products/product-clone`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                withCredentials: true
             });
             alert('Товар клоновано!');
             console.log('response:', response);

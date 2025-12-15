@@ -67,7 +67,7 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
         const fetchCats = async () => {
             setLoadingCats(true);
             try {
-                const res = await axios.get(`${backUrl}/category/categories`);
+                const res = await axios.get(`${backUrl}/category/categories`, {withCredentials: true});
                 globalCategoriesCache = res.data;
                 setCategories(res.data);
             } catch (err) {
@@ -139,7 +139,8 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
 
         try {
             const res = await axios.put(`${backUrl}/products/update/${product._id}`, formData, {
-                headers: {'Content-Type': 'multipart/form-data'}
+                headers: {'Content-Type': 'multipart/form-data'},
+                withCredentials: true
             });
             alert('Продукт оновлено');
             onSave(res.data);

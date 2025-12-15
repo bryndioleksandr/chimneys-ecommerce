@@ -20,6 +20,7 @@ export const createCategory = async (categoryData) => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(categoryData),
         });
         if (!response.ok) throw new Error('Failed to create category');
@@ -32,7 +33,7 @@ export const createCategory = async (categoryData) => {
 
 export const searchCategoryByName = async (name) => {
     try {
-        const response = await fetch(`${API_BASE}/category/by-name/${name}`);
+        const response = await fetch(`${API_BASE}/category/by-name/${name}`, {credentials: 'include'});
         if (!response.ok) throw new Error('Failed to fetch category');
         return await response.json();
     } catch (error) {
@@ -43,7 +44,7 @@ export const searchCategoryByName = async (name) => {
 
 export const searchCategoryBySlug = async (slug) => {
     try {
-        const response = await fetch(`${API_BASE}/category/by-slug/${slug}`);
+        const response = await fetch(`${API_BASE}/category/by-slug/${slug}`, {credentials: 'include'});
         if (!response.ok) throw new Error('Failed to fetch category');
         return await response.json();
     } catch (error) {
@@ -54,7 +55,7 @@ export const searchCategoryBySlug = async (slug) => {
 
 export const searchCategoryProducts = async (categoryId) => {
     try {
-        const response = await fetch(`${API_BASE}/products/by-category/${categoryId}`);
+        const response = await fetch(`${API_BASE}/products/by-category/${categoryId}`, {credentials: 'include'});
         if (!response.ok) throw new Error('Failed to fetch products');
         return await response.json();
     } catch (error) {

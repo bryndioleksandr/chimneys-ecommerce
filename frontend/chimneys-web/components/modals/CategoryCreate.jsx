@@ -21,6 +21,7 @@ const CategoryForm = () => {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
+                    withCredentials: true
                 }
             );
             alert('Категорія додана!');

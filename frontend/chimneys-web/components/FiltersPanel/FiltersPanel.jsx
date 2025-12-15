@@ -101,7 +101,7 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
             }
         }
         try {
-            const response = await axios.get(`${backUrl}/products/filtered-products?${queryParams.toString()}`);
+            const response = await axios.get(`${backUrl}/products/filtered-products?${queryParams.toString()}`, {withCredentials: true});
             const data = response.data;
             if (onFilter) {
                 onFilter(data);
@@ -144,7 +144,7 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
         }
 
         axios
-            .get(`${backUrl}/products/filtered-products?${queryParams.toString()}`)
+            .get(`${backUrl}/products/filtered-products?${queryParams.toString()}`, {withCredentials: true})
             .then((response) => {
                 const data = response.data;
                 if (onFilter) {

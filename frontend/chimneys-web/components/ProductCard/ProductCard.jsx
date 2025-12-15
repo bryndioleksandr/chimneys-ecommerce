@@ -45,7 +45,7 @@ const ProductCard = ({product}) => {
         try {
             const res = await axios.post(`${backUrl}/favorites/${userId}`, {
                 productId: product._id
-            });
+            }, {withCredentials: true});
 
             if (res.status === 200) {
                 alert("Товар додано у улюблені!");

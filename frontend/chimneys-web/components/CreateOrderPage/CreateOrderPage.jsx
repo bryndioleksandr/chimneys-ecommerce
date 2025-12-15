@@ -45,7 +45,7 @@ export default function CreateOrderPage() {
                 deliveryWay: formData.deliveryWay,
                 products,
                 totalPrice,
-            });
+            }, {withCredentials: true});
 
             localStorage.removeItem("cart");
             alert("Замовлення оформлено!");

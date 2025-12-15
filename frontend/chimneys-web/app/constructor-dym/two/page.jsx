@@ -123,7 +123,7 @@ export default function ChimneyMapTwo() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await fetch(`${backUrl}/products/products`);
+                const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
                 if (!res.ok) throw new Error("Products not found");
                 const data = await res.json();
                 setProducts(data);
@@ -140,7 +140,7 @@ export default function ChimneyMapTwo() {
             if (!selectedArea) return;
 
             try {
-                const res = await fetch(`${backUrl}/constructor-two/constructor/element/${selectedArea}`);
+                const res = await fetch(`${backUrl}/constructor-two/constructor/element/${selectedArea}`, {credentials: 'include'});
                 if (res.ok) {
                     const data = await res.json();
                     setAttachedProduct(data.product);
@@ -159,7 +159,7 @@ export default function ChimneyMapTwo() {
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
         try {
-            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
+            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`, {credentials: 'include'});
             const data = await res.json();
             console.log('data is:', data);
             setProducts(data);
@@ -189,6 +189,7 @@ export default function ChimneyMapTwo() {
                 headers: {
                     "Content-Type": "application/json"
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     area: areaId,
                     product: productId

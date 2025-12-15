@@ -2,7 +2,7 @@ import { backUrl as API_BASE } from '../config/config';
 
 export const fetchSubSubCategories = async () => {
     try {
-        const response = await fetch(`${API_BASE}/subsubcategory/subsubcategories`);
+        const response = await fetch(`${API_BASE}/subsubcategory/subsubcategories`, {credentials: 'include'});
         if (!response.ok) throw new Error('Failed to fetch subsubcategories');
         return await response.json();
     } catch (error) {
@@ -18,6 +18,7 @@ export const createSubSubCategory = async (subSubCategoryData) => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(subSubCategoryData),
         });
         if (!response.ok) throw new Error('Failed to create subsubcategory');
@@ -32,7 +33,7 @@ export const searchSubSubCategories = async (name) => {
     try {
         const formattedName = name.replace(/-/g, ' ');
         console.log('formatted name:', formattedName);
-        const response = await fetch(`${API_BASE}/subsubcategory/search?name=${formattedName}`);
+        const response = await fetch(`${API_BASE}/subsubcategory/search?name=${formattedName}`, {credentials: 'include'});
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
     } catch (err) {
@@ -43,7 +44,7 @@ export const searchSubSubCategories = async (name) => {
 
 export const searchSubSubCategoriesBySlug = async (slug) => {
     try {
-        const response = await fetch(`${API_BASE}/subsubcategory/search-all?slug=${slug}`);
+        const response = await fetch(`${API_BASE}/subsubcategory/search-all?slug=${slug}`, {credentials: 'include'});
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
     } catch (err) {
@@ -54,7 +55,7 @@ export const searchSubSubCategoriesBySlug = async (slug) => {
 
 export const searchOneSubSubCategoryBySlug = async (slug) => {
     try {
-        const response = await fetch(`${API_BASE}/subsubcategory/search-one?slug=${slug}`);
+        const response = await fetch(`${API_BASE}/subsubcategory/search-one?slug=${slug}`, {credentials: 'include'});
         if (!response.ok) throw new Error("Search failed");
         return await response.json();
     } catch (err) {
@@ -65,7 +66,7 @@ export const searchOneSubSubCategoryBySlug = async (slug) => {
 
 export const searchSubSubCategoryProducts = async (subSubCategoryId) => {
     try {
-        const response = await fetch(`${API_BASE}/products/by-subsubcategory/${subSubCategoryId}`);
+        const response = await fetch(`${API_BASE}/products/by-subsubcategory/${subSubCategoryId}`, {credentials: 'include'});
         if (!response.ok) throw new Error('Failed to fetch products');
         return await response.json();
     } catch (error) {

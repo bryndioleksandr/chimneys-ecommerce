@@ -13,7 +13,7 @@ const CategoryManager = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get(`${backUrl}/category/categories`);
+            const response = await axios.get(`${backUrl}/category/categories`, {withCredentials: true});
             setCategories(response.data);
         } catch (error) {
             console.error('Помилка при отриманні категорій:', error);
@@ -23,7 +23,7 @@ const CategoryManager = () => {
     const handleDelete = async (id) => {
         if (!confirm('Точно видалити категорію?')) return;
         try {
-            await axios.delete(`${backUrl}/category/${id}`);
+            await axios.delete(`${backUrl}/category/${id}`, {withCredentials: true});
             fetchCategories();
         } catch (error) {
             console.error('Помилка при видаленні:', error);

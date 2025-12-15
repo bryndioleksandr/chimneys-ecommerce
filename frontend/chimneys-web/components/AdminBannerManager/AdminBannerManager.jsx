@@ -10,7 +10,7 @@ export default function AdminBannerManager() {
 
     const fetchBanners = async () => {
         try {
-            const res = await fetch(`${backUrl}/banner/banners`);
+            const res = await fetch(`${backUrl}/banner/banners`, {credentials: 'include'});
             const data = await res.json();
             setBanners(data);
         } catch (error) {

@@ -10,7 +10,8 @@ import SubSubCategoryClient from "../../../../../components/CategoryClient/SubSu
 async function getFiltersByCategory(categoryId, subCategoryId, subSubCategoryId) {
     try {
         const res = await fetch(`${backUrl}/filters/${categoryId}/${subCategoryId}/${subSubCategoryId}`, {
-            next: { revalidate: 60 }
+            next: { revalidate: 60 },
+            credentials: 'include'
         });
         if (!res.ok) return {};
         const data = await res.json();

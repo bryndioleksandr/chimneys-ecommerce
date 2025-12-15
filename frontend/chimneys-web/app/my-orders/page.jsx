@@ -42,7 +42,7 @@ export default function MyOrdersPage() {
                 if (userRaw) {
                     const user = JSON.parse(userRaw);
                     const userId = user.id;
-                    const res = await axios.get(`${backUrl}/order/user/${userId}`);
+                    const res = await axios.get(`${backUrl}/order/user/${userId}`, {withCredentials: true});
                     const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                     setOrders(sorted);
                 }

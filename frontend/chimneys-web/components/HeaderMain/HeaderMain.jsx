@@ -48,7 +48,7 @@ export default function HeaderMain({ categories = [] }) {
     useEffect(() => {
         if(role === 'admin'){
             const fetchCount = async () => {
-                const res = await fetch(`${backUrl}/order/by-status/pending`, {});
+                const res = await fetch(`${backUrl}/order/by-status/pending`, {credentials: 'include'});
                 const data = await res.json();
                 setOrdersCount(data.length);
             }
@@ -92,7 +92,7 @@ export default function HeaderMain({ categories = [] }) {
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
         try {
-            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
+            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`, {credentials: 'include'});
             const data = await res.json();
             setSearchResults(data);
         } catch (error) {

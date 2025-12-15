@@ -165,7 +165,7 @@ export default function CreateOrderPage() {
                 paymentMethod: formData.paymentMethod,
                 products,
                 totalPrice,
-            });
+            }, {withCredentials: true});
 
             localStorage.removeItem("cart");
 
@@ -177,7 +177,7 @@ export default function CreateOrderPage() {
                     amount: totalPrice,
                     description: `Оплата замовлення "${productNames}"`,
                     orderId: orderResponse.data._id,
-                });
+                }, {withCredentials: true});
 
                 setLiqpayFormHtml(liqpayRes.data.html);
             } else {

@@ -7,7 +7,7 @@ import CategoryClient from "../../../components/CategoryClient/CategoryClient"; 
 
 async function getFiltersByCategory(categoryId) {
     try {
-        const res = await fetch(`${backUrl}/filters/${categoryId}`, { next: { revalidate: 60 } });
+        const res = await fetch(`${backUrl}/filters/${categoryId}`, { next: { revalidate: 60 }, credentials: 'include' });
         if (!res.ok) return {};
         const data = await res.json();
         return data.filters || {};

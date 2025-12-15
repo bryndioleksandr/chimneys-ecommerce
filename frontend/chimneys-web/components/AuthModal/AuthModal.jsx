@@ -145,6 +145,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             const res = await fetch(`${backUrl}/verify-email`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: 'include',
                 body: JSON.stringify({ email, code: verificationCode }),
             });
 

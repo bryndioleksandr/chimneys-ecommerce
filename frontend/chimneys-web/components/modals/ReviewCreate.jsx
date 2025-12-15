@@ -19,7 +19,7 @@ const ReviewForm = ({user, product}) => {
                 rating,
                 product,
                 comment,
-            });
+            }, {withCredentials: true});
             alert('Відгук додано!');
 
         } catch (error) {
@@ -27,17 +27,17 @@ const ReviewForm = ({user, product}) => {
             alert('Помилка при додаванні відгуку');
         }
         try{
-            const res = await fetch(`${backUrl}/reviews/product-reviews/${product}`);
+            const res = await fetch(`${backUrl}/reviews/product-reviews/${product}`, {credentials: 'include'});
             const data = await res.json();
             const validReviews = Array.isArray(data) ? data : [];
 
             const sum = validReviews.reduce((acc, review) => acc + review.rating, 0);
             const averageRating = validReviews.length > 0 ? sum / validReviews.length : 0;
 
-            await axios.patch(`${backUrl}/products/update-rating/${product}/${averageRating}`, {})
+            await axios.patch(`${backUrl}/products/update-rating/${product}/${averageRating}`, {}, {withCredentials: true})
             await axios.patch(`${backUrl}/products/update-reviews/${product}`, {
                 reviews: validReviews.map(review => review._id)
-            });        } catch(error) {
+            }, {withCredentials: true});        } catch(error) {
             console.error('Помилка при оновленні рейтингу товару:', error);
             alert('Помилка при оновленні рейтингу товару');
         }

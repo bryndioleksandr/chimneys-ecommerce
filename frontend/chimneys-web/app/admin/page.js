@@ -22,7 +22,7 @@ export default function AdminPage() {
     const handleSubsubcategoryFormToggle = () => setSubsubcategoryFormVisible(!isSubsubcategoryFormVisible);
     const handleFetchBasData = async () => {
         try{
-            const response = await axios.post(`${API_BASE}/data-exchange`, );
+            const response = await axios.post(`${API_BASE}/data-exchange`, {}, {withCredentials: true});
             console.log('fetch data is:', response);
         } catch (error) {
             console.error('Помилка при оновленні товару:', error);

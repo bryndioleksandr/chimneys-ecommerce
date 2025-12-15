@@ -13,7 +13,7 @@ const SubSubCategoryManager = () => {
 
     const fetchSubSubCategories = async () => {
         try {
-            const response = await axios.get(`${backUrl}/subsubcategory/subsubcategories`);
+            const response = await axios.get(`${backUrl}/subsubcategory/subsubcategories`, {withCredentials: true});
             setSubSubCategories(response.data);
         } catch (error) {
             console.error('Помилка при отриманні категорій:', error);
@@ -23,7 +23,7 @@ const SubSubCategoryManager = () => {
     const handleDelete = async (id) => {
         if (!confirm('Точно видалити категорію?')) return;
         try {
-            await axios.delete(`${backUrl}/subsubcategory/${id}`);
+            await axios.delete(`${backUrl}/subsubcategory/${id}`, {withCredentials: true});
             fetchSubSubCategories();
         } catch (error) {
             console.error('Помилка при видаленні:', error);

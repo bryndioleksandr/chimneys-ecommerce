@@ -28,7 +28,7 @@ export default function FavoritesPage() {
 
         const fetchFavorites = async () => {
             try {
-                const res = await axios.get(`${backUrl}/favorites/${userId}`);
+                const res = await axios.get(`${backUrl}/favorites/${userId}`, {withCredentials: true});
                 setFavorites(res.data || []);
             } catch (error) {
                 console.error(error);
@@ -42,7 +42,7 @@ export default function FavoritesPage() {
 
     const removeFromFavorites = async (productId) => {
         try {
-            const res = await axios.delete(`${backUrl}/favorites/${userId}/${productId}`);
+            const res = await axios.delete(`${backUrl}/favorites/${userId}/${productId}`, {withCredentials: true});
             if (res.status === 200) {
                 setFavorites((prev) => prev.filter((item) => item._id !== productId));
             } else {

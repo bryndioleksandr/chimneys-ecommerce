@@ -76,7 +76,7 @@ export default function AllOrdersPage() {
 
     const updateStatus = async (orderId, status) => {
         try {
-            await axios.patch(`${backUrl}/order/update-status/${orderId}`, {status});
+            await axios.patch(`${backUrl}/order/update-status/${orderId}`, {status}, {withCredentials: true});
             alert("Статус оновлено!");
         } catch (err) {
             console.error("Помилка при оновленні статусу:", err);
@@ -100,7 +100,7 @@ export default function AllOrdersPage() {
     const handleOrderDelete = async (orderId) => {
         try {
             if(confirm('Чи дійсно видалити замовлення?')) {
-                await axios.delete(`${backUrl}/order/${orderId}`);
+                await axios.delete(`${backUrl}/order/${orderId}`, {withCredentials: true});
                 alert('Замовлення видалено успішно!')
                 setOrders(prevOrders => prevOrders.filter(item => item._id !== orderId));
             }

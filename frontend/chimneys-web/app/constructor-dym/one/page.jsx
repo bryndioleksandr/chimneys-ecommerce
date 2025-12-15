@@ -118,7 +118,7 @@ export default function ChimneyMapOne() {
         const fetchProducts = async () => {
             try {
                 console.log('now fetch');
-                const res = await fetch(`${backUrl}/products/products`);
+                const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
                 if (!res.ok) throw new Error("Products not found");
                 const data = await res.json();
                 setProducts(data);
@@ -135,7 +135,7 @@ export default function ChimneyMapOne() {
             if (!selectedArea) return;
 
             try {
-                const res = await fetch(`${backUrl}/constructor-one/constructor/element/${selectedArea}`);
+                const res = await fetch(`${backUrl}/constructor-one/constructor/element/${selectedArea}`, {credentials: 'include'});
                 if (res.ok) {
                     const data = await res.json();
                     setAttachedProduct(data.product);
@@ -154,7 +154,7 @@ export default function ChimneyMapOne() {
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
         try {
-            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`);
+            const res = await fetch(`${backUrl}/products/search?query=${searchQuery}`, {credentials: 'include'});
             const data = await res.json();
             setProducts(data);
         } catch (error) {
@@ -184,6 +184,7 @@ export default function ChimneyMapOne() {
                 headers: {
                     "Content-Type": "application/json"
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     area: areaId,
                     product: productId

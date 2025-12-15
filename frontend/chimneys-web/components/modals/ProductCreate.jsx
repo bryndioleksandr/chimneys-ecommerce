@@ -71,7 +71,8 @@ const ProductForm = () => {
             const response = await axios.post(`${backUrl}/products/product`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                withCredentials: true
             });
             alert('Товар доданий!');
             console.log('response:', response);
@@ -83,7 +84,7 @@ const ProductForm = () => {
 
 
     useEffect(() => {
-        axios.get(`${backUrl}/category/categories`)
+        axios.get(`${backUrl}/category/categories`, {withCredentials: true})
             .then(response => {
                 setCategories(response.data);
             })
