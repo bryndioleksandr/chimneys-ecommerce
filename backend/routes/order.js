@@ -14,7 +14,7 @@ const jsonParser = express.json();
 
 orderRouter.post("/make", createOrder);
 orderRouter.get("/user/:userId", getOrdersByUser);
-orderRouter.get("/all-orders", getOrders);
+orderRouter.get("/all-orders", verifyToken, isAdmin, getOrders);
 orderRouter.get("/by-status/:status", getOrdersByStatus);
 orderRouter.get("/paid-orders/:isPaid", getPaidOrders);
 orderRouter.patch("/update-status/:orderId", updateOrderStatus);

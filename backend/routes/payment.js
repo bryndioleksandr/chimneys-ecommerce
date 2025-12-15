@@ -18,7 +18,22 @@ liqpayRouter.post("/create-payment", (req, res) => {
     const { amount, description, orderId } = req.body;
     const order_id = "order_" + orderId;
     console.log('hello liqpay');
-    const html = liqpay.cnb_form({
+    // const html = liqpay.cnb_form({
+    //     action: "pay",
+    //     amount,
+    //     currency: "UAH",
+    //     description,
+    //     order_id,
+    //     version: 3,
+    //     result_url: "https://chimneys-ecommerce-bi38.vercel.app/payment-success",
+    //     server_url: "https://chimneys-ecommerce.onrender.com/liqpay/payment-callback",
+    //     language: "uk",
+    //     sandbox: 1,
+    // });
+    // console.log('html is:', html);
+    // res.send({ html });
+
+    const params = liqpay.cnb_object({
         action: "pay",
         amount,
         currency: "UAH",
@@ -27,11 +42,13 @@ liqpayRouter.post("/create-payment", (req, res) => {
         version: 3,
         result_url: "https://chimneys-ecommerce-bi38.vercel.app/payment-success",
         server_url: "https://chimneys-ecommerce.onrender.com/liqpay/payment-callback",
+        // result_url: "http://localhost:3000/payment-success",
+        // server_url: "https://a852c465e58a.ngrok-free.app/liqpay/payment-callback",
         language: "uk",
         sandbox: 1,
     });
-    console.log('html is:', html);
-    res.send({ html });
+
+    res.json(params);
 });
 
 liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), async (req, res) => {
@@ -39,7 +56,6 @@ liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), 
         console.log('we are in liq callback');
         const { data, signature } = req.body;
 
-        // Перевірка підпису
         const expectedSignature = crypto
             .createHash("sha1")
             .update(process.env.LIQPAY_PRIVATE_KEY + data + process.env.LIQPAY_PRIVATE_KEY)

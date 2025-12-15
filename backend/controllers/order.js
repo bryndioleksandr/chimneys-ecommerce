@@ -20,7 +20,7 @@ export const createOrder = async (req, res) => {
                     stock: { $gte: item.quantity }
                 },
                 {
-                    $inc: { quantity: -item.quantity }
+                    $inc: { stock: -item.quantity }
                 },
                 { session, new: true }
             );

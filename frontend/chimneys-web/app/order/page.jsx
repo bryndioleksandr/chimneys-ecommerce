@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import axios from "axios";
 import { backUrl } from '../../config/config';
 import "./style.css";
@@ -28,6 +28,8 @@ export default function CreateOrderPage() {
     const [liqpayFormHtml, setLiqpayFormHtml] = useState("");
     const [userId, setUserId] = useState(null);
 
+    const liqPayFormRef = useRef(null);
+    const [liqPayData, setLiqPayData] = useState(null);
 
 
     const validatePhoneNumber = (number) => {
@@ -54,6 +56,13 @@ export default function CreateOrderPage() {
 
         fetchAndLogCities();
     }, []);
+
+    useEffect(() => {
+        if (liqPayData && liqPayFormRef.current) {
+            console.log("Redirecting to LiqPay...");
+            liqPayFormRef.current.submit();
+        }
+    }, [liqPayData]);
 
     const formattedSomeCities = someCities.map(city => ({
         value: city.Description,
@@ -142,6 +151,56 @@ export default function CreateOrderPage() {
     //         toast.error("Помилка при оформленні замовлення");
     //     }
     // };
+    //
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //
+    //     if (!validatePhoneNumber(formData.phoneNumber)) {
+    //         toast.error("Невірний номер телефону. Приклад: +380XXXXXXXXX або 0XXXXXXXXX");
+    //         return;
+    //     }
+    //
+    //     try {
+    //         const products = cartItems.map(item => ({
+    //             product: item._id,
+    //             quantity: item.quantity,
+    //         }));
+    //
+    //         console.log('trying to create req to backend');
+    //         const orderResponse = await axios.post(`${backUrl}/order/make`, {
+    //             ...formData,
+    //             user: userId || null,
+    //             deliveryWay: formData.deliveryWay,
+    //             paymentMethod: formData.paymentMethod,
+    //             products,
+    //             totalPrice,
+    //         }, {withCredentials: true});
+    //
+    //         localStorage.removeItem("cart");
+    //
+    //         const productNames = cartItems.map(item => item.name).join(", ");
+    //
+    //
+    //         if (formData.paymentMethod === "liqpay") {
+    //             const liqpayRes = await axios.post(`${backUrl}/liqpay/create-payment`, {
+    //                 amount: totalPrice,
+    //                 description: `Оплата замовлення "${productNames}"`,
+    //                 orderId: orderResponse.data._id,
+    //             }, {withCredentials: true});
+    //
+    //             setLiqpayFormHtml(liqpayRes.data.html);
+    //         } else {
+    //             toast.success("Замовлення оформлено!");
+    //             setTimeout(() => {
+    //                 window.location.href = "/";
+    //             }, 2000);
+    //         }
+    //     } catch (err) {
+    //         console.error("error in create order is:", err);
+    //         toast.error("Помилка при оформленні замовлення");
+    //     }
+    // };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -157,7 +216,8 @@ export default function CreateOrderPage() {
                 quantity: item.quantity,
             }));
 
-            console.log('trying to create req to backend');
+            console.log('Creating order...');
+
             const orderResponse = await axios.post(`${backUrl}/order/make`, {
                 ...formData,
                 user: userId || null,
@@ -165,21 +225,21 @@ export default function CreateOrderPage() {
                 paymentMethod: formData.paymentMethod,
                 products,
                 totalPrice,
-            }, {withCredentials: true});
+            }, { withCredentials: true });
 
             localStorage.removeItem("cart");
-
             const productNames = cartItems.map(item => item.name).join(", ");
-
 
             if (formData.paymentMethod === "liqpay") {
                 const liqpayRes = await axios.post(`${backUrl}/liqpay/create-payment`, {
                     amount: totalPrice,
                     description: `Оплата замовлення "${productNames}"`,
                     orderId: orderResponse.data._id,
-                }, {withCredentials: true});
+                }, { withCredentials: true });
 
-                setLiqpayFormHtml(liqpayRes.data.html);
+
+                setLiqPayData(liqpayRes.data);
+
             } else {
                 toast.success("Замовлення оформлено!");
                 setTimeout(() => {
@@ -187,11 +247,10 @@ export default function CreateOrderPage() {
                 }, 2000);
             }
         } catch (err) {
-            console.error("error in create order is:", err);
+            console.error("Error in create order:", err);
             toast.error("Помилка при оформленні замовлення");
         }
     };
-
 
 
     return (
@@ -308,6 +367,18 @@ export default function CreateOrderPage() {
                         />
                     )}
                 </form>
+                {liqPayData && (
+                    <form
+                        ref={liqPayFormRef}
+                        method="POST"
+                        action="https://www.liqpay.ua/api/3/checkout"
+                        acceptCharset="utf-8"
+                        style={{ display: "none" }}
+                    >
+                        <input type="hidden" name="data" value={liqPayData.data} />
+                        <input type="hidden" name="signature" value={liqPayData.signature} />
+                    </form>
+                )}
             </div>
             <ToastContainer position="top-right" autoClose={3000} />
         </section>
