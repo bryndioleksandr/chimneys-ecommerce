@@ -6,7 +6,7 @@ export const createOrder = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const { user, phoneNumber, paymentMethod, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
+        const { user, phoneNumber, firstName, lastName, email, paymentMethod, deliveryWay, products, totalPrice, city, postalCode, address } = req.body;
         const generateOrderNumber = () => {
             const randomNum = Math.floor(100000 + Math.random() * 900000);
             return String(randomNum);
@@ -34,6 +34,9 @@ export const createOrder = async (req, res) => {
             orderNumber,
             user,
             phoneNumber,
+            firstName,
+            lastName,
+            email,
             paymentMethod,
             deliveryWay,
             products,

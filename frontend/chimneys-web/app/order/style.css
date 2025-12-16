@@ -1,5 +1,5 @@
 .order-form {
-    background: linear-gradient(135deg, #fff4e6, #ffe5b4); /* теплий фон */
+    background: linear-gradient(135deg, var(--background-color), var(--highlight-color));
     padding: 50px 20px;
     min-height: 100vh;
     display: flex;
@@ -10,17 +10,17 @@
 .order-form .container {
     max-width: 600px;
     width: 100%;
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 16px;
     padding: 40px 30px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 24px rgba(0, 66, 79, 0.1);
 }
 
 .order-form h1 {
     margin-bottom: 25px;
     font-size: 2rem;
     font-weight: 600;
-    color: #333;
+    color: var(--primary-color);
     text-align: center;
 }
 
@@ -33,7 +33,8 @@
     border: 1px solid #d1d1d1;
     border-radius: 8px;
     font-size: 1rem;
-    background-color: #fafafa;
+    background-color: var(--filter-bg);
+    color: var(--text-color);
     box-sizing: border-box;
     transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -41,19 +42,19 @@
 .order-form form input:focus,
 .order-form form select:focus,
 .order-form form .react-select__control--is-focused {
-    border-color: #e98b2a;
-    box-shadow: 0 0 0 3px rgba(233, 139, 42, 0.2);
+    border-color: var(--hover-navbtn-color);
+    box-shadow: 0 0 0 3px rgba(41, 120, 131, 0.2);
     outline: none;
 }
 
 .order-form select {
-    background-color: #fff;
+    background-color: var(--card-bg);
 }
 
 .order-form button {
     width: 100%;
     padding: 14px;
-    background: #e98b2a; /* теплий помаранчевий */
+    background: var(--primary-color);
     color: #ffffff;
     border: none;
     border-radius: 8px;
@@ -61,46 +62,71 @@
     font-weight: 600;
     letter-spacing: 0.5px;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out, transform 0.1s ease;
 }
 
 .order-form button:hover {
-    background: #cc6e1e;
+    background: var(--hover-navbtn-color);
+}
+
+.order-form button:active {
+    transform: scale(0.98);
 }
 
 .order-form p {
     text-align: center;
     font-weight: 500;
     font-size: 1.1rem;
-    color: #444;
+    color: var(--text-color);
     margin: 20px 0;
 }
 
-/* React Select (якщо використовується) */
 .order-form form .react-select__control {
     min-height: 44px;
+    background-color: var(--filter-bg);
+    border-color: #d1d1d1;
 }
 
 .order-form form .react-select__control:hover {
-    border-color: #e98b2a;
+    border-color: var(--hover-navbtn-color);
+    cursor: pointer;
 }
 
-/* Toastify */
+.order-form form .react-select__menu {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    z-index: 5;
+}
+
+.order-form form .react-select__option--is-focused {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+}
+
+.order-form form .react-select__option--is-selected {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.order-form form .react-select__single-value {
+    color: var(--text-color);
+}
+
+.order-form form .react-select__placeholder {
+    color: #888;
+}
+
 .Toastify__toast {
-    background-color: #fff !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
     border-radius: 8px !important;
+    font-family: inherit;
 }
 
-.Toastify__toast-body {
-    background-color: transparent !important;
-    color: #333;
+.Toastify__toast-icon svg {
+    fill: var(--discount-color);
 }
 
-.Toastify__toast-icon {
-    color: #ff4e4e;
-}
-
-.Toastify__toast-container {
-    z-index: 9999;
+.Toastify__progress-bar {
+    background: var(--primary-color) !important;
 }

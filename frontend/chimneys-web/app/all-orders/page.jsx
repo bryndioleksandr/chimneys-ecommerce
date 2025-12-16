@@ -99,13 +99,12 @@ export default function AllOrdersPage() {
 
     const handleOrderDelete = async (orderId) => {
         try {
-            if(confirm('Чи дійсно видалити замовлення?')) {
+            if (confirm('Чи дійсно видалити замовлення?')) {
                 await axios.delete(`${backUrl}/order/${orderId}`, {withCredentials: true});
                 alert('Замовлення видалено успішно!')
                 setOrders(prevOrders => prevOrders.filter(item => item._id !== orderId));
             }
-        }
-        catch(e) {
+        } catch (e) {
             console.error("Помилка при видаленні замовлення:", e);
             alert("Помилка при видаленні замовлення");
         }
@@ -163,6 +162,15 @@ export default function AllOrdersPage() {
                             <p><strong>Дата створення:</strong> {new Date(order.createdAt).toLocaleString()}</p>
                             <p><strong>Користувач:</strong> {order.user?.email || "Гість"}</p>
                             <p><strong>Номер телефону:</strong> {order.phoneNumber}</p>
+                            {order.firstName ? (
+                                    <>
+                                        <p><strong>Ім'я:</strong> {order.firstName}</p>
+                                        <p><strong>Прізвище:</strong> {order.lastName}</p>
+                                    </>
+                                ) :
+                                null
+                            }
+
                             <p><strong>Спосіб
                                 доставки:</strong> {deliveryWayMap[order.deliveryWay] || order.deliveryWay}</p>
                             <p>

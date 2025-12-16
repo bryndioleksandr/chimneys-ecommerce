@@ -31,6 +31,7 @@ export default function CreateOrderPage() {
     const liqPayFormRef = useRef(null);
     const [liqPayData, setLiqPayData] = useState(null);
 
+    const [createdOrder, setCreatedOrder] = useState(null);
 
     const validatePhoneNumber = (number) => {
         const phoneRegex = /^(\+380|0)\d{9}$/;
@@ -240,7 +241,13 @@ export default function CreateOrderPage() {
 
                 setLiqPayData(liqpayRes.data);
 
-            } else {
+            }
+            else if (formData.paymentMethod === "bank_transfer") {
+                setCreatedOrder(orderResponse.data);
+                toast.success("Замовлення створено! Будь ласка, оплатіть за реквізитами.");
+                window.scrollTo(0, 0);
+            }
+            else {
                 toast.success("Замовлення оформлено!");
                 setTimeout(() => {
                     window.location.href = "/";
@@ -252,16 +259,120 @@ export default function CreateOrderPage() {
         }
     };
 
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text);
+        toast.info("Скопійовано!");
+    };
 
     return (
         <section className="order-form">
             <div className="container">
+                {createdOrder ? (
+                        <div className="bank-transfer-info" style={{ textAlign: "center", padding: "40px 0" }}>
+                            <h1 style={{ color: "#28a745" }}>Дякуємо за замовлення!</h1>
+                            <p style={{ fontSize: "18px" }}>Ваше замовлення <strong>№{createdOrder.orderNumber}</strong> успішно прийнято.</p>
+
+                            <div style={{
+                                background: "#f8f9fa",
+                                padding: "30px",
+                                borderRadius: "12px",
+                                maxWidth: "600px",
+                                margin: "30px auto",
+                                textAlign: "left",
+                                border: "1px solid #e9ecef"
+                            }}>
+                                <h3 style={{ marginBottom: "20px", textAlign: "center" }}>Реквізити для оплати</h3>
+
+                                <div style={{ marginBottom: "15px" }}>
+                                    <p style={{ color: "#6c757d", fontSize: "14px", marginBottom: "5px" }}>Отримувач:</p>
+                                    <p style={{ fontSize: "18px", fontWeight: "600" }}>ФОП Бриндьо О. В.</p>
+                                </div>
+
+                                <div style={{ marginBottom: "15px" }}>
+                                    <p style={{ color: "#6c757d", fontSize: "14px", marginBottom: "5px" }}>IBAN (Рахунок):</p>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                        <button
+                                            type="button"
+                                            onClick={() => copyToClipboard("UA1234567890123456789012345")}
+                                            style={{ padding: "5px 10px", fontSize: "18px", cursor: "pointer", fontFamily: "monospace", background: "transparent", color:"black" }}
+                                        >
+                                            UA1234567890123456789012345
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div style={{ marginBottom: "15px" }}>
+                                    <p style={{ color: "#6c757d", fontSize: "14px", marginBottom: "5px" }}>Сума до сплати:</p>
+                                    <p style={{ fontSize: "24px", fontWeight: "bold", color: "#d9534f" }}>
+                                        {createdOrder.totalPrice} грн
+                                    </p>
+                                </div>
+
+                                <div style={{ background: "#fff3cd", padding: "15px", borderRadius: "8px" }}>
+                                    <p style={{ color: "#856404", fontSize: "14px", marginBottom: "5px" }}>⚠️ Призначення платежу (Обов'язково):</p>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                        <button
+                                            type="button"
+                                            onClick={() => copyToClipboard(`Оплата замовлення №${createdOrder.orderNumber}`)}
+                                            style={{ padding: "5px 10px", fontSize: "12px", cursor: "pointer", background: "transparent", border: "1px solid #ccc", color: "black" }}
+                                        >
+                                            Оплата замовлення № {createdOrder.orderNumber}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p style={{ color: "#6c757d" }}>Менеджер зв'яжеться з вами для підтвердження після оплати.</p>
+
+                            <button
+                                onClick={() => window.location.href = "/"}
+                                style={{ marginTop: "30px", padding: "12px 30px", background: "#333", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }}
+                            >
+                                Повернутися на головну
+                            </button>
+                        </div>
+                    ) : ( <>
                 <h1>Оформлення замовлення</h1>
                 <form onSubmit={handleSubmit}>
                     <input type="text" name="phoneNumber" placeholder="Номер телефону" required
                            onChange={handleChange}/>
+                    <input type="text" name="firstName" placeholder="Прізвище" required
+                           onChange={handleChange}/>
+                    <input type="text" name="lastName" placeholder="Ім'я" required
+                           onChange={handleChange}/>
+                    <input type="text" name="email" placeholder="Email (необов'язково)"
+                           onChange={handleChange}/>
                     {/*<input type="text" name="city" placeholder="Місто" required onChange={handleChange}/>*/}
-                    <AsyncSelect
+                    <Select
+                        classNamePrefix="react-select"
+                        options={[
+                            {value: "nova_poshta_branch", label: "Доставка у відділення нової пошти"},
+                            {value: "nova_poshta_courier", label: "Доставка кур'єром нової пошти"},
+                            {value: "ukrposhta", label: "Доставка УкрПоштою"},
+                            {value: "pickup", label: "Самовивіз із магазину"},
+                        ]}
+                        onChange={(selectedOption) =>{
+                            const value = selectedOption?.value || "";
+
+                            let newFormData = { ...formData, deliveryWay: value };
+
+                            if (value === "pickup") {
+                                newFormData.city = "Тернопіль";
+                                newFormData.address = "м. Тернопіль, вул. Степана Будного, 37";
+                            }
+                            else if (formData.deliveryWay === "pickup") {
+                                newFormData.city = "";
+                                newFormData.address = "";
+                            }
+
+                            setFormData(newFormData);
+                        }
+
+                        }
+                        placeholder="Оберіть спосіб доставки..."
+                        isSearchable={false}
+                    />
+                    {formData.deliveryWay !== 'pickup' && (<AsyncSelect
                         classNamePrefix="react-select"
 
                         cacheOptions
@@ -274,21 +385,8 @@ export default function CreateOrderPage() {
                         }
                         placeholder="Оберіть місто..."
                         isClearable
-                    />
-                    <Select
-                        classNamePrefix="react-select"
-                        options={[
-                            { value: "nova_poshta_branch", label: "Доставка у відділення нової пошти" },
-                            { value: "nova_poshta_courier", label: "Доставка кур'єром нової пошти" },
-                            { value: "ukrposhta", label: "Доставка УкрПоштою" },
-                            { value: "pickup", label: "Самовивіз із магазину" },
-                        ]}
-                        onChange={(selectedOption) =>
-                            setFormData({ ...formData, deliveryWay: selectedOption?.value || "" })
-                        }
-                        placeholder="Оберіть спосіб доставки..."
-                        isSearchable={false}
-                    />
+                    />)}
+
 
                     {formData.deliveryWay === "nova_poshta_branch" && (
                         <AsyncSelect
@@ -313,7 +411,7 @@ export default function CreateOrderPage() {
                                 }
                             }}
                             onChange={(selectedOption) =>
-                                setFormData({ ...formData, city: selectedOption?.value || "" })
+                                setFormData({...formData, city: selectedOption?.value || ""})
                             }
                             placeholder="Оберіть відділення Нової пошти..."
                             isClearable
@@ -347,13 +445,13 @@ export default function CreateOrderPage() {
                     <Select
                         classNamePrefix="react-select"
                         options={[
-                            { value: "liqpay", label: "Оплата карткою онлайн (LiqPay)" },
-                            { value: "on_delivery_place", label: "Оплата при отриманні" },
-                            { value: "bank_transfer", label: "Банківський переказ" },
+                            {value: "liqpay", label: "Оплата карткою онлайн (LiqPay)"},
+                            {value: "on_delivery_place", label: "Оплата при отриманні"},
+                            {value: "bank_transfer", label: "Банківський переказ"},
                         ]}
-                        defaultValue={{ value: "on_delivery_place", label: "Оплата при отриманні" }}
+                        defaultValue={{value: "on_delivery_place", label: "Оплата при отриманні"}}
                         onChange={(selectedOption) =>
-                            setFormData({ ...formData, paymentMethod: selectedOption?.value || "on_delivery_place" })
+                            setFormData({...formData, paymentMethod: selectedOption?.value || "on_delivery_place"})
                         }
                         placeholder="Оберіть спосіб оплати..."
                         isSearchable={false}
@@ -362,11 +460,12 @@ export default function CreateOrderPage() {
                     <button type="submit">Підтвердити замовлення</button>
                     {liqpayFormHtml && (
                         <div
-                            dangerouslySetInnerHTML={{ __html: liqpayFormHtml }}
-                            style={{ marginTop: "20px" }}
+                            dangerouslySetInnerHTML={{__html: liqpayFormHtml}}
+                            style={{marginTop: "20px"}}
                         />
                     )}
                 </form>
+                </> ) }
                 {liqPayData && (
                     <form
                         ref={liqPayFormRef}
