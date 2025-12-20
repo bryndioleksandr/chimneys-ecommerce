@@ -12,6 +12,7 @@ import { useDispatch } from "../../redux/store";
 import axios from "axios";
 import { backUrl } from '../../config/config';
 import '../../app/product/[slug]/style.css';
+import {toast} from "react-toastify";
 
 const ProductClient = ({ product, reviews, productGroups }) => {
     const dispatch = useDispatch();
@@ -30,12 +31,12 @@ const ProductClient = ({ product, reviews, productGroups }) => {
 
     const handleAddToCart = (productItem) => {
         dispatch(addItemToCart(productItem));
-        alert('Товар додано до кошика! ' + productItem.name);
+        toast.success('Товар додано до кошика! ' + productItem.name);
     };
 
     const handleAddToFavorites = async () => {
         if (!userId) {
-            alert("Будь ласка, увійдіть, щоб додати улюблені.");
+            toast.warning("Будь ласка, увійдіть, щоб додати улюблені.");
             return;
         }
         try {
@@ -43,11 +44,11 @@ const ProductClient = ({ product, reviews, productGroups }) => {
                 productId: product._id
             }, {withCredentials: true});
             if (res.status === 200) {
-                alert("Товар додано у улюблені!");
+                toast.success("Товар додано у улюблені!");
             }
         } catch (error) {
             console.error(error);
-            alert("Не вдалося додати улюблені");
+            toast.error("Не вдалося додати улюблені");
         }
     };
 

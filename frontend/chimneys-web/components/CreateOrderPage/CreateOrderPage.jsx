@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { backUrl } from '../../config/config';
 import "./order.css";
+import {toast} from "react-toastify";
 
 export default function CreateOrderPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -48,11 +49,11 @@ export default function CreateOrderPage() {
             }, {withCredentials: true});
 
             localStorage.removeItem("cart");
-            alert("Замовлення оформлено!");
+            toast.success("Замовлення оформлено!");
             window.location.href = "/";
         } catch (err) {
             console.error(err);
-            alert("Помилка при оформленні замовлення");
+            toast.error("Помилка при оформленні замовлення");
         }
     };
 

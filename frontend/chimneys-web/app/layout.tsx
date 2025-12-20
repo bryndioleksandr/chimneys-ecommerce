@@ -32,7 +32,7 @@ export const metadata = {
         locale: "uk_UA",
         images: [
             {
-                url: "/og-image.jpg",
+                url: "/dymohit_logo.png",
                 width: 1200,
                 height: 630,
                 alt: "Димоходи Тернопіль - Продаж димохідних систем",
@@ -47,7 +47,7 @@ export const metadata = {
         images: ["/twitter-image.jpg"],
     },
     icons: {
-        icon: "/favicon.ico",
+        icon: "/icon.png",
         shortcut: "/favicon-32x32.png",
         apple: "/apple-touch-icon.png",
     },

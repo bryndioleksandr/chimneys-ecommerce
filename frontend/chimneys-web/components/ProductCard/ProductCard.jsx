@@ -12,6 +12,7 @@ import {backUrl} from '../../config/config';
 import {deleteProductRequest} from "@/services/product";
 import EditProductModal from "../modals/ProductEdit";
 import ProductCloneModal from "@/components/modals/ProductClone";
+import {toast} from "react-toastify";
 
 const ProductCard = ({product}) => {
     const dispatch = useDispatch();
@@ -33,13 +34,12 @@ const ProductCard = ({product}) => {
 
     const handleAddToCart = (product) => {
         dispatch(addItemToCart(product));
-        alert('Товар додано до кошика! ' + product.name);
+        toast.success('Товар додано до кошика! ' + product.name);
     };
 
     const handleAddToFavorites = async () => {
         if (!userId) {
-            alert("Будь ласка, увійдіть, щоб додати улюблені.");
-            alert(`id is ${userId}`);
+            toast.warning("Будь ласка, увійдіть, щоб додати улюблені.");
             return;
         }
         try {
@@ -48,13 +48,13 @@ const ProductCard = ({product}) => {
             }, {withCredentials: true});
 
             if (res.status === 200) {
-                alert("Товар додано у улюблені!");
+                toast.success("Товар додано у улюблені!");
             } else {
-                alert("Помилка при додаванні у улюблені");
+                toast.error("Помилка при додаванні у улюблені");
             }
         } catch (error) {
             console.error(error);
-            alert("Не вдалося додати улюблені");
+            toast.error("Не вдалося додати улюблені");
         }
     };
 

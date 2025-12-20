@@ -5,10 +5,11 @@ import { useSelector } from "react-redux";
 import RoleGuard from "../../components/auth/RoleGuard";
 import "./style.css";
 import { backUrl } from '../../config/config';
+import {toast} from "react-toastify";
 
-const API_URL = `${backUrl}/info-page`;
+const API_URL = `${backUrl}/privacy-policy-page`;
 
-export default function CertificatesPage() {
+export default function PrivacyPolicyPage() {
     const user = useSelector((state) => state.user.user);
 
     const [page, setPage] = useState(null);
@@ -17,7 +18,7 @@ export default function CertificatesPage() {
     const [title, setTitle] = useState("");
 
     useEffect(() => {
-        fetch(API_URL + '/certificates')
+        fetch(API_URL + '/privacy-policy')
             .then((res) => res.json())
             .then((data) => {
                 setPage(data);
@@ -25,7 +26,7 @@ export default function CertificatesPage() {
                 setContent(data.content ?? "");
             })
             .catch(() => {
-                setPage({ title: "Сертифікати", content: "" });
+                setPage({ title: "Політика конфіденційності", content: "" });
             });
     }, []);
 
@@ -36,7 +37,7 @@ export default function CertificatesPage() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ slug: "certificates", title, content }),
+                body: JSON.stringify({ slug: "privacy-policy", title, content }),
             });
 
             if (!res.ok) {
@@ -47,10 +48,10 @@ export default function CertificatesPage() {
             const updated = await res.json();
             setPage(updated);
             setEditing(false);
-            alert("Збережено!");
+            toast.success("Збережено!");
         } catch (err) {
             console.error("error is:", err);
-            alert("Не вдалося зберегти: " + err.message);
+            toast.error("Не вдалося зберегти: " + err.message);
         }
     };
 

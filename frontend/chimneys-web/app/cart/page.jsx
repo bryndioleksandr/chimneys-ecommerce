@@ -4,6 +4,7 @@ import React, {useState, useEffect} from "react";
 import "./cart.css";
 import {useRouter} from "next/navigation";
 import productCard from "../../components/ProductCard/ProductCard";
+import {toast} from "react-toastify";
 
 export default function CartPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -50,7 +51,7 @@ export default function CartPage() {
     }, 0);
     const handleCheckout = () => {
         if (cartItems.length === 0) {
-            alert("Кошик порожній");
+            toast.warning("Кошик порожній");
             return;
         }
         router.push("/order");

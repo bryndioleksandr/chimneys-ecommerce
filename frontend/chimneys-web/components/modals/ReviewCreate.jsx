@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { backUrl } from '../../config/config';
 import Rating from "../ReviewStars/ReviewStars";
+import {toast} from "react-toastify";
 import "./style.css"
 
 const ReviewForm = ({user, product}) => {
@@ -20,11 +21,11 @@ const ReviewForm = ({user, product}) => {
                 product,
                 comment,
             }, {withCredentials: true});
-            alert('Відгук додано!');
+            toast.success('Відгук додано!');
 
         } catch (error) {
             console.error('Помилка при додаванні відгуку:', error);
-            alert('Помилка при додаванні відгуку');
+            toast.error('Помилка при додаванні відгуку');
         }
         try{
             const res = await fetch(`${backUrl}/reviews/product-reviews/${product}`, {credentials: 'include'});
@@ -39,7 +40,7 @@ const ReviewForm = ({user, product}) => {
                 reviews: validReviews.map(review => review._id)
             }, {withCredentials: true});        } catch(error) {
             console.error('Помилка при оновленні рейтингу товару:', error);
-            alert('Помилка при оновленні рейтингу товару');
+            toast.error('Помилка при оновленні рейтингу товару');
         }
     };
 

@@ -9,6 +9,7 @@ import { addItemToCart } from '@/redux/slices/cart';
 import {FaSearch} from "react-icons/fa";
 import { backUrl } from '../../../config/config';
 import {loadCartFromStorage} from "../../../redux/slices/cart";
+import {toast} from "react-toastify";
 
 
 const AREAS = [
@@ -194,15 +195,16 @@ export default function ChimneyMapOne() {
             if (!res.ok) {
                 const errorData = await res.json();
                 console.error("Error response:", errorData);
-                alert("Не вдалося прив’язати продукт");
+                toast.error("Не вдалося прив'язати продукт");
                 return;
             }
 
             const updatedConstructor = await res.json();
             console.log("Оновлений конструктор:", updatedConstructor);
+            toast.success("Продукт успішно прив'язано");
         } catch (error) {
             console.error("Fetch error:", error);
-            alert("Сталася помилка при зверненні до сервера");
+            toast.error("Сталася помилка при зверненні до сервера");
         } finally {
             setIsProductModalOpen(false);
             setSelectedAreaForLinking(null);

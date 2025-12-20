@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import LiqPayConstructor from "../lib/liqpay.js";
 import crypto from "crypto";
 import Order from "../models/order.js";
-import {sendInfoEmail} from "../services/emailService.js";
+import {sendInfoEmail, sendInfoEmailResend} from "../services/emailService.js";
 
 dotenv.config();
 
@@ -40,10 +40,10 @@ liqpayRouter.post("/create-payment", (req, res) => {
         description,
         order_id,
         version: 3,
-        result_url: "https://chimneys-ecommerce-bi38.vercel.app/payment-success",
-        server_url: "https://chimneys-ecommerce.onrender.com/liqpay/payment-callback",
-        // result_url: "http://localhost:3000/payment-success",
-        // server_url: "https://a852c465e58a.ngrok-free.app/liqpay/payment-callback",
+        // result_url: "https://chimneys-ecommerce-bi38.vercel.app/payment-success",
+        // server_url: "https://chimneys-ecommerce.onrender.com/liqpay/payment-callback",
+        result_url: "http://localhost:3000/payment-success",
+        server_url: "https://a4792b8ecef6.ngrok-free.app/liqpay/payment-callback",
         language: "uk",
         sandbox: 1,
     });
@@ -147,7 +147,8 @@ liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), 
                 order.isPaid = true;
                 order.paidAt = new Date();
 
-                if(order.email || order.user) await sendInfoEmail({
+                console.log('success trying to send email');
+                if(order.email || order.user) await sendInfoEmailResend({
                     to: order.email || order.user.email,
                     subject: "Оплату отримано!",
                     text: `Ваше замовлення №${order.orderNumber} успішно оплачено. Ми вже пакуємо його!`
@@ -158,7 +159,7 @@ liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), 
             console.log(`Payment failed for order ${order_id}: ${decodedData.err_description}`);
 
             order.isPaid = false;
-            if(order.email || order.user) await sendEmail({
+            if(order.email || order.user) await sendInfoEmailResend({
                 to: order.email || order.user.email,
                 subject: "Помилка оплати",
                 text: `На жаль, оплата замовлення №${order.orderNumber} не пройшла. Причина: ${decodedData.err_description}. Спробуйте ще раз на сайті.`

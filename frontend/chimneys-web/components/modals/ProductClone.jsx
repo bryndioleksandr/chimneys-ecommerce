@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-
+import {toast} from "react-toastify";
 import {backUrl} from "@/config/config";
 import "./edit.css";
 import ReactDOM from "react-dom";
@@ -37,7 +37,7 @@ const ProductCloneModal = ({product, onClose}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(name === product.name) {
-            alert('Назва товару повинна відрізнятися');
+            toast.warning('Назва товару повинна відрізнятися');
             return;
         }
         const productCode = generateProductCode();
@@ -75,12 +75,12 @@ const ProductCloneModal = ({product, onClose}) => {
                 },
                 withCredentials: true
             });
-            alert('Товар клоновано!');
+            toast.success('Товар клоновано!');
             console.log('response:', response);
             onClose();
         } catch (error) {
             console.error('Помилка при додаванні товару:', error);
-            alert('Помилка при додаванні товару');
+            toast.error('Помилка при додаванні товару');
         }
     };
 

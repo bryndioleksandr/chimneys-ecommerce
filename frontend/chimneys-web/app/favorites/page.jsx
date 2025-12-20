@@ -6,6 +6,7 @@ import axios from "axios";
 import { backUrl } from '../../config/config';
 import {useSelector} from "react-redux";
 import Link from "next/link";
+import {toast} from "react-toastify";
 
 export default function FavoritesPage() {
     const [favorites, setFavorites] = useState([]);
@@ -45,12 +46,13 @@ export default function FavoritesPage() {
             const res = await axios.delete(`${backUrl}/favorites/${userId}/${productId}`, {withCredentials: true});
             if (res.status === 200) {
                 setFavorites((prev) => prev.filter((item) => item._id !== productId));
+                toast.success("Товар видалено з улюблених");
             } else {
-                alert("Помилка при видаленні з улюблених");
+                toast.error("Помилка при видаленні з улюблених");
             }
         } catch (error) {
             console.error(error);
-            alert("Не вдалося видалити з улюблених");
+            toast.error("Не вдалося видалити з улюблених");
         }
     };
 

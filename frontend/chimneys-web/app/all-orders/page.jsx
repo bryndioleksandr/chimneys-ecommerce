@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {backUrl} from '../../config/config';
 import "./style.css";
+import {toast} from "react-toastify";
 
 const deliveryWayMap = {
     nova_poshta_branch: "Нова Пошта (відділення)",
@@ -77,10 +78,10 @@ export default function AllOrdersPage() {
     const updateStatus = async (orderId, status) => {
         try {
             await axios.patch(`${backUrl}/order/update-status/${orderId}`, {status}, {withCredentials: true});
-            alert("Статус оновлено!");
+            toast.success("Статус оновлено!");
         } catch (err) {
             console.error("Помилка при оновленні статусу:", err);
-            alert("Помилка при оновленні статусу");
+            toast.error("Помилка при оновленні статусу");
         }
     };
 
@@ -101,12 +102,12 @@ export default function AllOrdersPage() {
         try {
             if (confirm('Чи дійсно видалити замовлення?')) {
                 await axios.delete(`${backUrl}/order/${orderId}`, {withCredentials: true});
-                alert('Замовлення видалено успішно!')
+                toast.success('Замовлення видалено успішно!')
                 setOrders(prevOrders => prevOrders.filter(item => item._id !== orderId));
             }
         } catch (e) {
             console.error("Помилка при видаленні замовлення:", e);
-            alert("Помилка при видаленні замовлення");
+            toast.error("Помилка при видаленні замовлення");
         }
     }
 
@@ -115,7 +116,6 @@ export default function AllOrdersPage() {
             <div className="container">
                 <h1>Усі замовлення</h1>
 
-                {/* Панель фільтрів */}
                 <div className="filters">
                     <label>
                         Статус:
@@ -157,7 +157,7 @@ export default function AllOrdersPage() {
                             <h3>
                                 {order.status === "pending"
                                     ? `НОВЕ замовлення №: ${order.orderNumber || order._id} потребує обробки!`
-                                    : `Замовлення №: ${order._id}`}
+                                    : `Замовлення №: ${order.orderNumber || order._id}`}
                             </h3>
                             <p><strong>Дата створення:</strong> {new Date(order.createdAt).toLocaleString()}</p>
                             <p><strong>Користувач:</strong> {order.user?.email || "Гість"}</p>

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import './style.css';
 import { backUrl } from '../../config/config';
+import {toast} from "react-toastify";
 
 export default function AccountPage() {
     const user = useSelector(state => state.user.user);
@@ -51,15 +52,15 @@ export default function AccountPage() {
             });
 
             if (response.ok) {
-                alert('Профіль успішно оновлено!');
+                toast.success('Профіль успішно оновлено!');
                 setIsEditing(false);
             } else {
                 const error = await response.json();
-                alert(error.message || 'Помилка при оновленні профілю');
+                toast.error(error.message || 'Помилка при оновленні профілю');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            alert('Помилка при оновленні профілю');
+            toast.error('Помилка при оновленні профілю');
         }
     };
 

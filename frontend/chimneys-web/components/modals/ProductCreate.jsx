@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {searchSubCategories, searchSubCategoriesBySlug} from "../../services/subcategory";
 import {searchSubSubCategories, searchSubSubCategoriesBySlug} from "../../services/subsubcategory";
-
+import {toast} from "react-toastify";
 import {backUrl} from "../../config/config";
 
 const ProductForm = () => {
@@ -74,11 +74,11 @@ const ProductForm = () => {
                 },
                 withCredentials: true
             });
-            alert('Товар доданий!');
+            toast.success('Товар доданий!');
             console.log('response:', response);
         } catch (error) {
             console.error('Помилка при додаванні товару:', error);
-            alert('Помилка при додаванні товару');
+            toast.error('Помилка при додаванні товару');
         }
     };
 

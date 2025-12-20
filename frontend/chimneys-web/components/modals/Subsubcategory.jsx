@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { backUrl } from '../../config/config';
+import {toast} from "react-toastify";
 
 const SubSubCategoryForm = () => {
     const [subCategory, setSubCategory] = useState('');
@@ -27,10 +28,10 @@ const SubSubCategoryForm = () => {
                     withCredentials: true
                 }
             );
-            alert('Підпідкатегорія додана!');
+            toast.success('Підпідкатегорія додана!');
         } catch (error) {
             console.error('Помилка при додаванні підпідкатегорії:', error);
-            alert('Помилка при додаванні підпідкатегорії');
+            toast.error('Помилка при додаванні підпідкатегорії');
         }
     };
 

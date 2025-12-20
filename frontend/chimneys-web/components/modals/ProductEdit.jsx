@@ -4,7 +4,7 @@ import {backUrl} from '@/config/config';
 import { searchSubCategoriesBySlug } from '@/services/subcategory';
 import { searchSubSubCategoriesBySlug } from '@/services/subsubcategory';
 import ReactDOM from 'react-dom';
-
+import {toast} from "react-toastify";
 import "./edit.css";
 
 let globalCategoriesCache = null;
@@ -142,12 +142,12 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
                 headers: {'Content-Type': 'multipart/form-data'},
                 withCredentials: true
             });
-            alert('Продукт оновлено');
+            toast.success('Продукт оновлено');
             onSave(res.data);
             onClose();
         } catch (err) {
             console.error('Помилка при оновленні:', err);
-            alert('Помилка при оновленні продукту');
+            toast.error('Помилка при оновленні продукту');
         }
     };
 

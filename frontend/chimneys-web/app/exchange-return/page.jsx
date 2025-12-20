@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import RoleGuard from "../../components/auth/RoleGuard";
 import "./style.css";
 import { backUrl } from '../../config/config';
+import {toast} from "react-toastify";
 
 const API_URL = `${backUrl}/info-page`;
 
@@ -45,10 +46,10 @@ export default function ReturnPage() {
             const updated = await res.json();
             setPage(updated);
             setEditing(false);
-            alert("Збережено!");
+            toast.success("Збережено!");
         } catch (err) {
             console.error("error is:", err);
-            alert("Не вдалося зберегти: " + err.message);
+            toast.error("Не вдалося зберегти: " + err.message);
         }
     };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { backUrl } from '../../config/config';
+import {toast} from "react-toastify";
 
 const CategoryForm = () => {
     const [name, setName] = useState('');
@@ -24,10 +25,10 @@ const CategoryForm = () => {
                     withCredentials: true
                 }
             );
-            alert('Категорія додана!');
+            toast.success('Категорія додана!');
         } catch (error) {
             console.error('Помилка при додаванні категорії:', error);
-            alert('Помилка при додаванні категорії');
+            toast.error('Помилка при додаванні категорії');
         }
     };
 
