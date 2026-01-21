@@ -7,6 +7,10 @@ const ProductSchema = new mongoose.Schema({
             unique: true,
         },
         groupId: {type: String, index: true},
+
+        basId: {type: String, index: true, unique: true},
+        basGroup: {type: String},
+
         slug: { type: String, unique: true },
         name: {type: String, required: true},
         description: {type: String},

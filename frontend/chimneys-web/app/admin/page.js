@@ -20,9 +20,25 @@ export default function AdminPage() {
     const handleProductFormToggle = () => setProductFormVisible(!isProductFormVisible);
     const handleSubcategoryFormToggle = () => setSubcategoryFormVisible(!isSubcategoryFormVisible);
     const handleSubsubcategoryFormToggle = () => setSubsubcategoryFormVisible(!isSubsubcategoryFormVisible);
+
+    const [selectedFiles, setSelectedFiles] = useState(null);
+    const handleFileChange = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setSelectedFiles(e.target.files);
+        }
+    }
+
     const handleFetchBasData = async () => {
+        if (!selectedFiles) {
+            alert('Select XML files');
+            return;
+        }
+        const formData = new FormData();
+        for (let i = 0; i < selectedFiles.length; i++) {
+            formData.append('file', selectedFiles[i]);
+        }
         try{
-            const response = await axios.post(`${API_BASE}/data-exchange`, {}, {withCredentials: true});
+            const response = await axios.post(`${API_BASE}/data-exchange/`, formData, {withCredentials: true});
             console.log('fetch data is:', response);
         } catch (error) {
             console.error('Помилка при оновленні товару:', error);
@@ -32,9 +48,10 @@ export default function AdminPage() {
     return (
         <div className="admin-wrapper">
             <h1>Адмінка магазину</h1>
-            <button className="fetch-bas" onClick={handleFetchBasData}>
-                <h2>Завантажити дані з BAS</h2>
-            </button>
+            <div className="fetch-bas">
+                <input type="file" id="xmlFile" accept=".xml" multiple onChange={handleFileChange}/>
+                <button onClick={handleFetchBasData}>Send</button>
+            </div>
             <p>Додай новий товар або змінюй існуючі!</p>
 
             <div className="admin-panel">

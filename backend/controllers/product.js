@@ -184,7 +184,7 @@ export const getProducts = async (req, res) => {
 export const getPopularProducts = async (req, res) => {
     try {
         const popularProducts = await Product.find()
-            .sort({ purchaseCount: -1 })
+            .sort({ purchaseCount: -1, rating: -1 })
             .limit(10)
             .populate("category subCategory subSubCategory");
         res.status(200).json(popularProducts);
@@ -322,7 +322,7 @@ export const deleteProduct = async (req, res) => {
 export const searchByCategory = async (req, res) => {
     try {
         console.log('params:', req.params);
-        const products = await Product.find({ category: req.params.categoryid, subCategory: null, subSubCategory: null });
+        const products = await Product.find({ category: req.params.categoryid, subCategory: null, subSubCategory: null }).populate('category subCategory subSubCategory');
         res.json(products);
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
@@ -333,7 +333,7 @@ export const searchBySubCategory = async (req, res) => {
     try {
         const subCategoryId = new mongoose.Types.ObjectId(req.params.subcategoryid);
         console.log('params search products subCat:', req.params);
-        const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null });
+        const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null }).populate('category subCategory subSubCategory');
         res.json(products);
     } catch (err){
         console.log('error is', err);
@@ -345,7 +345,7 @@ export const searchBySubSubCategory = async (req, res) => {
     try {
         const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subsubcategoryid);
         console.log('params:', req.params);
-        const products = await Product.find({ subSubCategory: subSubCategoryId });
+        const products = await Product.find({ subSubCategory: subSubCategoryId }).populate('category subCategory subSubCategory');
         res.json(products);
     } catch (err) {
         res.status(500).json({ error: 'Server error' });

@@ -80,7 +80,7 @@ const ProductCard = ({product}) => {
                             <span className="count-reviews">({product.reviews?.length || 0})</span>
                         </div>
                         {product.stock !== 0 ? (
-                            <span className="card-in-stock">В наявності</span>
+                            <span className="card-in-stock">В наявності: {product.stock}</span>
                         ) : (
                             <span className="card-in-stock"
                                   style={{color: 'var(--discount-color)'}}>Під замовлення</span>

@@ -99,7 +99,7 @@ const ProductClient = ({ product, reviews, productGroups }) => {
                         )}
                         <span className="stock-status">
                             {product.stock > 0 ? (
-                                <span className="text-green-600">✔ В наявності</span>
+                                <span className="text-green-600">✔ В наявності: {product.stock}</span>
                             ) : (
                                 <span className="text-orange-500">⏳ Під замовлення</span>
                             )}

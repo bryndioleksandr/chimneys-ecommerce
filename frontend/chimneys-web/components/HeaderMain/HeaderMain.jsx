@@ -142,35 +142,68 @@ export default function HeaderMain({ categories = [] }) {
                         <span><b>Субота:</b> 09:00-15:00</span>
                     </div>
                 </div>
+                {/*<div className="headerSearchBarContainer" ref={searchRef}>*/}
+                {/*    <div className="headerSearchBar">*/}
+                {/*        <input*/}
+                {/*            name={"search input"}*/}
+                {/*            placeholder={"Пошук товарів"}*/}
+                {/*            type="text"*/}
+                {/*            value={searchQuery}*/}
+                {/*            onChange={(e) => setSearchQuery(e.target.value)}*/}
+                {/*        />*/}
+                {/*        <div className="searchButton" onClick={handleSearch}>*/}
+                {/*            <FaSearch/>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+
+                {/*    {searchResults.length > 0 && (*/}
+                {/*        <div className="searchResults">*/}
+                {/*            {searchResults.map((product) => (*/}
+                {/*                <Link key={product._id} href={`/product/${product.slug}`}>*/}
+                {/*                    <div className="searchResultItem"*/}
+                {/*                         onClick={() => {*/}
+                {/*                             setSearchResults([]);*/}
+                {/*                             setSearchQuery("");*/}
+                {/*                         }}>*/}
+                {/*                        {product.name}:*/}
+                {/*                        <img src={product.images[0]} alt={product.name} style={{*/}
+                {/*                            width: "60px",*/}
+                {/*                            height: "60px",*/}
+                {/*                            objectFit: "cover",*/}
+                {/*                        }}/>*/}
+                {/*                    </div>*/}
+                {/*                </Link>*/}
+                {/*            ))}*/}
+                {/*        </div>*/}
+                {/*    )}*/}
+                {/*</div>*/}
                 <div className="headerSearchBarContainer" ref={searchRef}>
                     <div className="headerSearchBar">
                         <input
-                            name={"search input"}
-                            placeholder={"Пошук товарів"}
+                            name="search"
+                            placeholder="Пошук товарів..."
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <div className="searchButton" onClick={handleSearch}>
+                        <button className="searchButton" onClick={handleSearch}>
                             <FaSearch/>
-                        </div>
+                        </button>
                     </div>
 
                     {searchResults.length > 0 && (
                         <div className="searchResults">
                             {searchResults.map((product) => (
                                 <Link key={product._id} href={`/product/${product.slug}`}>
-                                    <div className="searchResultItem"
-                                         onClick={() => {
-                                             setSearchResults([]);
-                                             setSearchQuery("");
-                                         }}>
-                                        {product.name}:
-                                        <img src={product.images[0]} alt={product.name} style={{
-                                            width: "60px",
-                                            height: "60px",
-                                            objectFit: "cover",
-                                        }}/>
+                                    <div
+                                        className="searchResultItem"
+                                        onClick={() => {
+                                            setSearchResults([]);
+                                            setSearchQuery("");
+                                        }}
+                                    >
+                                        <img src={product.images[0]} alt={product.name}/>
+                                        <span>{product.name}</span>
                                     </div>
                                 </Link>
                             ))}
@@ -181,30 +214,30 @@ export default function HeaderMain({ categories = [] }) {
             </div>
 
             {mounted && (
-            <div className="headerActions">
-                {mounted && (
-                <RoleGuard role="user">
-                    <>
-                        <div className="log-in-out">
-                            <Link href="/account" className="login">
-                                <FaUser />
-                                <span>{user?.name}</span>
-                            </Link>
-                            <div className="sign-out">
-                                <FaSignOutAlt onClick={handleLogout} />
-                                <span>Вийти</span>
-                            </div>
-                        </div>
-                    </>
-                </RoleGuard>
-                )}
-                {mounted && (
-                    <RoleGuard role="admin">
-                        <div className="log-in-out">
-                            <Link href="/admin">
-                                <div className="login">
-                                    <FaUser />
-                                    <span>Адмін {user?.name}</span>
+                <div className="headerActions">
+                    {mounted && (
+                        <RoleGuard role="user">
+                            <>
+                                <div className="log-in-out">
+                                    <Link href="/account" className="login">
+                                        <FaUser/>
+                                        <span>{user?.name}</span>
+                                    </Link>
+                                    <div className="sign-out">
+                                        <FaSignOutAlt onClick={handleLogout}/>
+                                        <span>Вийти</span>
+                                    </div>
+                                </div>
+                            </>
+                        </RoleGuard>
+                    )}
+                    {mounted && (
+                        <RoleGuard role="admin">
+                            <div className="log-in-out">
+                                <Link href="/admin">
+                                    <div className="login">
+                                        <FaUser/>
+                                        <span>Адмін {user?.name}</span>
                                 </div>
                             </Link>
                             <Link href="/all-orders">
