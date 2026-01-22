@@ -8,6 +8,7 @@ const subCategorySchema = new mongoose.Schema(
             ref: "Category",
             required: true,
         },
+        basGroupId: {type: String, unique:true },
         name: {
             type: String,
             required: true,
@@ -27,7 +28,7 @@ const subCategorySchema = new mongoose.Schema(
         },
         slug: {
             type: String,
-            unique: true,
+            unique: false,
         },
     },
     {

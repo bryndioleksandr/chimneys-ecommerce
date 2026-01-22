@@ -8,6 +8,7 @@ const categorySchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        basGroupId: {type: String, unique:true },
         subCategories: [
             {
                 type: mongoose.Schema.Types.ObjectId,

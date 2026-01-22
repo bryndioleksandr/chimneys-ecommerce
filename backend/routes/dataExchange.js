@@ -137,12 +137,23 @@ import multer from 'multer';
 import xml2js from 'xml2js';
 import Product from "../models/product.js";
 import slugify from "slugify";
+import Category from "../models/category.js";
+import SubCategory from "../models/subCategory.js";
+import SubSubCategory from "../models/subSubCategory.js";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const exchangeRouter = express.Router();
 const basCategory = "6970a4871f522c8c4da273af";
+
+const CATEGORY_STRATEGIES = {
+    "Нержавійка": "combine",
+    "Оцинковка": "direct",
+    "Сауна": "direct",
+    "Термо": "direct",
+    "default": "direct"
+};
 
 const asArray = (data) => {
     if (!data) return [];
@@ -179,6 +190,206 @@ const createImportDataMap = (products, groupMap) => {
     return map;
 };
 
+let previewResult = {};
+let basIdIndex = {};
+let objsWithIds = [];
+
+const makeSlug = (name) => slugify(name, { lower: true, strict: true });
+
+const syncCategoriesPreview = async(node, depth = 0, context = {}, currentTreePointer = previewResult) => {
+    const groups = asArray(node);
+
+    for (const group of groups) {
+        const groupName = group.Наименование.trim();
+        const basId = group.Ид;
+
+        let newContext = { ...context };
+        let nextTreePointer = currentTreePointer;
+
+        if (depth === 0) {
+        }
+
+        else if (depth === 1) {
+            const strategy = CATEGORY_STRATEGIES[groupName] || CATEGORY_STRATEGIES["default"];
+            newContext.strategy = strategy;
+
+            if (strategy === "combine") {
+                newContext.namePrefix = groupName;
+            }
+            else if (strategy === "direct") {
+                currentTreePointer[groupName] = {
+                    type: "🔴 CATEGORY (Main)",
+                    basId: basId,
+                    children: {}
+                };
+                // const slug = makeSlug(groupName);
+                const slug = makeSlug(groupName + "-" + basId.slice(6));
+                const category = await Category.findOneAndUpdate(
+                    { basGroupId: basId },
+                    { name: groupName, slug: slug, basGroupId: basId },
+                    { upsert: true, new: true }
+                );
+                // categoriesArray.push({basGroupId: basId, categoryId: category._id });
+                objsWithIds.push({groupId: basId, obj:{categorySyncId:category._id, subcategorySyncId:null, subsubcategorySyncId:null,}})
+                nextTreePointer = currentTreePointer[groupName].children;
+               // newContext.categoryId = basId;
+                newContext.categoryId = category._id;
+            }
+        }
+
+        else if (depth === 2) {
+            if (newContext.strategy === "combine") {
+                const combinedName = `${newContext.namePrefix} ${groupName}`;
+
+                // const slug = makeSlug(combinedName);
+                const slug = makeSlug(groupName + "-" + basId.slice(6));
+
+                const category = await Category.findOneAndUpdate(
+                    { basGroupId: basId },
+                    { name: combinedName, slug: slug, basGroupId: basId },
+                    { upsert: true, new: true }
+                );
+                // categoriesArray.push({basGroupId: basId, categoryId: category._id });
+                objsWithIds.push({groupId: basId, obj:{categorySyncId:category._id, subcategorySyncId:null, subsubcategorySyncId:null,}})
+
+                currentTreePointer[combinedName] = {
+                    type: "🔴 CATEGORY (Combined)",
+                    basId: basId,
+                    children: {}
+                };
+                nextTreePointer = currentTreePointer[combinedName].children;
+                //newContext.categoryId = basId;
+                newContext.categoryId = category._id;
+            }
+            else if (newContext.strategy === "direct") {
+                if (newContext.categoryId) {
+                    // const slug = makeSlug(groupName);
+                    const slug = makeSlug(groupName + "-" + basId.slice(6));
+
+                    currentTreePointer[groupName] = {
+                        type: "🟡 SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.categoryId,
+                        children: {}
+                    };
+
+                    const subCategory = await SubCategory.findOneAndUpdate(
+                        { basGroupId: basId },
+                        {
+                            name: groupName,
+                            slug: slug,
+                            basGroupId: basId,
+                            category: newContext.categoryId
+                        },
+                        { upsert: true, new: true }
+                    );
+                    //subcategoriesArray.push({basGroupId: basId, subcategoryId: subCategory._id });
+                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:subCategory._id, subsubcategorySyncId:null,}})
+
+                    nextTreePointer = currentTreePointer[groupName].children;
+                    //newContext.subCategoryId = basId;
+                    newContext.subCategoryId = subCategory._id;
+                }
+            }
+        }
+
+        else if (depth === 3) {
+            if (newContext.strategy === "combine") {
+                if (newContext.categoryId) {
+                    // const slug = makeSlug(groupName);
+                    const slug = makeSlug(groupName + "-" + basId.slice(6));
+
+                    currentTreePointer[groupName] = {
+                        type: "🟡 SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.categoryId,
+                        children: {}
+                    };
+
+                    const subCategory = await SubCategory.findOneAndUpdate(
+                        { basGroupId: basId },
+                        {
+                            name: groupName,
+                            slug: slug,
+                            basGroupId: basId,
+                            category: newContext.categoryId
+                        },
+                        { upsert: true, new: true }
+                    );
+                    //subcategoriesArray.push({basGroupId: basId, subcategoryId: subCategory._id });
+                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:subCategory._id, subsubcategorySyncId:null,}})
+
+                    nextTreePointer = currentTreePointer[groupName].children;
+                    // newContext.subCategoryId = basId;
+                    newContext.subCategoryId = subCategory._id;
+
+                }
+            }
+            else if (newContext.strategy === "direct") {
+                if (newContext.subCategoryId) {
+                    // const slug = makeSlug(groupName);
+                    const slug = makeSlug(groupName + "-" + basId.slice(6));
+
+                    currentTreePointer[groupName] = {
+                        type: "🟢 SUB-SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.subCategoryId,
+                        parentsParentBasId: newContext.categoryId
+                    };
+                    const subSubCategory = await SubSubCategory.findOneAndUpdate(
+                        { basGroupId: basId },
+                        {
+                            name: groupName,
+                            slug: slug,
+                            basGroupId: basId,
+                            subCategory: newContext.subCategoryId
+                        },
+                        { upsert: true, new: true }
+                    );
+                    //subsubcategoriesArray.push({basGroupId: basId, subsubcategoryId: subSubCategory._id });
+                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:newContext.subCategoryId, subsubcategorySyncId:subSubCategory._id,}})
+
+                }
+            }
+        }
+
+        else if (depth === 4) {
+            if (newContext.strategy === "combine") {
+                if (newContext.subCategoryId) {
+                    // const slug = makeSlug(groupName);
+                    const slug = makeSlug(groupName + "-" + basId.slice(6));
+
+                    currentTreePointer[groupName] = {
+                        type: "🟢 SUB-SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.subCategoryId,
+                        parentsParentBasId: newContext.categoryId
+                    };
+
+                    const subSubCategory = await SubSubCategory.findOneAndUpdate(
+                        { basGroupId: basId },
+                        {
+                            name: groupName,
+                            slug: slug,
+                            basGroupId: basId,
+                            subCategory: newContext.subCategoryId
+                        },
+                        { upsert: true, new: true }
+                    );
+                    // subsubcategoriesArray.push({basGroupId: basId, subsubcategoryId: subSubCategory._id });
+                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:newContext.subCategoryId, subsubcategorySyncId:subSubCategory._id,}})
+
+                }
+            }
+        }
+
+        if (group.Группы && group.Группы.Группа) {
+            await syncCategoriesPreview(group.Группы.Группа, depth + 1, newContext, nextTreePointer);
+        }
+    }
+};
+
+
 exchangeRouter.post('/', upload.any(), async (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
@@ -207,6 +418,13 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
         const groupMap = createGroupMap(groupsRoot);
         const importDataMap = createImportDataMap(productsImport, groupMap);
 
+        if (groupsRoot.Группа) {
+            console.log("generating tree of categories");
+
+            await syncCategoriesPreview(groupsRoot.Группа);
+        }
+
+        console.log('map of groups:', groupMap);
         const offersList = asArray(resultOffers.КоммерческаяИнформация?.ПакетПредложений?.Предложения?.Предложение);
 
         console.log(`processing ${offersList.length} products`);
@@ -250,10 +468,12 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
                 trim: true
             });
 
-            const slugBas = `${baseSlug}-${basId.slice(basId.length-4, basId.length)}`;
+            const slugBas = `${baseSlug}-${basId.slice(0,8)}`;
+            const found = objsWithIds.find(item => item.groupId === importData.groupBasId);
 
-            console.log('name of the product:', productName);
-            console.log('slug bas for this product:', slugBas);
+            const obj = found?.obj;
+            console.log('for product #', found?.groupId);
+            console.log('products cats:', obj);
 
             return {
                 updateOne: {
@@ -271,7 +491,9 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
                         },
                         $setOnInsert: {
                             slug: slugBas,
-                            category: basCategory,
+                            category: obj?.categorySyncId || basCategory,
+                            subCategory: obj?.subcategorySyncId || null,
+                            subSubCategory: obj?.subsubcategorySyncId || null,
                         }
                     },
                     upsert: true
@@ -294,10 +516,10 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
+//
 // exchangeRouter.get('/delete-last-150', async (req, res) => {
 //     try {
-//         const docs = await Product.find().sort({_id: -1}).limit(145).select('_id');
+//         const docs = await Product.find().sort({_id: -1}).limit(2300).select('_id');
 //         const ids = docs.map(d => d._id);
 //
 //         const result = await Product.deleteMany({ _id: { $in: ids } });
