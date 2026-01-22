@@ -1,9 +1,13 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { searchCategoryBySlug, searchCategoryProducts } from "../../../services/category";
+import {
+    searchCategoryBySlug,
+    searchCategoryProducts,
+    searchCategoryProductsPaginated
+} from "../../../services/category";
 import { searchSubCategoriesBySlug } from "../../../services/subcategory";
 import { backUrl } from '../../../config/config';
-import CategoryClient from "../../../components/CategoryClient/CategoryClient"; // Імпортуємо клієнтську частину
+import CategoryClient from "../../../components/CategoryClient/CategoryClient";
 
 async function getFiltersByCategory(categoryId) {
     try {
@@ -30,8 +34,11 @@ export async function generateMetadata({ params }) {
     };
 }
 
-export default async function CategoryPage({ params }) {
+export default async function CategoryPage({ params, searchParams }) {
     const { categoryName } = await params;
+    const resolvedSearchParams = await searchParams;
+    const page = Number(resolvedSearchParams?.page) || 1;
+    const limit = 12;
 
     const categoryData = await searchCategoryBySlug(categoryName);
     const currentCat = categoryData[0];
@@ -40,15 +47,17 @@ export default async function CategoryPage({ params }) {
         return notFound();
     }
 
-    const [subcategories, products, filtersData] = await Promise.all([
+    const [subcategories, productsData, filtersData] = await Promise.all([
         searchSubCategoriesBySlug(categoryName),
-        searchCategoryProducts(currentCat._id),
+        // searchCategoryProducts(currentCat._id),
+        searchCategoryProductsPaginated(currentCat._id, page, limit),
         getFiltersByCategory(currentCat._id)
     ]);
 
     return (
         <CategoryClient
-            initialProducts={products}
+            initialProducts={productsData.products}
+            pagination={productsData.pagination}
             subcategories={subcategories}
             category={currentCat}
             filtersData={filtersData}

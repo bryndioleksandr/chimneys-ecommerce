@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import ProductCard from "../ProductCard/ProductCard";
 import FiltersPanel from "../FiltersPanel/FiltersPanel";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Pagination from "../Pagination/Pagination";
 import "../../app/category/category.css";
+
 const SubSubCategoryClient = ({
                                   initialProducts,
+                                  pagination,
                                   subSubCategory,
                                   filters,
                                   categoryName,
@@ -14,6 +17,10 @@ const SubSubCategoryClient = ({
                               }) => {
     const [products, setProducts] = useState(initialProducts);
     const [sortOption, setSortOption] = useState("default");
+
+    useEffect(() => {
+        setProducts(initialProducts);
+    }, [initialProducts]);
 
     const getSortedProducts = () => {
         let sorted = [...products];
@@ -94,6 +101,13 @@ const SubSubCategoryClient = ({
                         <p>Товарів не знайдено ;(</p>
                     )}
                 </ul>
+                <div className="pagination-wrapper"
+                     style={{marginTop: '30px', display: 'flex', justifyContent: 'center'}}>
+                    <Pagination
+                        totalPages={pagination.totalPages}
+                        currentPage={pagination.page}
+                    />
+                </div>
             </main>
         </div>
     );

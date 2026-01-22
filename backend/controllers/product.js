@@ -329,6 +329,29 @@ export const searchByCategory = async (req, res) => {
     }
 };
 
+export const searchByCategoryPaginated = async (req, res) => {
+    try {
+        const { categoryid } = req.params;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const skip = (page - 1) * limit;
+
+        const products = await Product.find({ category: categoryid, subCategory: null, subSubCategory: null }).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
+        const total = await Product.countDocuments({ category: categoryid, subCategory: null, subSubCategory: null });
+        res.json({
+            products,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 export const searchBySubCategory = async (req, res) => {
     try {
         const subCategoryId = new mongoose.Types.ObjectId(req.params.subcategoryid);
@@ -341,12 +364,58 @@ export const searchBySubCategory = async (req, res) => {
     }
 };
 
+export const searchBySubCategoryPaginated = async (req, res) => {
+    try {
+        const subCategoryId = new mongoose.Types.ObjectId(req.params.subcategoryid);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const skip = (page - 1) * limit;
+
+        const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null }).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
+        const total = await Product.countDocuments({ subCategory: subCategoryId, subSubCategory: null });
+        res.json({
+            products,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 export const searchBySubSubCategory = async (req, res) => {
     try {
         const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subsubcategoryid);
         console.log('params:', req.params);
         const products = await Product.find({ subSubCategory: subSubCategoryId }).populate('category subCategory subSubCategory');
         res.json(products);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+export const searchBySubSubCategoryPaginated = async (req, res) => {
+    try {
+        const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subsubcategoryid);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const skip = (page - 1) * limit;
+
+        const products = await Product.find({ subSubCategory: subSubCategoryId }).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
+        const total = await Product.countDocuments({  subSubCategory: subSubCategoryId });
+        res.json({
+            products,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
     }

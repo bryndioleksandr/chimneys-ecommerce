@@ -63,3 +63,14 @@ export const searchCategoryProducts = async (categoryId) => {
         throw error;
     }
 }
+
+export const searchCategoryProductsPaginated = async (categoryId, page = 1, limit = 12) => {
+    try {
+        const response = await fetch(`${API_BASE}/products/by-category-paginated/${categoryId}?page=${page}&limit=${limit}`, {credentials: 'include'});
+        if (!response.ok) throw new Error('Failed to fetch products');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return { products: [], pagination: { total: 0, page: 1, totalPages: 1 } };
+    }
+}

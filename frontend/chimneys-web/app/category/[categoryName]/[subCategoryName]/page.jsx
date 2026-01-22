@@ -1,6 +1,10 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { searchOneSubCategoryBySlug, searchSubCategoryProducts } from "../../../../services/subcategory";
+import {
+    searchOneSubCategoryBySlug,
+    searchSubCategoryProducts,
+    searchSubCategoryProductsPaginated
+} from "../../../../services/subcategory";
 import { searchCategoryBySlug } from "../../../../services/category";
 import { searchSubSubCategoriesBySlug } from "../../../../services/subsubcategory";
 import { backUrl } from '../../../../config/config';
@@ -34,8 +38,11 @@ export async function generateMetadata({ params }) {
     };
 }
 
-export default async function SubCategoryPage({ params }) {
+export default async function SubCategoryPage({ params, searchParams }) {
     const { categoryName, subCategoryName } = await params;
+    const resolvedSearchParams = await searchParams;
+    const page = Number(resolvedSearchParams?.page) || 1;
+    const limit = 12;
 
     const [subCatData, parentCatData] = await Promise.all([
         searchOneSubCategoryBySlug(subCategoryName),
@@ -47,15 +54,17 @@ export default async function SubCategoryPage({ params }) {
 
     if (!subCategory) return notFound();
 
-    const [products, filters, subSubCategories] = await Promise.all([
-        searchSubCategoryProducts(subCategory._id),
+    const [productsData, filters, subSubCategories] = await Promise.all([
+        //searchSubCategoryProducts(subCategory._id),
+        searchSubCategoryProductsPaginated(subCategory._id, page, limit),
         getFiltersByCategory(parentCategory?._id, subCategory._id),
         searchSubSubCategoriesBySlug(subCategoryName)
     ]);
 
     return (
         <SubCategoryClient
-            initialProducts={products}
+            initialProducts={productsData.products}
+            pagination={productsData.pagination}
             subCategory={subCategory}
             subSubCategories={subSubCategories}
             filters={filters}

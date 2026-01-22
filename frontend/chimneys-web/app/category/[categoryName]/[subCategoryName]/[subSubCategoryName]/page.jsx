@@ -2,7 +2,11 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { searchCategoryBySlug } from "../../../../../services/category";
 import { searchOneSubCategoryBySlug } from "../../../../../services/subcategory";
-import { searchOneSubSubCategoryBySlug, searchSubSubCategoryProducts } from "../../../../../services/subsubcategory";
+import {
+    searchOneSubSubCategoryBySlug,
+    searchSubSubCategoryProducts,
+    searchSubSubCategoryProductsPaginated
+} from "../../../../../services/subsubcategory";
 import { backUrl } from '../../../../../config/config';
 import SubSubCategoryClient from "../../../../../components/CategoryClient/SubSubCategoryClient";
 
@@ -35,8 +39,12 @@ export async function generateMetadata({ params }) {
     };
 }
 
-export default async function SubSubCategoryPage({ params }) {
+export default async function SubSubCategoryPage({ params, searchParams }) {
     const { categoryName, subCategoryName, subSubCategoryName } = await params;
+
+    const resolvedSearchParams = await searchParams;
+    const page = Number(resolvedSearchParams?.page) || 1;
+    const limit = 12;
 
     const [catData, subCatData, subSubCatData] = await Promise.all([
         searchCategoryBySlug(categoryName),
@@ -50,14 +58,16 @@ export default async function SubSubCategoryPage({ params }) {
 
     if (!subSubCategory) return notFound();
 
-    const [products, filters] = await Promise.all([
-        searchSubSubCategoryProducts(subSubCategory._id),
+    const [productsData, filters] = await Promise.all([
+        //searchSubSubCategoryProducts(subSubCategory._id),
+        searchSubSubCategoryProductsPaginated(subSubCategory._id, page, limit),
         getFiltersByCategory(category?._id, subCategory?._id, subSubCategory._id)
     ]);
 
     return (
         <SubSubCategoryClient
-            initialProducts={products}
+            initialProducts={productsData.products}
+            pagination={productsData.pagination}
             subSubCategory={subSubCategory}
             filters={filters}
             categoryName={categoryName}

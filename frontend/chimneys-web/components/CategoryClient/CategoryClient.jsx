@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, {useState, useEffect} from "react";
+import {useRouter} from "next/navigation";
 import Link from "next/link";
 import ProductCard from "../ProductCard/ProductCard";
 import FiltersPanel from "../FiltersPanel/FiltersPanel";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Pagination from "../Pagination/Pagination";
 import "../../app/category/category.css";
 
 const CategoryClient = ({
                             initialProducts,
+                            pagination,
                             subcategories,
                             category,
                             filtersData
@@ -17,6 +19,10 @@ const CategoryClient = ({
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
     const [sortOption, setSortOption] = useState("default");
+
+    useEffect(() => {
+        setProducts(initialProducts);
+    }, [initialProducts]);
 
     const getSortedProducts = () => {
         let sortedProducts = [...products];
@@ -56,7 +62,7 @@ const CategoryClient = ({
             </aside>
 
             <main className="content-section">
-                <Breadcrumbs items={[{ label: category?.name, href: null }]}/>
+                <Breadcrumbs items={[{label: category?.name, href: null}]}/>
                 <h1>{category.name}</h1>
 
                 <ul className="subcategory-list">
@@ -98,6 +104,13 @@ const CategoryClient = ({
                             <p>Товарів не знайдено ;(</p>
                         )}
                     </ul>
+                    <div className="pagination-wrapper"
+                         style={{marginTop: '30px', display: 'flex', justifyContent: 'center'}}>
+                        <Pagination
+                            totalPages={pagination.totalPages}
+                            currentPage={pagination.page}
+                        />
+                    </div>
                 </div>
             </main>
         </div>

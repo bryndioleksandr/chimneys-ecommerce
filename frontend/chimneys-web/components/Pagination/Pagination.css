@@ -1,0 +1,96 @@
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 40px 0;
+    padding: 10px;
+    font-family: inherit;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 6px;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 6px;
+
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.pagination-btn:not(:disabled):hover {
+    background-color: var(--highlight-color);
+    color: var(--primary-color);
+    border-color: var(--hover-navbtn-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-btn.active {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    border-color: var(--primary-color);
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 66, 79, 0.2);
+}
+
+.pagination-btn.active:hover {
+    background-color: var(--nav-bg);
+    transform: none;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: var(--filter-bg);
+    border-color: transparent;
+}
+
+.pagination-dots {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 20px;
+    height: 40px;
+    padding-bottom: 8px;
+    color: var(--text-color);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+
+.nav-btn, .jump-btn {
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+@media (max-width: 600px) {
+    .pagination-container {
+        gap: 4px;
+    }
+
+    .pagination-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 12px;
+        border-radius: 6px;
+    }
+
+    .jump-btn {
+        display: none;
+    }
+}

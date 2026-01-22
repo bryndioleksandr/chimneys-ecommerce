@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 import Link from "next/link";
 import ProductCard from "../ProductCard/ProductCard";
 import FiltersPanel from "../FiltersPanel/FiltersPanel";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Pagination from "../Pagination/Pagination";
 import "../../app/category/category.css";
 
 const SubCategoryClient = ({
                                initialProducts,
+                               pagination,
                                subCategory,
                                subSubCategories,
                                filters,
@@ -19,6 +21,10 @@ const SubCategoryClient = ({
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
     const [sortOption, setSortOption] = useState("default");
+
+    useEffect(() => {
+        setProducts(initialProducts);
+    }, [initialProducts]);
 
     const getSortedProducts = () => {
         let sorted = [...products];
@@ -58,8 +64,8 @@ const SubCategoryClient = ({
 
             <main className="content-section">
                 <Breadcrumbs items={[
-                    { label: subCategory?.category?.name || "Категорія", href: `/category/${categoryName}` },
-                    { label: subCategory?.name, href: null },
+                    {label: subCategory?.category?.name || "Категорія", href: `/category/${categoryName}`},
+                    {label: subCategory?.name, href: null},
                 ].filter(item => item.label)}/>
 
                 <h1>{subCategory.name}</h1>
@@ -100,7 +106,7 @@ const SubCategoryClient = ({
                 </div>
 
                 <ul className="product-list">
-                    {products.length > 0 ? (
+                    {products?.length > 0 ? (
                         getSortedProducts().map((product) => (
                             <ProductCard key={product._id} product={product}/>
                         ))
@@ -108,6 +114,13 @@ const SubCategoryClient = ({
                         <p>Товарів не знайдено ;(</p>
                     )}
                 </ul>
+                <div className="pagination-wrapper"
+                     style={{marginTop: '30px', display: 'flex', justifyContent: 'center'}}>
+                    <Pagination
+                        totalPages={pagination.totalPages}
+                        currentPage={pagination.page}
+                    />
+                </div>
             </main>
         </div>
     );
