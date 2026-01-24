@@ -16,6 +16,7 @@ import constructorRouter from "./constructorOne.js";
 import constructorTwoRouter from "./constructorTwo.js";
 import infoRouter from "./infoPage.js";
 import exchangeRouter from "./dataExchange.js";
+import debugRouter from "./debug.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -40,5 +41,6 @@ router.use('/data-exchange', exchangeRouter);
 router.get('/health', (req, res) => {
     res.status(200).send('Server is alive');
 });
+router.use('/debug', debugRouter);
 
 export default router;
