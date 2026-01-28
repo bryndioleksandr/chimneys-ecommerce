@@ -41,7 +41,7 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 
 const debugRouter = express.Router();
 
@@ -50,10 +50,10 @@ const __dirname = path.dirname(__filename);
 const TEMP_DIR = path.join(__dirname, '../temp_1c');
 
 if (!fs.existsSync(TEMP_DIR)) {
-    fs.mkdirSync(TEMP_DIR, { recursive: true });
+    fs.mkdirSync(TEMP_DIR, {recursive: true});
 }
 
-debugRouter.use(express.raw({ type: '*/*', limit: '100mb' }));
+debugRouter.use(express.raw({type: '*/*', limit: '100mb'}));
 
 debugRouter.all('/', async (req, res) => {
     const mode = req.query.mode;
@@ -61,6 +61,7 @@ debugRouter.all('/', async (req, res) => {
     const filename = req.query.filename;
 
     console.log(`\n🔔 1C REQUEST: mode=${mode}, type=${type}, filename=${filename}`);
+    console.log('📋 HEADERS:', JSON.stringify(req.headers, null, 2));
 
     try {
 
