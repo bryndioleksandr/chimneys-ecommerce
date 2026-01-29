@@ -517,21 +517,21 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
     }
 });
 //
-// exchangeRouter.get('/delete-last-150', async (req, res) => {
-//     try {
-//         const docs = await Product.find().sort({_id: -1}).limit(2300).select('_id');
-//         const ids = docs.map(d => d._id);
-//
-//         const result = await Product.deleteMany({ _id: { $in: ids } });
-//
-//         res.json({
-//             message: "Deleted successfully",
-//             count: result.deletedCount,
-//             ids: ids
-//         });
-//     } catch (e) {
-//         res.status(500).json({ error: e.message });
-//     }
-// });
+exchangeRouter.get('/delete-last-150', async (req, res) => {
+    try {
+        const docs = await Product.find().sort({_id: -1}).limit(2300).select('_id');
+        const ids = docs.map(d => d._id);
+
+        const result = await Product.deleteMany({ _id: { $in: ids } });
+
+        res.json({
+            message: "Deleted successfully",
+            count: result.deletedCount,
+            ids: ids
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
 
 export default exchangeRouter;

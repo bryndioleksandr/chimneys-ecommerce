@@ -72,8 +72,9 @@ const CategoryClient = ({
                             href={`/category/${category.slug}/${subcategory.slug}`}
                             key={subcategory._id}
                         >
-                            <li onClick={() => handleSubcategoryClick(subcategory)}>
-                                {subcategory.name}
+                            <li className="category-card-incomp" onClick={() => handleSubcategoryClick(subcategory)}>
+                                <img src={subcategory.img} alt={subcategory.name}/>
+                                <p className="p-incomp">{subcategory.name}</p>
                             </li>
                         </Link>
                     ))}

@@ -1,21 +1,21 @@
 'use client';
 
-import { useEffect, useState, useRef } from "react";
+import {useEffect, useState, useRef} from "react";
 import "./HeaderMain.css";
-import { FaHeart, FaShoppingCart, FaUser, FaSearch, FaSignOutAlt, FaClipboardList} from "react-icons/fa";
+import {FaHeart, FaShoppingCart, FaUser, FaSearch, FaSignOutAlt, FaClipboardList} from "react-icons/fa";
 import Link from "next/link";
 import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
 import AuthModal from "@/components/AuthModal/AuthModal";
-import { useSelector, useDispatch } from "@/redux/store";
+import {useSelector, useDispatch} from "@/redux/store";
 import {logoutUser} from "@/services/auth";
-import { logout } from "@/redux/slices/user";
+import {logout} from "@/redux/slices/user";
 import RoleGuard from "@/components/auth/RoleGuard";
-import { backUrl } from '@/config/config';
-import { useRouter } from "next/navigation";
+import {backUrl} from '@/config/config';
+import {useRouter} from "next/navigation";
 import {toast} from "react-toastify";
 import InfoMenu from "@/components/InfoMenu/InfoMenu";
 
-export default function HeaderMain({ categories = [] }) {
+export default function HeaderMain({categories = []}) {
     const [isAuthOpen, setAuthOpen] = useState(false);
     const [role, setRole] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
@@ -46,7 +46,7 @@ export default function HeaderMain({ categories = [] }) {
     }, [user]);
 
     useEffect(() => {
-        if(role === 'admin'){
+        if (role === 'admin') {
             const fetchCount = async () => {
                 const res = await fetch(`${backUrl}/order/by-status/pending`, {credentials: 'include'});
                 const data = await res.json();
@@ -56,7 +56,7 @@ export default function HeaderMain({ categories = [] }) {
         }
     }, [role]);
 
-    const handleLogout = async() => {
+    const handleLogout = async () => {
         await logoutUser();
         dispatch(logout());
         console.log('logout');
@@ -108,22 +108,22 @@ export default function HeaderMain({ categories = [] }) {
 
         router.push("/favorites");
     };
-    if(!mounted) return null;
+    if (!mounted) return null;
     return (
         <div className="headerMain">
             <div className="wrapperLeft">
                 <Link href="/" className="logoLink">
-                <div className="logoDiv">
+                    <div className="logoDiv">
                         <div className="logoImg">
                             <img src="/main_logo.png" alt="Logo"/>
                         </div>
-                </div>
+                    </div>
                 </Link>
                 <div className="info">
-                    <InfoMenu />
+                    <InfoMenu/>
                 </div>
                 <div className="categories">
-                    <CatalogDropdown categories={categories} />
+                    <CatalogDropdown categories={categories}/>
                 </div>
             </div>
 
@@ -195,6 +195,16 @@ export default function HeaderMain({ categories = [] }) {
                         <div className="searchResults">
                             {searchResults.map((product) => (
                                 <Link key={product._id} href={`/product/${product.slug}`}>
+                                    {/*<div*/}
+                                    {/*    className="searchResultItem"*/}
+                                    {/*    onClick={() => {*/}
+                                    {/*        setSearchResults([]);*/}
+                                    {/*        setSearchQuery("");*/}
+                                    {/*    }}*/}
+                                    {/*>*/}
+                                    {/*    <img src={product.images[0]} alt={product.name}/>*/}
+                                    {/*    <span>{product.name}</span>*/}
+                                    {/*</div>*/}
                                     <div
                                         className="searchResultItem"
                                         onClick={() => {
@@ -202,8 +212,20 @@ export default function HeaderMain({ categories = [] }) {
                                             setSearchQuery("");
                                         }}
                                     >
-                                        <img src={product.images[0]} alt={product.name}/>
-                                        <span>{product.name}</span>
+                                        <div className="searchImageWrapper">
+                                            {/* Додаємо перевірку, чи є картинка, або плейсхолдер */}
+                                            <img
+                                                src={product.images?.[0] || '/placeholder.png'}
+                                                alt={product.name}
+                                            />
+                                        </div>
+
+                                        <div className="searchInfoWrapper">
+                                            <span className="productName">{product.name}</span>
+                                            <span className="productPrice">
+                            {product.discountedPrice ?? product.price} ₴
+                        </span>
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
@@ -238,57 +260,57 @@ export default function HeaderMain({ categories = [] }) {
                                     <div className="login">
                                         <FaUser/>
                                         <span>Адмін {user?.name}</span>
-                                </div>
-                            </Link>
-                            <Link href="/all-orders">
-                                <div className="login">
-                                    <div className="icon-with-badge">
-                                    <FaClipboardList />
-                                    {ordersCount > 0 && (
-                                        <span className="badge">{ordersCount}</span>
-                                    )}
                                     </div>
-                                    <span>Усі замовлення</span>
+                                </Link>
+                                <Link href="/all-orders">
+                                    <div className="login">
+                                        <div className="icon-with-badge">
+                                            <FaClipboardList/>
+                                            {ordersCount > 0 && (
+                                                <span className="badge">{ordersCount}</span>
+                                            )}
+                                        </div>
+                                        <span>Усі замовлення</span>
+                                    </div>
+                                </Link>
+                                <div className="sign-out">
+                                    <FaSignOutAlt onClick={handleLogout}/>
+                                    <span>Вийти</span>
                                 </div>
-                            </Link>
-                            <div className="sign-out">
-                                <FaSignOutAlt onClick={handleLogout} />
-                                <span>Вийти</span>
                             </div>
+                        </RoleGuard>
+                    )}
+                    <RoleGuard role="guest">
+                        <div onClick={() => setAuthOpen(true)}>
+                            <div className="login">
+                                <FaUser/>
+                                <span>Увійти</span>
+                            </div>
+                            <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)}/>
                         </div>
                     </RoleGuard>
-                )}
-                <RoleGuard role="guest">
-                    <div onClick={() => setAuthOpen(true)}>
-                        <div className="login">
-                            <FaUser />
-                            <span>Увійти</span>
-                        </div>
-                        <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
-                    </div>
-                </RoleGuard>
-                {mounted && role !== "admin" && (
-                <div className="goods">
-                    <div onClick={handleFavoritesClick} style={{cursor: "pointer"}}>
-                        <FaHeart/>
-                    </div>
-                    <Link href="/cart">
-                        <div className="cart">
-                            <div className="icon-with-badge">
-                                <FaShoppingCart className="cart-icon"/>
-                                {cart.totalQuantity > 0 && (
-                                    <span className="badge">{cart.totalQuantity}</span>
-                                )}
+                    {mounted && role !== "admin" && (
+                        <div className="goods">
+                            <div onClick={handleFavoritesClick} style={{cursor: "pointer"}}>
+                                <FaHeart/>
                             </div>
-                            {cart.totalPrice > 0 && (
-                                <span className="total-price">{cart.totalPrice} грн</span>
-                            )}
-                        </div>
+                            <Link href="/cart">
+                                <div className="cart">
+                                    <div className="icon-with-badge">
+                                        <FaShoppingCart className="cart-icon"/>
+                                        {cart.totalQuantity > 0 && (
+                                            <span className="badge">{cart.totalQuantity}</span>
+                                        )}
+                                    </div>
+                                    {cart.totalPrice > 0 && (
+                                        <span className="total-price">{cart.totalPrice} грн</span>
+                                    )}
+                                </div>
 
-                    </Link>
+                            </Link>
+                        </div>
+                    )}
                 </div>
-                )}
-            </div>
             )}
         </div>
     );
