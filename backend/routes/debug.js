@@ -283,6 +283,35 @@ const syncCategoriesPreview = async(node, depth = 0, context = {}, currentTreePo
                 }
             }
         }
+        else if (depth === 4) {
+            if (newContext.strategy === "combine") {
+                if (newContext.subCategoryId) {
+                    // const slug = makeSlug(groupName);
+                    const slug = makeSlug(groupName + "-" + basId.slice(6));
+
+                    currentTreePointer[groupName] = {
+                        type: "🟢 SUB-SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.subCategoryId,
+                        parentsParentBasId: newContext.categoryId
+                    };
+
+                    const subSubCategory = await SubSubCategory.findOneAndUpdate(
+                        { basGroupId: basId },
+                        {
+                            name: groupName,
+                            slug: slug,
+                            basGroupId: basId,
+                            subCategory: newContext.subCategoryId
+                        },
+                        { upsert: true, new: true }
+                    );
+                    // subsubcategoriesArray.push({basGroupId: basId, subsubcategoryId: subSubCategory._id });
+                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:newContext.subCategoryId, subsubcategorySyncId:subSubCategory._id,}})
+
+                }
+            }
+        }
 
 
         if (group.Группы && group.Группы.Группа) {
