@@ -287,6 +287,7 @@ const syncCategoriesPreview = async(node, depth = 0, context = {}, currentTreePo
 
         if (group.Группы && group.Группы.Группа) {
             await syncCategoriesPreview(group.Группы.Группа, depth + 1, newContext, nextTreePointer);
+            console.log('test groups tree:', objsWithIds);
         }
     }
 };
@@ -385,6 +386,8 @@ debugRouter.all('/', async (req, res) => {
 
                     const found = objsWithIds.find(item => item.groupId === importData.groupBasId);
                     const obj = found?.obj;
+                    console.log('for product #', found?.groupId);
+                    console.log('products cats:', obj);
 
                     return {
                         updateOne: {
