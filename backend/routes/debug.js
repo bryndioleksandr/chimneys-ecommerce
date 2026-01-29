@@ -411,7 +411,13 @@ debugRouter.all('/', async (req, res) => {
                 });
 
                 if (bulkOps.length > 0) {
-                    await Product.bulkWrite(bulkOps);
+                    const result = await Product.bulkWrite(bulkOps);
+                    console.log(`SYNC COMPLETE!`);
+                    console.log(`-------------------------------------------`);
+                    console.log(`🟢 Inserted (New):     ${result.upsertedCount}`);
+                    console.log(`🔵 Modified (Updated): ${result.modifiedCount}`);
+                    console.log(`⚪ Matched (No change): ${result.matchedCount}`);
+                    console.log(`-------------------------------------------`);
                     console.log(`Successfully synced ${bulkOps.length} products!`);
                 }
 
