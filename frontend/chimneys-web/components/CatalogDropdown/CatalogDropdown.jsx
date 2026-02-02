@@ -18,15 +18,19 @@ const CatalogDropdown = ({ categories = [] }) => {
         };
 
         if (isOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("click", handleClickOutside);
+            document.addEventListener("touchstart", handleClickOutside);
         }
 
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+            }
     }, [isOpen]);
 
     return (
         <div className="catalog-container" ref={menuRef}>
-            <button className="catalog-button" onClick={toggleMenu}>
+            <button type="button" className="catalog-button" onClick={toggleMenu}>
                 <span>КАТАЛОГ ТОВАРІВ</span>
                 {isOpen ? <FaTimes/> : <FaBars/>}
             </button>

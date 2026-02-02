@@ -111,3 +111,42 @@
     }
 }
 
+
+@media (max-width: 768px) {
+    .catalog-container {
+        width: 100%;
+        display: block;
+    }
+
+    .catalog-button {
+        width: 100%;
+        text-align: center;
+        border-radius: 0;
+        justify-content: space-between;
+    }
+
+    .catalog-dropdown {
+        position: relative;
+        top: 0;
+
+        box-shadow: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+        animation: mobile-slide-down 0.3s ease-in-out;
+    }
+
+    .catalog-dropdown li {
+        padding: 12px 15px;
+    }
+}
+
+@keyframes mobile-slide-down {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

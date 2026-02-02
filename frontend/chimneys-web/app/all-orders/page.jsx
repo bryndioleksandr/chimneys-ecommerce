@@ -5,6 +5,7 @@ import axios from "axios";
 import {backUrl} from '../../config/config';
 import "./style.css";
 import {toast} from "react-toastify";
+import AdminGuard from "../../components/auth/AdminGuard";
 
 const deliveryWayMap = {
     nova_poshta_branch: "Нова Пошта (відділення)",
@@ -112,140 +113,145 @@ export default function AllOrdersPage() {
     }
 
     return (
-        <section className="all-orders">
-            <div className="container">
-                <h1>Усі замовлення</h1>
+        <AdminGuard>
+            <section className="all-orders">
+                <div className="container">
+                    <h1>Усі замовлення</h1>
 
-                <div className="filters">
-                    <label>
-                        Статус:
-                        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                            <option value="">Усі</option>
-                            {Object.entries(statusLabels).map(([value, label]) => (
-                                <option key={value} value={value}>{label}</option>
-                            ))}
-                        </select>
-                    </label>
+                    <div className="filters">
+                        <label>
+                            Статус:
+                            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                                <option value="">Усі</option>
+                                {Object.entries(statusLabels).map(([value, label]) => (
+                                    <option key={value} value={value}>{label}</option>
+                                ))}
+                            </select>
+                        </label>
 
 
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={showPaidOnly}
-                            onChange={(e) => setShowPaidOnly(e.target.checked)}
-                        />
-                        Лише оплачені
-                    </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={showPaidOnly}
+                                onChange={(e) => setShowPaidOnly(e.target.checked)}
+                            />
+                            Лише оплачені
+                        </label>
 
-                    <label>
-                        Сортувати:
-                        <select value={sortNewestFirst ? "desc" : "asc"}
-                                onChange={(e) => setSortNewestFirst(e.target.value === "desc")}>
-                            <option value="desc">Новіші спочатку</option>
-                            <option value="asc">Старіші спочатку</option>
-                        </select>
-                    </label>
+                        <label>
+                            Сортувати:
+                            <select value={sortNewestFirst ? "desc" : "asc"}
+                                    onChange={(e) => setSortNewestFirst(e.target.value === "desc")}>
+                                <option value="desc">Новіші спочатку</option>
+                                <option value="asc">Старіші спочатку</option>
+                            </select>
+                        </label>
 
-                    <button onClick={resetFilters}>Скинути фільтри</button>
-                </div>
+                        <button onClick={resetFilters}>Скинути фільтри</button>
+                    </div>
 
-                {orders.length === 0 ? (
-                    <p style={{marginTop: "2rem"}}>Немає замовлень для відображення.</p>
-                ) : (
-                    orders.map((order) => (
-                        <div key={order._id} className="order-card">
-                            <h3>
-                                {order.status === "pending"
-                                    ? `НОВЕ замовлення №: ${order.orderNumber || order._id} потребує обробки!`
-                                    : `Замовлення №: ${order.orderNumber || order._id}`}
-                            </h3>
-                            <p><strong>Дата створення:</strong> {new Date(order.createdAt).toLocaleString()}</p>
-                            <p><strong>Користувач:</strong> {order.user?.email || "Гість"}</p>
-                            <p><strong>Номер телефону:</strong> {order.phoneNumber}</p>
-                            {order.firstName ? (
-                                    <>
-                                        <p><strong>Ім'я:</strong> {order.firstName}</p>
-                                        <p><strong>Прізвище:</strong> {order.lastName}</p>
-                                    </>
-                                ) :
-                                null
-                            }
+                    {orders.length === 0 ? (
+                        <p style={{marginTop: "2rem"}}>Немає замовлень для відображення.</p>
+                    ) : (
+                        orders.map((order) => (
+                            <div key={order._id} className="order-card">
+                                <h3>
+                                    {order.status === "pending"
+                                        ? `НОВЕ замовлення №: ${order.orderNumber || order._id} потребує обробки!`
+                                        : `Замовлення №: ${order.orderNumber || order._id}`}
+                                </h3>
+                                <p><strong>Дата створення:</strong> {new Date(order.createdAt).toLocaleString()}</p>
+                                <p><strong>Користувач:</strong> {order.user?.email || "Гість"}</p>
+                                <p><strong>Номер телефону:</strong> {order.phoneNumber}</p>
+                                {order.firstName ? (
+                                        <>
+                                            <p><strong>Ім'я:</strong> {order.firstName}</p>
+                                            <p><strong>Прізвище:</strong> {order.lastName}</p>
+                                        </>
+                                    ) :
+                                    null
+                                }
 
-                            <p><strong>Спосіб
-                                доставки:</strong> {deliveryWayMap[order.deliveryWay] || order.deliveryWay}</p>
-                            <p>
-                                <strong>Адреса:</strong> {`${order.address}, ${order.city}`}
-                            </p>
-                            <p><strong>Спосіб
-                                оплати:</strong> {paymentMethodLabels[order.paymentMethod] || order.paymentMethod}</p>
-                            <p><strong>Оплата:</strong> {order.isPaid ? "✅ Оплачено" : "❌ Не оплачено"}</p>
+                                <p><strong>Спосіб
+                                    доставки:</strong> {deliveryWayMap[order.deliveryWay] || order.deliveryWay}</p>
+                                <p>
+                                    <strong>Адреса:</strong> {`${order.address}, ${order.city}`}
+                                </p>
+                                <p><strong>Спосіб
+                                    оплати:</strong> {paymentMethodLabels[order.paymentMethod] || order.paymentMethod}
+                                </p>
+                                <p><strong>Оплата:</strong> {order.isPaid ? "✅ Оплачено" : "❌ Не оплачено"}</p>
 
-                            <button
-                                onClick={() => toggleExpand(order._id)}
-                                style={{margin: "1rem 0"}}
-                            >
-                                {expandedOrders.includes(order._id) ? "Приховати товари" : "Показати товари"}
-                            </button>
+                                <button
+                                    onClick={() => toggleExpand(order._id)}
+                                    style={{margin: "1rem 0"}}
+                                >
+                                    {expandedOrders.includes(order._id) ? "Приховати товари" : "Показати товари"}
+                                </button>
 
-                            {expandedOrders.includes(order._id) && (
-                                <div className="products-list">
-                                    {order.products.map((item, index) => (
-                                        <div key={index} className="product-item">
-                                            <h5>Товар №{index + 1}</h5>
-                                            <img src={item.product?.images[0]} alt="" width={80} height={80}/>
-                                            <p><strong>Назва:</strong> {item.product?.name || "Невідомо"}</p>
-                                            {item.product?.discountedPrice ? (
-                                                <>
-                                                    <p><strong>Ціна зі
-                                                        знижкою:</strong> {item.product?.discountedPrice} грн</p>
-                                                    <p><strong>Кількість:</strong> {item.quantity}</p>
-                                                    <p>
-                                                        <strong>Разом:</strong> {item.product?.discountedPrice * item.quantity} грн
-                                                    </p>
-                                                </>) : (
-                                                <>
-                                                    <p><strong>Ціна:</strong> {item.product?.price} грн</p>
-                                                    <p><strong>Кількість:</strong> {item.quantity}</p>
-                                                    <p><strong>Разом:</strong> {item.product?.price * item.quantity} грн
-                                                    </p>
-                                                </>
-                                            )}
+                                {expandedOrders.includes(order._id) && (
+                                    <div className="products-list">
+                                        {order.products.map((item, index) => (
+                                            <div key={index} className="product-item">
+                                                <h5>Товар №{index + 1}</h5>
+                                                <img src={item.product?.images[0]} alt="" width={80} height={80}/>
+                                                <p><strong>Назва:</strong> {item.product?.name || "Невідомо"}</p>
+                                                {item.product?.discountedPrice ? (
+                                                    <>
+                                                        <p><strong>Ціна зі
+                                                            знижкою:</strong> {item.product?.discountedPrice} грн</p>
+                                                        <p><strong>Кількість:</strong> {item.quantity}</p>
+                                                        <p>
+                                                            <strong>Разом:</strong> {item.product?.discountedPrice * item.quantity} грн
+                                                        </p>
+                                                    </>) : (
+                                                    <>
+                                                        <p><strong>Ціна:</strong> {item.product?.price} грн</p>
+                                                        <p><strong>Кількість:</strong> {item.quantity}</p>
+                                                        <p>
+                                                            <strong>Разом:</strong> {item.product?.price * item.quantity} грн
+                                                        </p>
+                                                    </>
+                                                )}
 
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            <p><strong>Загальна сума замовлення:</strong> {order.totalPrice} грн</p>
-
-                            <div className="status-control">
-                                <p><strong>Поточний статус:</strong> {statusLabels[order.status] || order.status}</p>
-                                <div className="wrap-space">
-                                    <div className="manage-status">
-                                        <select
-                                            value={order.status}
-                                            onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                                        >
-                                            {Object.entries(statusLabels).map(([value, label]) => (
-                                                <option key={value} value={value}>{label}</option>
-                                            ))}
-                                        </select>
-                                        <button onClick={() => updateStatus(order._id, order.status)}>
-                                            Зберегти
-                                        </button>
+                                            </div>
+                                        ))}
                                     </div>
-                                    <div className="delete-order">
-                                        <button onClick={() => handleOrderDelete(order._id)}>
-                                            Видалити ❌
-                                        </button>
+                                )}
+
+                                <p><strong>Загальна сума замовлення:</strong> {order.totalPrice} грн</p>
+
+                                <div className="status-control">
+                                    <p><strong>Поточний статус:</strong> {statusLabels[order.status] || order.status}
+                                    </p>
+                                    <div className="wrap-space">
+                                        <div className="manage-status">
+                                            <select
+                                                value={order.status}
+                                                onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                                            >
+                                                {Object.entries(statusLabels).map(([value, label]) => (
+                                                    <option key={value} value={value}>{label}</option>
+                                                ))}
+                                            </select>
+                                            <button onClick={() => updateStatus(order._id, order.status)}>
+                                                Зберегти
+                                            </button>
+                                        </div>
+                                        <div className="delete-order">
+                                            <button onClick={() => handleOrderDelete(order._id)}>
+                                                Видалити ❌
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
-                )}
-            </div>
-        </section>
+                        ))
+                    )}
+                </div>
+            </section>
+        </AdminGuard>
     )
         ;
 }

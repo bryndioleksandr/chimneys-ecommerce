@@ -7,8 +7,9 @@ import ProductForm from "../../components/modals/ProductCreate";
 import SubcategoryForm from "../../components/modals/SubcategoryCreate";
 import SubsubcategoryForm from "../../components/modals/Subsubcategory";
 import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
-import { backUrl as API_BASE } from '../../config/config';
+import {backUrl as API_BASE} from '../../config/config';
 import './style.css';
+import AdminGuard from "../../components/auth/AdminGuard";
 
 export default function AdminPage() {
     const [isCategoryFormVisible, setCategoryFormVisible] = useState(false);
@@ -37,7 +38,7 @@ export default function AdminPage() {
         for (let i = 0; i < selectedFiles.length; i++) {
             formData.append('file', selectedFiles[i]);
         }
-        try{
+        try {
             const response = await axios.post(`${API_BASE}/data-exchange/`, formData, {withCredentials: true});
             console.log('fetch data is:', response);
         } catch (error) {
@@ -46,52 +47,54 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="admin-wrapper">
-            <h1>Адмінка магазину</h1>
-            <div className="fetch-bas">
-                <input type="file" id="xmlFile" accept=".xml" multiple onChange={handleFileChange}/>
-                <button onClick={handleFetchBasData}>Send</button>
-            </div>
-            <p>Додай новий товар або змінюй існуючі!</p>
-
-            <div className="admin-panel">
-                <button onClick={handleCategoryFormToggle}>Додати категорію</button>
-                <button onClick={handleProductFormToggle}>Додати товар</button>
-                <button onClick={handleSubcategoryFormToggle}>Додати підкатегорію</button>
-                <button onClick={handleSubsubcategoryFormToggle}>Додати підпідкатегорію</button>
-            </div>
-            <div className="panel-update">
-                <p>Оновити або видалити</p>
-                <div className="update-btns">
-                    <a href='/admin/update/category'>Категорії товарів</a>
-                    <a href='/admin/update/subcategory'>Підкатегорії товарів</a>
-                    <a href='/admin/update/subsubcategory'>Підпідкатегорії товарів</a>
+        <AdminGuard>
+            <div className="admin-wrapper">
+                <h1>Адмінка магазину</h1>
+                <div className="fetch-bas">
+                    <input type="file" id="xmlFile" accept=".xml" multiple onChange={handleFileChange}/>
+                    <button onClick={handleFetchBasData}>Send</button>
                 </div>
-                <div className="manage-banners">
-                    <a href="/admin/banner-manager">Змінити основні баннери вебсайту</a>
-                </div>
-            </div>
+                <p>Додай новий товар або змінюй існуючі!</p>
 
-            {isCategoryFormVisible && (
-                <ModalWrapper onClose={handleCategoryFormToggle}>
-                    <CategoryForm />
-                </ModalWrapper>
-            )}
-            {isProductFormVisible && (
-                <ModalWrapper onClose={handleProductFormToggle}>
-                    <ProductForm />
-                </ModalWrapper>
-            )}
-            {isSubcategoryFormVisible && (
-                <ModalWrapper onClose={handleSubcategoryFormToggle}>
-                    <SubcategoryForm />
-                </ModalWrapper>
-            )}
-            {isSubsubcategoryFormVisible && (
-                <ModalWrapper onClose={handleSubsubcategoryFormToggle}>
-                    <SubsubcategoryForm />
-                </ModalWrapper>
-            )}
-        </div>
+                <div className="admin-panel">
+                    <button onClick={handleCategoryFormToggle}>Додати категорію</button>
+                    <button onClick={handleProductFormToggle}>Додати товар</button>
+                    <button onClick={handleSubcategoryFormToggle}>Додати підкатегорію</button>
+                    <button onClick={handleSubsubcategoryFormToggle}>Додати підпідкатегорію</button>
+                </div>
+                <div className="panel-update">
+                    <p>Оновити або видалити</p>
+                    <div className="update-btns">
+                        <a href='/admin/update/category'>Категорії товарів</a>
+                        <a href='/admin/update/subcategory'>Підкатегорії товарів</a>
+                        <a href='/admin/update/subsubcategory'>Підпідкатегорії товарів</a>
+                    </div>
+                    <div className="manage-banners">
+                        <a href="/admin/banner-manager">Змінити основні баннери вебсайту</a>
+                    </div>
+                </div>
+
+                {isCategoryFormVisible && (
+                    <ModalWrapper onClose={handleCategoryFormToggle}>
+                        <CategoryForm/>
+                    </ModalWrapper>
+                )}
+                {isProductFormVisible && (
+                    <ModalWrapper onClose={handleProductFormToggle}>
+                        <ProductForm/>
+                    </ModalWrapper>
+                )}
+                {isSubcategoryFormVisible && (
+                    <ModalWrapper onClose={handleSubcategoryFormToggle}>
+                        <SubcategoryForm/>
+                    </ModalWrapper>
+                )}
+                {isSubsubcategoryFormVisible && (
+                    <ModalWrapper onClose={handleSubsubcategoryFormToggle}>
+                        <SubsubcategoryForm/>
+                    </ModalWrapper>
+                )}
+            </div>
+        </AdminGuard>
     );
 }
