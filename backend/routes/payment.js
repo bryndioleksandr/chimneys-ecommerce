@@ -147,7 +147,6 @@ liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), 
                 order.isPaid = true;
                 order.paidAt = new Date();
 
-                console.log('success trying to send email');
                 if(order.email || order.user) await sendInfoEmailResend({
                     to: order.email || order.user.email,
                     subject: "Оплату отримано!",

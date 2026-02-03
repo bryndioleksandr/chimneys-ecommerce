@@ -166,11 +166,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-direction: row;
     gap: 6px;
     font-size: 14px;
     cursor: pointer;
     color: #444;
     text-align: left;
+    width: 100%;
 }
 .show-password input[type="checkbox"] {
     width: 16px;

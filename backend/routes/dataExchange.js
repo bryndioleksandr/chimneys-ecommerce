@@ -396,7 +396,6 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
             return res.status(400).json({ error: 'No files uploaded' });
         }
 
-        console.log(`start processing ${req.files.length} files`);
 
         const importFile = req.files.find(f => f.originalname.includes("import"));
         const offersFile = req.files.find(f => f.originalname.includes("offers"));
@@ -419,12 +418,10 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
         const importDataMap = createImportDataMap(productsImport, groupMap);
 
         if (groupsRoot.Группа) {
-            console.log("generating tree of categories");
 
             await syncCategoriesPreview(groupsRoot.Группа);
         }
 
-        console.log('map of groups:', groupMap);
         const offersList = asArray(resultOffers.КоммерческаяИнформация?.ПакетПредложений?.Предложения?.Предложение);
 
         console.log(`processing ${offersList.length} products`);
@@ -472,8 +469,6 @@ exchangeRouter.post('/', upload.any(), async (req, res) => {
             const found = objsWithIds.find(item => item.groupId === importData.groupBasId);
 
             const obj = found?.obj;
-            console.log('for product #', found?.groupId);
-            console.log('products cats:', obj);
 
             return {
                 updateOne: {
