@@ -51,7 +51,8 @@ const CategoryClient = ({
 
     return (
         <div className="category-page-wrapper">
-            <aside className="sidebar-panel">
+            {products.length > 0 &&  (
+                <aside className="sidebar-panel">
                 <FiltersPanel
                     filters={filtersData}
                     onFilter={setProducts}
@@ -59,7 +60,8 @@ const CategoryClient = ({
                     subCategoryId={null}
                     subSubCategoryId={null}
                 />
-            </aside>
+            </aside>)}
+
 
             <main className="content-section">
                 <Breadcrumbs items={[{label: category?.name, href: null}]}/>
