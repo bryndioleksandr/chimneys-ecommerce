@@ -120,7 +120,7 @@ export default function HeaderMain({categories = []}) {
                     </div>
                 </Link>
                 <div className="info">
-                    <InfoMenu/>
+                    <InfoMenu categories={categories}/>
                 </div>
                 <div className="categories">
                     <CatalogDropdown categories={categories}/>

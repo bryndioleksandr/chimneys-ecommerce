@@ -17,7 +17,7 @@ import {backUrl} from '../../config/config';
 import Link from "next/link";
 import CatalogDropdown from "@/components/CatalogDropdown/CatalogDropdown";
 
-const InfoMenu = () => {
+const InfoMenu = ({ categories = [] }) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
     const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -51,7 +51,7 @@ const InfoMenu = () => {
                 <>
                     <ul className="info-dropdown">
                         <li className="catalog-dropdown-li">
-                            <CatalogDropdown/>
+                            <CatalogDropdown categories={categories}/>
                         </li>
                         <li className="info-item">
                             <a href="/about">
