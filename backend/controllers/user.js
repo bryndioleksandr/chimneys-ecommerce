@@ -87,7 +87,6 @@ export const userRegister = async (req, res) => {
 
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-        console.log('code created');
         const newUser = new User({
             name,
             surname,
@@ -113,7 +112,6 @@ export const userRegister = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
     try {
-        console.log('refreshing token back');
 
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) {

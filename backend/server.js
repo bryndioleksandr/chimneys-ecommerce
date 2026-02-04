@@ -38,9 +38,6 @@ const initConstructor = async () => {
     if (!existing) {
         const constructor = new ConstructorOne();
         await constructor.save();
-        console.log("✅ ConstructorOne документ створено");
-    } else {
-        console.log("ℹ️ ConstructorOne вже існує");
     }
 };
 

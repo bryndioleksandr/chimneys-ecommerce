@@ -61,8 +61,6 @@ export const createProduct = async (req, res) => {
             if (!req.body.subCategory) req.body.subCategory = null;
             if (!req.body.subSubCategory) req.body.subSubCategory = null;
             const productData = req.body;
-            console.log('images received:', req.body.images);
-            console.log('files received:', req.files);
             productData.slug = slugify(productData.name, { lower: true });
             let uploadedImages = [];
 
@@ -87,7 +85,6 @@ export const createProduct = async (req, res) => {
             const discount = parseFloat(productData.discount || 0);
             productData.discountedPrice = Math.round(price - (price * discount / 100));
             const groupId = generateSmartGroupId(productData.slug);
-            console.log('group id is: ', groupId);
             const newProduct = new Product({
                 ...productData,
                 groupId: groupId,
@@ -321,7 +318,6 @@ export const deleteProduct = async (req, res) => {
 
 export const searchByCategory = async (req, res) => {
     try {
-        console.log('params:', req.params);
         const products = await Product.find({ category: req.params.categoryid, subCategory: null, subSubCategory: null }).populate('category subCategory subSubCategory');
         res.json(products);
     } catch (err) {
@@ -355,11 +351,9 @@ export const searchByCategoryPaginated = async (req, res) => {
 export const searchBySubCategory = async (req, res) => {
     try {
         const subCategoryId = new mongoose.Types.ObjectId(req.params.subcategoryid);
-        console.log('params search products subCat:', req.params);
         const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null }).populate('category subCategory subSubCategory');
         res.json(products);
     } catch (err){
-        console.log('error is', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
@@ -390,7 +384,6 @@ export const searchBySubCategoryPaginated = async (req, res) => {
 export const searchBySubSubCategory = async (req, res) => {
     try {
         const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subsubcategoryid);
-        console.log('params:', req.params);
         const products = await Product.find({ subSubCategory: subSubCategoryId }).populate('category subCategory subSubCategory');
         res.json(products);
     } catch (err) {

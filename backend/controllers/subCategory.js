@@ -140,7 +140,6 @@ export const removeSubCategory = async (req, res) => {
 
 export const findSubCategoryByName  = async (req, res) => {
     try {
-        console.log('we are in find subcategories, name is ', name);
         const { name } = req.query;
         if (!name) return res.status(400).json({ msg: "Name is required" });
 
@@ -159,12 +158,10 @@ export const findSubCategoryBySlug  = async (req, res) => {
     try {
         const { slug } = req.query;
         if (!slug) return res.status(400).json({ msg: "slug is required" });
-        console.log('slug find subcat: ', slug);
 
         const category = await Category.findOne({ slug: slug });
         if (!category) return res.status(404).json({ msg: "Category not found" });
 
-        console.log('_id isisis', category._id);
         const subCategories = await SubCategory.find({ category: category._id }).populate("category");
         res.status(200).json(subCategories);
     } catch (err) {

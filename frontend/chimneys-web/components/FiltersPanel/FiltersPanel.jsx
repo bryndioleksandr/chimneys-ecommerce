@@ -39,6 +39,16 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
     }, [filters.price]);
 
     useEffect(() => {
+        const handleResizePanel = () => {
+            if(window.innerWidth < 574) setIsPanelCollapsed(true);
+            else setIsPanelCollapsed(false);
+        }
+        handleResizePanel();
+        window.addEventListener('resize', handleResizePanel);
+        return () => window.removeEventListener('resize', handleResizePanel);
+    }, []);
+
+    useEffect(() => {
         if (!filters.stock) return;
 
         const hasInStock = filters.stock.some(v => Number(v) > 0);
