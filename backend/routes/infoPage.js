@@ -6,6 +6,7 @@ import {
     updatePage,
     deletePage
 } from "../controllers/infoPage.js";
+import {isAdmin, verifyToken} from "../middleware/auth.js";
 
 const infoRouter = express.Router();
 
@@ -14,7 +15,7 @@ infoRouter.get("/", getAllPages);
 infoRouter.get("/:slug", getPageBySlug);
 
 infoRouter.post("/", createPage);
-infoRouter.put("/:slug", updatePage);
-infoRouter.delete("/:slug", deletePage);
+infoRouter.put("/:slug", verifyToken, isAdmin, updatePage);
+infoRouter.delete("/:slug", verifyToken, isAdmin, deletePage);
 
 export default infoRouter;

@@ -135,7 +135,8 @@ export const refreshToken = async (req, res) => {
             res.cookie('accessToken', accessToken, {
                 httpOnly: true,
                 secure: false,
-                sameSite: 'lax'
+                sameSite: 'lax',
+                path: '/',
             });
 
             return res.status(200).json({ msg: 'Token updated successful' });
@@ -177,8 +178,6 @@ export const userLogin = async (req, res) => {
                 surname: user.surname,
                 email: user.email,
                 role: user.role,
-                accessToken,
-                refreshToken,
             }
         });
     } catch (err) {

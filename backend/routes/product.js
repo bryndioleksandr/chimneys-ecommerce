@@ -17,14 +17,14 @@ import {
     updateRating,
     updateReviews
 } from "../controllers/product.js";
-import {verifyToken} from "../middleware/auth.js";
+import {isAdmin, verifyToken} from "../middleware/auth.js";
 import cookieParser from "cookie-parser";
 
 const productRouter = express.Router();
 
-productRouter.get('/products', cookieParser(), getProducts);
-productRouter.post('/product', createProduct);
-productRouter.post('/product-clone', cloneProduct);
+productRouter.get('/products', getProducts);
+productRouter.post('/product', verifyToken, isAdmin, createProduct);
+productRouter.post('/product-clone', verifyToken, isAdmin, cloneProduct);
 productRouter.get('/by-category/:categoryid', searchByCategory);
 productRouter.get('/by-subcategory/:subcategoryid', searchBySubCategory);
 productRouter.get('/by-subsubcategory/:subsubcategoryid', searchBySubSubCategory);
@@ -33,8 +33,8 @@ productRouter.get('/search', searchProducts);
 productRouter.patch('/update-rating/:productId/:rating', updateRating);
 productRouter.patch('/update-reviews/:productId', updateReviews);
 productRouter.get('/filtered-products', getFilteredProducts);
-productRouter.put('/update/:productId', updateProduct);
-productRouter.delete('/delete/:productId', deleteProduct);
+productRouter.put('/update/:productId', verifyToken, isAdmin, updateProduct);
+productRouter.delete('/delete/:productId', verifyToken, isAdmin, deleteProduct);
 productRouter.get('/popular', getPopularProducts);
 productRouter.get('/for-sale', getHotProducts);
 productRouter.get('/newest', getNewestProducts);

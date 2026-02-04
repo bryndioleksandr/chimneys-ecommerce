@@ -8,16 +8,16 @@ import {
     searchBySlug,
     updateCategory
 } from "../controllers/category.js";
-import {verifyToken} from "../middleware/auth.js";
+import {isAdmin, verifyToken} from "../middleware/auth.js";
 
 const categoryRouter = express.Router();
 const jsonParser = express.json();
 
 categoryRouter.get('/categories', getCategories);
-categoryRouter.post('/category', jsonParser, createCategory);
+categoryRouter.post('/category', jsonParser, verifyToken, isAdmin, createCategory);
 categoryRouter.get('/by-name/:name', searchByName);
 categoryRouter.get('/by-slug/:slug', searchBySlug);
-categoryRouter.patch('/update/:id', updateCategory);
-categoryRouter.delete('/:id', removeCategory);
+categoryRouter.patch('/update/:id', verifyToken, isAdmin, updateCategory);
+categoryRouter.delete('/:id', verifyToken, isAdmin, removeCategory);
 
 export default categoryRouter;

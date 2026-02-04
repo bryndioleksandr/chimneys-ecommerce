@@ -13,7 +13,7 @@ export default function AdminGuard({ children }) {
     useEffect(() => {
         if (isLoading) return;
 
-        if (!user || user.role !== 'user') {
+        if (!user || user.role !== 'admin') {
             router.push('/');
         } else {
             setIsAuthorized(true);

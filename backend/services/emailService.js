@@ -41,12 +41,17 @@ const transporter = nodemailer.createTransport({
 
 export const sendVerificationEmail = async (to, code) => {
     console.log('trying to send an email');
-    await transporter.sendMail({
-        from: `"Chimney Store" <${process.env.EMAIL_FROM}>`,
-        to,
-        subject: 'Email Verification Code',
-        html: `<p>Код для підвтердження електронної пошти: <b>${code}</b></p>`
-    });
+    try {
+        await transporter.sendMail({
+            from: `"Chimney Store" <${process.env.EMAIL_FROM}>`,
+            to,
+            subject: 'Email Verification Code',
+            html: `<p>Код для підвтердження електронної пошти: <b>${code}</b></p>`
+        });
+    }
+    catch (error) {
+        console.error('Email error:', error);
+    }
     console.log('after email send');
 };
 

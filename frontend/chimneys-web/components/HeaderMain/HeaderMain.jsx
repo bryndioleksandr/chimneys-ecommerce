@@ -237,6 +237,27 @@ export default function HeaderMain({categories = []}) {
 
             {mounted && (
                 <div className="headerActions">
+                    {mounted && role !== "admin" && (
+                        <div className="goods">
+                            <div onClick={handleFavoritesClick} style={{cursor: "pointer"}}>
+                                <FaHeart/>
+                            </div>
+                            <Link href="/cart">
+                                <div className="cart">
+                                    <div className="icon-with-badge">
+                                        <FaShoppingCart className="cart-icon"/>
+                                        {cart.totalQuantity > 0 && (
+                                            <span className="badge">{cart.totalQuantity}</span>
+                                        )}
+                                    </div>
+                                    {cart.totalPrice > 0 && (
+                                        <span className="total-price">{cart.totalPrice} грн</span>
+                                    )}
+                                </div>
+
+                            </Link>
+                        </div>
+                    )}
                     {mounted && (
                         <RoleGuard role="user">
                             <>
@@ -289,27 +310,27 @@ export default function HeaderMain({categories = []}) {
                             <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)}/>
                         </div>
                     </RoleGuard>
-                    {mounted && role !== "admin" && (
-                        <div className="goods">
-                            <div onClick={handleFavoritesClick} style={{cursor: "pointer"}}>
-                                <FaHeart/>
-                            </div>
-                            <Link href="/cart">
-                                <div className="cart">
-                                    <div className="icon-with-badge">
-                                        <FaShoppingCart className="cart-icon"/>
-                                        {cart.totalQuantity > 0 && (
-                                            <span className="badge">{cart.totalQuantity}</span>
-                                        )}
-                                    </div>
-                                    {cart.totalPrice > 0 && (
-                                        <span className="total-price">{cart.totalPrice} грн</span>
-                                    )}
-                                </div>
+                    {/*{mounted && role !== "admin" && (*/}
+                    {/*    <div className="goods">*/}
+                    {/*        <div onClick={handleFavoritesClick} style={{cursor: "pointer"}}>*/}
+                    {/*            <FaHeart/>*/}
+                    {/*        </div>*/}
+                    {/*        <Link href="/cart">*/}
+                    {/*            <div className="cart">*/}
+                    {/*                <div className="icon-with-badge">*/}
+                    {/*                    <FaShoppingCart className="cart-icon"/>*/}
+                    {/*                    {cart.totalQuantity > 0 && (*/}
+                    {/*                        <span className="badge">{cart.totalQuantity}</span>*/}
+                    {/*                    )}*/}
+                    {/*                </div>*/}
+                    {/*                {cart.totalPrice > 0 && (*/}
+                    {/*                    <span className="total-price">{cart.totalPrice} грн</span>*/}
+                    {/*                )}*/}
+                    {/*            </div>*/}
 
-                            </Link>
-                        </div>
-                    )}
+                    {/*        </Link>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
             )}
         </div>

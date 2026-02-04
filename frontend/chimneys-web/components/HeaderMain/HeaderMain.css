@@ -338,6 +338,28 @@ h3 {
     display: none;
 }
 
+@media (min-width: 769px) {
+    .headerActions {
+        flex-direction: row;
+        gap:40px;
+    }
+    .goods {
+        gap:20px;
+
+    }
+    .log-in-out {
+        gap:20px;
+
+    }
+    .login {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .sign-out {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
 
 @media (max-width: 768px) {
     .headerMain {
@@ -412,6 +434,34 @@ h3 {
     .wrapperLeft {
         flex-direction: column;
     }
+
+    .headerActions {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap:40px;
+        padding: 0 15px;
+    }
+    .goods {
+        justify-content: start;
+        gap:20px;
+        width: 100%;
+
+    }
+    .log-in-out {
+        justify-content: end;
+        width: 100%;
+        gap:20px;
+
+    }
+    .login {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .sign-out {
+        flex-direction: column;
+        justify-content: space-between;
+    }
 }
 
 @media (max-width: 480px) {
@@ -448,11 +498,11 @@ h3 {
         justify-content: flex-end;
     }
 
-    .headerActions {
-        flex-direction: row;
-        justify-content: space-around;
-        padding: 0 10px;
-    }
+    /*.headerActions {*/
+    /*    flex-direction: row;*/
+    /*    justify-content: space-around;*/
+    /*    padding: 0 10px;*/
+    /*}*/
 
     .headerSearchBar {
         flex-direction: row;
@@ -470,6 +520,36 @@ h3 {
     .categories{
         display:none;
     }
+
+
+    .headerActions {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap:40px;
+        padding: 0 15px;
+    }
+    .goods {
+        justify-content: start;
+        gap:20px;
+        width: 100%;
+
+    }
+    .log-in-out {
+        justify-content: end;
+        width: 100%;
+        gap:20px;
+
+    }
+    .login {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .sign-out {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
 }
 
 .headerMain {

@@ -1,38 +1,32 @@
 import { backUrl } from './config/config';
+import {logout} from "@/redux/slices/user";
+import store from "@/redux/store";
 
 export const refreshToken = async () => {
-    console.log("🔄 Refresh token started...");
-
-    return new Promise((resolve, reject) => {
-        fetch(`${backUrl}/user/refreshToken`, {
+    try {
+        const response = await fetch(`${backUrl}/user/refreshToken`, {
             method: 'POST',
             credentials: 'include',
-        })
-            .then(async response => {
-                if (response.status === 401) {
-                    console.log("ℹ️ No refresh token, probably not logged in.");
-                    resolve();
-                    return;
-                }
+        });
 
-                const data = await response.json();
-                console.log("🔁 Refresh token response:", data);
+        if (!response.ok) {
+            const currentUser = store.getState().user.user;
 
-                if (data.msg === 'Token updated successful') {
-                    resolve();
-                } else if (data.message === 'Invalid access token') {
-                    localStorage.clear();
-                    location.reload();
-                } else if (data.message === 'Authorization error') {
-                    reject("Authorization error");
-                } else {
-                    reject("Unknown refresh response");
-                }
-            })
-            .catch(err => {
-                console.error("⛔ Refresh token error:", err);
-                reject(err);
-            });
-    });
+
+            if (currentUser && response.status !== 401) {
+
+                console.log("end the session");
+                store.dispatch(logout());
+                localStorage.removeItem("user");
+            }
+            return;
+        }
+
+        const data = await response.json();
+        if (data.msg === 'Token updated successful') {
+            console.log("token is updated");
+        }
+    } catch (err) {
+        console.error("network error:", err);
+    }
 };
-

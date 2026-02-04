@@ -15,10 +15,10 @@ const jsonParser = express.json();
 orderRouter.post("/make", createOrder);
 orderRouter.get("/user/:userId", getOrdersByUser);
 orderRouter.get("/all-orders", verifyToken, isAdmin, getOrders);
-orderRouter.get("/by-status/:status", getOrdersByStatus);
-orderRouter.get("/paid-orders/:isPaid", getPaidOrders);
+orderRouter.get("/by-status/:status", verifyToken, isAdmin, getOrdersByStatus);
+orderRouter.get("/paid-orders/:isPaid", verifyToken, isAdmin, getPaidOrders);
 orderRouter.patch("/update-status/:orderId", updateOrderStatus);
-orderRouter.delete("/:orderId", deleteOrder);
+orderRouter.delete("/:orderId", verifyToken, isAdmin, deleteOrder);
 
 
 export default orderRouter;
