@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import './FiltersPanel.css';
+import styles from './FiltersPanel.module.css';
 import axios from "axios";
 import { backUrl } from '../../config/config';
 
@@ -169,161 +169,362 @@ const FiltersPanel = ({ filters = {}, onFilter, categoryId, subCategoryId, subSu
 
 
     return (
-        <div className="filters-panel">
-            <div className="filters-panel-header">
+        <div className={styles["filters-panel"]}>
+            <div className={styles["filters-panel-header"]}>
                 <h3>Фільтри</h3>
                 <button
                     onClick={() => setIsPanelCollapsed(prev => !prev)}
-                    className="toggle-filters-button"
+                    className={styles["toggle-filters-button"]}
                 >
                     {isPanelCollapsed ? "Показати фільтри ▼" : "Сховати фільтри ▲"}
                 </button>
             </div>
+
             {!isPanelCollapsed && (
                 <>
-            <button onClick={handleResetFilters} className="reset-button">Скинути фільтри</button>
-            {filters.stock && (
-                <div className="filter-group">
-                    <div
-                        className="filter-header"
-                        onClick={() => handleToggleCollapse("stock")}
-                        style={{cursor: "pointer"}}
+                    <button
+                        onClick={handleResetFilters}
+                        className={styles["reset-button"]}
                     >
-                        <strong>{FILTER_LABELS["stock"]}</strong>{" "}
-                        {collapsed["stock"] ? "▶" : "▼"}
-                    </div>
+                        Скинути фільтри
+                    </button>
 
-                    {!collapsed["stock"] && (
-                        <div className="filter-options">
-                            {isInStock && (
-                                <div className="filter-option">
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            value={true}
-                                            checked={selectedFilters["stock"]?.includes(true) || false}
-                                            onChange={() => handleCheckboxChange("stock", true)}
-                                        />
-                                        так
-                                    </label>
-                                </div>
-                            )}
-                            {isOutStock && (
-                                <div className="filter-option">
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            value={false}
-                                            checked={selectedFilters["stock"]?.includes(false) || false}
-                                            onChange={() => handleCheckboxChange("stock", false)}
-                                        />
-                                        ні
-                                    </label>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
+                    {filters.stock && (
+                        <div className={styles["filter-group"]}>
+                            <div
+                                className={styles["filter-header"]}
+                                onClick={() => handleToggleCollapse("stock")}
+                                style={{ cursor: "pointer" }}
+                            >
+                                <strong>{FILTER_LABELS["stock"]}</strong>{" "}
+                                {collapsed["stock"] ? "▶" : "▼"}
+                            </div>
 
-            {Object.entries(filters).map(([key, values]) => {
-                if (key === "price" || key === "stock") return null;
-
-                return (
-                    <div key={key} className="filter-group">
-                        <div className="filter-header" onClick={() => handleToggleCollapse(key)}
-                             style={{cursor: "pointer"}}>
-                            <strong>{FILTER_LABELS[key] || key}</strong> {collapsed[key] ? "▶" : "▼"}
-                        </div>
-
-                        {!collapsed[key] && (
-                            <div className="filter-options">
-                                {values.map((v, idx) => {
-                                    let displayValue = v;
-
-                                    if (key === "hasMesh" || key === "revision") {
-                                        displayValue = v === true || v === "true" ? "так" : "ні";
-                                    }
-
-                                    if (key === "stock") {
-                                        Number(v) > 0 ? setIsInStock(true) : setIsOutStock(true);
-                                    }
-
-                                    return (
-                                        <div key={idx} className="filter-option">
+                            {!collapsed["stock"] && (
+                                <div className={styles["filter-options"]}>
+                                    {isInStock && (
+                                        <div className={styles["filter-option"]}>
                                             <label>
                                                 <input
                                                     type="checkbox"
-                                                    value={v}
-                                                    checked={selectedFilters[key]?.includes(v) || false}
-                                                    onChange={() => handleCheckboxChange(key, v)}
+                                                    value={true}
+                                                    checked={
+                                                        selectedFilters["stock"]?.includes(true) || false
+                                                    }
+                                                    onChange={() =>
+                                                        handleCheckboxChange("stock", true)
+                                                    }
                                                 />
-                                                {displayValue}
+                                                так
                                             </label>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-                );
-            })}
+                                    )}
 
-            {filters.price?.length > 0 && (
-                <div className="filter-group">
-                    <div className="filter-header" onClick={() => handleToggleCollapse("price")}
-                         style={{cursor: "pointer"}}>
-                        <strong>Ціна(₴)</strong> {collapsed.price ? "▶" : "▼"}
-                    </div>
-
-                    {!collapsed.price && (
-                        <div className="price-filter">
-                            <div className="price-inputs">
-                                <label>
-                                    Від: <input
-                                    type="number"
-                                    value={selectedPrice.min}
-                                    min={priceRange.min}
-                                    max={selectedPrice.max}
-                                    onChange={(e) => handlePriceChange("min", e.target.value)}
-                                />
-                                </label>
-                                <label>
-                                    До: <input
-                                    type="number"
-                                    value={selectedPrice.max}
-                                    min={selectedPrice.min}
-                                    max={priceRange.max}
-                                    onChange={(e) => handlePriceChange("max", e.target.value)}
-                                />
-                                </label>
-                            </div>
-
-                            <div className="price-sliders">
-                                <input
-                                    type="range"
-                                    min={priceRange.min}
-                                    max={priceRange.max}
-                                    value={selectedPrice.min}
-                                    onChange={(e) => handlePriceChange("min", e.target.value)}
-                                />
-                                <input
-                                    type="range"
-                                    min={priceRange.min}
-                                    max={priceRange.max}
-                                    value={selectedPrice.max}
-                                    onChange={(e) => handlePriceChange("max", e.target.value)}
-                                />
-                            </div>
+                                    {isOutStock && (
+                                        <div className={styles["filter-option"]}>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    value={false}
+                                                    checked={
+                                                        selectedFilters["stock"]?.includes(false) || false
+                                                    }
+                                                    onChange={() =>
+                                                        handleCheckboxChange("stock", false)
+                                                    }
+                                                />
+                                                ні
+                                            </label>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     )}
-                </div>
-            )}
 
-            <button onClick={handleApplyFilters} className="apply-btn">Застосувати</button>
+                    {Object.entries(filters).map(([key, values]) => {
+                        if (key === "price" || key === "stock") return null;
+
+                        return (
+                            <div key={key} className={styles["filter-group"]}>
+                                <div
+                                    className={styles["filter-header"]}
+                                    onClick={() => handleToggleCollapse(key)}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <strong>{FILTER_LABELS[key] || key}</strong>{" "}
+                                    {collapsed[key] ? "▶" : "▼"}
+                                </div>
+
+                                {!collapsed[key] && (
+                                    <div className={styles["filter-options"]}>
+                                        {values.map((v, idx) => {
+                                            let displayValue = v;
+
+                                            if (key === "hasMesh" || key === "revision") {
+                                                displayValue =
+                                                    v === true || v === "true" ? "так" : "ні";
+                                            }
+
+                                            return (
+                                                <div
+                                                    key={idx}
+                                                    className={styles["filter-option"]}
+                                                >
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value={v}
+                                                            checked={
+                                                                selectedFilters[key]?.includes(v) ||
+                                                                false
+                                                            }
+                                                            onChange={() =>
+                                                                handleCheckboxChange(key, v)
+                                                            }
+                                                        />
+                                                        {displayValue}
+                                                    </label>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+
+                    {filters.price?.length > 0 && (
+                        <div className={styles["filter-group"]}>
+                            <div
+                                className={styles["filter-header"]}
+                                onClick={() => handleToggleCollapse("price")}
+                                style={{ cursor: "pointer" }}
+                            >
+                                <strong>Ціна(₴)</strong>{" "}
+                                {collapsed.price ? "▶" : "▼"}
+                            </div>
+
+                            {!collapsed.price && (
+                                <div className={styles["price-filter"]}>
+                                    <div className={styles["price-inputs"]}>
+                                        <label>
+                                            Від:{" "}
+                                            <input
+                                                type="number"
+                                                value={selectedPrice.min}
+                                                min={priceRange.min}
+                                                max={selectedPrice.max}
+                                                onChange={(e) =>
+                                                    handlePriceChange("min", e.target.value)
+                                                }
+                                            />
+                                        </label>
+
+                                        <label>
+                                            До:{" "}
+                                            <input
+                                                type="number"
+                                                value={selectedPrice.max}
+                                                min={selectedPrice.min}
+                                                max={priceRange.max}
+                                                onChange={(e) =>
+                                                    handlePriceChange("max", e.target.value)
+                                                }
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div className={styles["price-sliders"]}>
+                                        <input
+                                            type="range"
+                                            min={priceRange.min}
+                                            max={priceRange.max}
+                                            value={selectedPrice.min}
+                                            onChange={(e) =>
+                                                handlePriceChange("min", e.target.value)
+                                            }
+                                        />
+                                        <input
+                                            type="range"
+                                            min={priceRange.min}
+                                            max={priceRange.max}
+                                            value={selectedPrice.max}
+                                            onChange={(e) =>
+                                                handlePriceChange("max", e.target.value)
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <button
+                        onClick={handleApplyFilters}
+                        className={styles["apply-btn"]}
+                    >
+                        Застосувати
+                    </button>
                 </>
-                )}
+            )}
         </div>
+
+        // <div className="filters-panel">
+        //     <div className="filters-panel-header">
+        //         <h3>Фільтри</h3>
+        //         <button
+        //             onClick={() => setIsPanelCollapsed(prev => !prev)}
+        //             className="toggle-filters-button"
+        //         >
+        //             {isPanelCollapsed ? "Показати фільтри ▼" : "Сховати фільтри ▲"}
+        //         </button>
+        //     </div>
+        //     {!isPanelCollapsed && (
+        //         <>
+        //     <button onClick={handleResetFilters} className="reset-button">Скинути фільтри</button>
+        //     {filters.stock && (
+        //         <div className="filter-group">
+        //             <div
+        //                 className="filter-header"
+        //                 onClick={() => handleToggleCollapse("stock")}
+        //                 style={{cursor: "pointer"}}
+        //             >
+        //                 <strong>{FILTER_LABELS["stock"]}</strong>{" "}
+        //                 {collapsed["stock"] ? "▶" : "▼"}
+        //             </div>
+        //
+        //             {!collapsed["stock"] && (
+        //                 <div className="filter-options">
+        //                     {isInStock && (
+        //                         <div className="filter-option">
+        //                             <label>
+        //                                 <input
+        //                                     type="checkbox"
+        //                                     value={true}
+        //                                     checked={selectedFilters["stock"]?.includes(true) || false}
+        //                                     onChange={() => handleCheckboxChange("stock", true)}
+        //                                 />
+        //                                 так
+        //                             </label>
+        //                         </div>
+        //                     )}
+        //                     {isOutStock && (
+        //                         <div className="filter-option">
+        //                             <label>
+        //                                 <input
+        //                                     type="checkbox"
+        //                                     value={false}
+        //                                     checked={selectedFilters["stock"]?.includes(false) || false}
+        //                                     onChange={() => handleCheckboxChange("stock", false)}
+        //                                 />
+        //                                 ні
+        //                             </label>
+        //                         </div>
+        //                     )}
+        //                 </div>
+        //             )}
+        //         </div>
+        //     )}
+        //
+        //     {Object.entries(filters).map(([key, values]) => {
+        //         if (key === "price" || key === "stock") return null;
+        //
+        //         return (
+        //             <div key={key} className="filter-group">
+        //                 <div className="filter-header" onClick={() => handleToggleCollapse(key)}
+        //                      style={{cursor: "pointer"}}>
+        //                     <strong>{FILTER_LABELS[key] || key}</strong> {collapsed[key] ? "▶" : "▼"}
+        //                 </div>
+        //
+        //                 {!collapsed[key] && (
+        //                     <div className="filter-options">
+        //                         {values.map((v, idx) => {
+        //                             let displayValue = v;
+        //
+        //                             if (key === "hasMesh" || key === "revision") {
+        //                                 displayValue = v === true || v === "true" ? "так" : "ні";
+        //                             }
+        //
+        //                             if (key === "stock") {
+        //                                 Number(v) > 0 ? setIsInStock(true) : setIsOutStock(true);
+        //                             }
+        //
+        //                             return (
+        //                                 <div key={idx} className="filter-option">
+        //                                     <label>
+        //                                         <input
+        //                                             type="checkbox"
+        //                                             value={v}
+        //                                             checked={selectedFilters[key]?.includes(v) || false}
+        //                                             onChange={() => handleCheckboxChange(key, v)}
+        //                                         />
+        //                                         {displayValue}
+        //                                     </label>
+        //                                 </div>
+        //                             );
+        //                         })}
+        //                     </div>
+        //                 )}
+        //             </div>
+        //         );
+        //     })}
+        //
+        //     {filters.price?.length > 0 && (
+        //         <div className="filter-group">
+        //             <div className="filter-header" onClick={() => handleToggleCollapse("price")}
+        //                  style={{cursor: "pointer"}}>
+        //                 <strong>Ціна(₴)</strong> {collapsed.price ? "▶" : "▼"}
+        //             </div>
+        //
+        //             {!collapsed.price && (
+        //                 <div className="price-filter">
+        //                     <div className="price-inputs">
+        //                         <label>
+        //                             Від: <input
+        //                             type="number"
+        //                             value={selectedPrice.min}
+        //                             min={priceRange.min}
+        //                             max={selectedPrice.max}
+        //                             onChange={(e) => handlePriceChange("min", e.target.value)}
+        //                         />
+        //                         </label>
+        //                         <label>
+        //                             До: <input
+        //                             type="number"
+        //                             value={selectedPrice.max}
+        //                             min={selectedPrice.min}
+        //                             max={priceRange.max}
+        //                             onChange={(e) => handlePriceChange("max", e.target.value)}
+        //                         />
+        //                         </label>
+        //                     </div>
+        //
+        //                     <div className="price-sliders">
+        //                         <input
+        //                             type="range"
+        //                             min={priceRange.min}
+        //                             max={priceRange.max}
+        //                             value={selectedPrice.min}
+        //                             onChange={(e) => handlePriceChange("min", e.target.value)}
+        //                         />
+        //                         <input
+        //                             type="range"
+        //                             min={priceRange.min}
+        //                             max={priceRange.max}
+        //                             value={selectedPrice.max}
+        //                             onChange={(e) => handlePriceChange("max", e.target.value)}
+        //                         />
+        //                     </div>
+        //                 </div>
+        //             )}
+        //         </div>
+        //     )}
+        //
+        //     <button onClick={handleApplyFilters} className="apply-btn">Застосувати</button>
+        //         </>
+        //         )}
+        // </div>
     );
 };
 

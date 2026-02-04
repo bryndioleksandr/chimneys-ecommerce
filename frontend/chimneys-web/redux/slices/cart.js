@@ -74,9 +74,15 @@ const cartSlice = createSlice({
             }
         },
         loadCartFromStorage: (state, action) => {
-            state.items = action.payload;
-            state.totalQuantity = action.payload.reduce((sum, item) => sum + item.quantity, 0);
-            state.totalPrice = action.payload.reduce((sum, item) => sum + item.discountedPrice ? item.discountedPrice * item.quantity : item.price * item.quantity, 0);
+            const items = action.payload;
+            state.items = items;
+
+            state.totalQuantity = items.reduce((sum, item) => sum + Number(item.quantity), 0);
+
+            state.totalPrice = items.reduce((sum, item) => {
+                const price = item.discountedPrice || item.price;
+                return sum + (price * item.quantity);
+            }, 0);
         },
     },
 });

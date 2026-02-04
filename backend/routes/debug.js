@@ -321,7 +321,6 @@ const syncCategoriesPreview = async(node, depth = 0, context = {}, currentTreePo
 };
 
 
-// --- ОСНОВНИЙ РОУТ ---
 debugRouter.use(express.raw({ type: '*/*', limit: '100mb' }));
 
 debugRouter.all('/', async (req, res) => {

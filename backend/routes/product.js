@@ -19,6 +19,8 @@ import {
 } from "../controllers/product.js";
 import {isAdmin, verifyToken} from "../middleware/auth.js";
 import cookieParser from "cookie-parser";
+import { z } from "zod";
+import {validate} from "../middleware/validate.js";
 
 const productRouter = express.Router();
 
@@ -31,7 +33,7 @@ productRouter.get('/by-subsubcategory/:subsubcategoryid', searchBySubSubCategory
 productRouter.get('/by-slug/:slug', getProductBySlug);
 productRouter.get('/search', searchProducts);
 productRouter.patch('/update-rating/:productId/:rating', updateRating);
-productRouter.patch('/update-reviews/:productId', updateReviews);
+productRouter.patch('/update-reviews/:productId', validate(z.object({ reviews: z.array(z.any()) })), updateReviews);
 productRouter.get('/filtered-products', getFilteredProducts);
 productRouter.put('/update/:productId', verifyToken, isAdmin, updateProduct);
 productRouter.delete('/delete/:productId', verifyToken, isAdmin, deleteProduct);

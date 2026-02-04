@@ -119,6 +119,9 @@ a[href="/constructor-dym"]:hover {
     border: 3px solid var(--primary-color) !important;
 }
 
+input[type="checkbox"] {
+    cursor: pointer;
+}
 
 
 

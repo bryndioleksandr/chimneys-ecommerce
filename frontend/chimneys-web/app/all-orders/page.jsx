@@ -196,24 +196,12 @@ export default function AllOrdersPage() {
                                             <div key={index} className="product-item">
                                                 <h5>Товар №{index + 1}</h5>
                                                 <img src={item.product?.images[0]} alt="" width={80} height={80}/>
-                                                <p><strong>Назва:</strong> {item.product?.name || "Невідомо"}</p>
-                                                {item.product?.discountedPrice ? (
-                                                    <>
-                                                        <p><strong>Ціна зі
-                                                            знижкою:</strong> {item.product?.discountedPrice} грн</p>
-                                                        <p><strong>Кількість:</strong> {item.quantity}</p>
-                                                        <p>
-                                                            <strong>Разом:</strong> {item.product?.discountedPrice * item.quantity} грн
-                                                        </p>
-                                                    </>) : (
-                                                    <>
-                                                        <p><strong>Ціна:</strong> {item.product?.price} грн</p>
-                                                        <p><strong>Кількість:</strong> {item.quantity}</p>
-                                                        <p>
-                                                            <strong>Разом:</strong> {item.product?.price * item.quantity} грн
-                                                        </p>
-                                                    </>
-                                                )}
+                                                <p><strong>Назва:</strong> {item.nameAtPurchase || "Товар видалено"}</p>
+                                                <p><strong>Ціна за одиницю:</strong> {item.priceAtPurchase} грн</p>
+                                                <p><strong>Кількість:</strong> {item.quantity}</p>
+                                                <p>
+                                                    <strong>Разом:</strong> {item.priceAtPurchase * item.quantity} грн
+                                                </p>
 
                                             </div>
                                         ))}

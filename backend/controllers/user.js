@@ -91,10 +91,10 @@ export const userRegister = async (req, res) => {
             name,
             surname,
             email,
-            role: email === 's.v.bryndo@gmail.com' ? 'admin' : 'user',
+            role: 'user',
             password: hashPw,
             emailVerificationCode: verificationCode,
-            emailVerificationExpires: Date.now() + 10 * 60 * 1000 // 10 хв
+            emailVerificationExpires: Date.now() + 10 * 60 * 1000
         });
 
         await newUser.save();

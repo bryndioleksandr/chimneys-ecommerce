@@ -95,8 +95,8 @@ export default function MyOrdersPage() {
                                     className="product-image"
                                 />
                                 <div className="product-info">
-                                    <span>{item.product?.name || "Товар"}</span>
-                                    <span>{item.quantity} × {item.product?.price || "?"} грн</span>
+                                    <span>{item.nameAtPurchase || "Товар"}</span>
+                                    <span>{item.quantity} × {item.priceAtPurchase || "?"} грн</span>
                                 </div>
                             </li>
                         ))}

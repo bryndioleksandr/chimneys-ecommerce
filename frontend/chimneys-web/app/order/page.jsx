@@ -383,7 +383,7 @@ export default function CreateOrderPage() {
                             setFormData({...formData, address: selectedOption?.value || ""})
                         }
                         }
-                        placeholder="Оберіть місто..."
+                        placeholder="Оберіть населений пункт..."
                         isClearable
                     />)}
 

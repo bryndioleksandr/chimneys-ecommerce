@@ -79,7 +79,7 @@ const ProductCard = ({product}) => {
                             <StarRating rating={product.rating}/>
                             <span className="count-reviews">({product.reviews?.length || 0})</span>
                         </div>
-                        {product.stock !== 0 ? (
+                        {product.stock > 0 ? (
                             <span className="card-in-stock">{product.stock} шт.</span>
                         ) : (
                             <span className="card-in-stock"

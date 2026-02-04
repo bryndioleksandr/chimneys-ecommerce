@@ -148,7 +148,7 @@ liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), 
                 order.paidAt = new Date();
 
                 if(order.email || order.user) await sendInfoEmailResend({
-                    to: order.email || order.user.email,
+                    to: order.email || order.user?.email,
                     subject: "Оплату отримано!",
                     text: `Ваше замовлення №${order.orderNumber} успішно оплачено. Ми вже пакуємо його!`
                 });
@@ -159,7 +159,7 @@ liqpayRouter.post("/payment-callback", express.urlencoded({ extended: false }), 
 
             order.isPaid = false;
             if(order.email || order.user) await sendInfoEmailResend({
-                to: order.email || order.user.email,
+                to: order.email || order.user?.email,
                 subject: "Помилка оплати",
                 text: `На жаль, оплата замовлення №${order.orderNumber} не пройшла. Причина: ${decodedData.err_description}. Спробуйте ще раз на сайті.`
             });

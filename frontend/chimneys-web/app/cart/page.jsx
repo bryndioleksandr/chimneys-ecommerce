@@ -5,6 +5,7 @@ import "./cart.css";
 import {useRouter} from "next/navigation";
 import productCard from "../../components/ProductCard/ProductCard";
 import {toast} from "react-toastify";
+import Link from "next/link";
 
 export default function CartPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -45,6 +46,7 @@ export default function CartPage() {
         });
     };
 
+    const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cartItems.reduce((total, item) => {
         const price = item.discountedPrice ?? item.price;
         return total + price * item.quantity;
@@ -61,61 +63,86 @@ export default function CartPage() {
             <div className="container">
                 <div className="card">
                     <h1 className="title">Кошик</h1>
-                    <p className="items-count">{cartItems.length} товар(ів)</p>
+                    <p className="items-count">{totalQuantity} товар(ів)</p>
                     <hr/>
 
                     {cartItems.length > 0 ? (
-                        cartItems.map((item) => (
-                            <div key={item._id} className="wrapper-card">
-                                <div className="wrap-img-name">
-                                    <img src={item.images[0]} alt={item.name} className="item-image"/>
-                                    <div className="item-details">
-                                        <p className="item-category">{item.category.name}</p>
-                                        <h6 className="item-name">{item.name}</h6>
+                        <div className="cart-list">
+                            {cartItems.map((item) => (
+                                <div key={item._id} className="wrapper-card">
+
+                                    <div className="wrap-img-name">
+                                        <div className="image-wrapper">
+                                            <img src={item.images[0]} alt={item.name} className="item-image"/>
+                                            {item.stock <= 0 && (
+                                                <span className="item-stock-badge overlay">Під замовлення</span>
+                                            )}
+                                        </div>
+                                        <div className="item-details">
+                                            <p className="item-category">{item.category?.name}</p>
+                                            <h6 className="item-name">{item.name}</h6>
+                                            {item.stock <= 0 && (
+                                                <p className="delivery-hint">ℹ️ Виготовлення до 7 робочих днів</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="item-actions">
+                                        <div className="price-block">
+                                            <p className={`item-price ${item.discountedPrice ? 'discount' : ''}`}>
+                                                {(item.discountedPrice ?? item.price) * item.quantity} грн
+                                            </p>
+                                        </div>
+
+                                        <div className="quantity-controls">
+                                            <button className="btn" onClick={() => updateQuantity(item._id, -1)}>-</button>
+                                            <input type="number" value={item.quantity} readOnly className="quantity-input"/>
+                                            <button className="btn" onClick={() => updateQuantity(item._id, 1)}>+</button>
+                                        </div>
+
+                                        <button className="remove-item" onClick={() => removeItem(item._id)} title="Видалити">
+                                            ×
+                                        </button>
                                     </div>
                                 </div>
-                                <div key={item._id} className="cart-item">
-                                {item.discountedPrice ? (
-                                        <p className="item-price" style={{color:"var(--discount-color)"}}>{item.discountedPrice * item.quantity} грн</p>
-                                    ) : (
-                                        <p className="item-price">{item.price * item.quantity} грн</p>
-                                    )}
-                                    <div className="quantity-controls">
-                                        <button className="btn" onClick={() => updateQuantity(item._id, -1)}>-</button>
-                                        <input type="number" value={item.quantity} readOnly className="quantity-input"/>
-                                        <button className="btn" onClick={() => updateQuantity(item._id, 1)}>+</button>
-                                    </div>
-                                    <button className="remove-item" onClick={() => removeItem(item._id)}>×</button>
-                                </div>
-                            </div>
-                        ))
+                            ))}
+                        </div>
                     ) : (
-                        <p>Кошик порожній</p>
+                        <div className="empty-cart">
+                            <div className="empty-cart-icon">🛒</div>
+                            <h3>Ваш кошик порожній</h3>
+                            <p>Здається, ви ще нічого не додали до кошика.</p>
+                            <Link href="/" className="back-to-home-btn">
+                                Повернутися до покупок
+                            </Link>
+                        </div>
                     )}
 
-                    <div className="summary">
-                        <h3>Підсумок</h3>
-                        <hr/>
-                        <div className="summary-item">
-                            <p>Товари: {cartItems.length}</p>
-                            <p>{totalPrice} грн</p>
+                    {cartItems.length > 0 && (
+                        <div className="summary">
+                            <h3>Підсумок</h3>
+                            <hr/>
+                            <div className="summary-item">
+                                <p>Кількість товарів: {totalQuantity}</p>
+                                <p>{totalPrice} грн</p>
+                            </div>
+
+                            {cartItems.some(item => item.stock <= 0) && (
+                                <div className="order-notice">
+                                    <p>У замовленні є товари "під замовлення". Термін відправки може скласти до 7 робочих днів.</p>
+                                </div>
+                            )}
+
+                            <hr/>
+                            <div className="summary-item total">
+                                <p>Загальна сума</p>
+                                <p>{totalPrice} грн</p>
+                            </div>
+                            <button className="checkout-btn" onClick={handleCheckout}>
+                                Оформити замовлення
+                            </button>
                         </div>
-                        {/*<label>Доставка</label>*/}
-                        {/*<select className="shipping-options">*/}
-                        {/*    <option value="1">Стандартна доставка - 50 грн</option>*/}
-                        {/*    <option value="2">Експрес-доставка - 100 грн</option>*/}
-                        {/*</select>*/}
-                        {/*<label>Купон</label>*/}
-                        {/*<input type="text" placeholder="Введіть код знижки" className="discount-code"/>*/}
-                        <hr/>
-                        <div className="summary-item total">
-                            <p>Загальна сума</p>
-                            <p>{totalPrice} грн</p>
-                        </div>
-                        <button className="checkout-btn" onClick={handleCheckout}>
-                            Оформити замовлення
-                        </button>
-                    </div>
+                    )}
                 </div>
             </div>
         </section>
