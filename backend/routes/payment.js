@@ -42,8 +42,8 @@ liqpayRouter.post("/create-payment", (req, res) => {
         version: 3,
         // result_url: "https://chimneys-ecommerce-bi38.vercel.app/payment-success",
         // server_url: "https://chimneys-ecommerce.onrender.com/liqpay/payment-callback",
-        result_url: "http://localhost:3000/payment-success",
-        server_url: "https://a4792b8ecef6.ngrok-free.app/liqpay/payment-callback",
+        result_url: "https://dymohit.com.ua/payment-success",
+        server_url: "https://api.dymohit.com.ua/liqpay/payment-callback",
         language: "uk",
         sandbox: 1,
     });
