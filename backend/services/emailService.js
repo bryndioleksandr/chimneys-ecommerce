@@ -38,21 +38,49 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
+//
+// export const sendVerificationEmail = async (to, code) => {
+//     console.log('trying to send an email');
+//     try {
+//         await transporter.sendMail({
+//             from: `"Chimney Store" <${process.env.EMAIL_FROM}>`,
+//             to,
+//             subject: 'Email Verification Code',
+//             html: `<p>Код для підвтердження електронної пошти: <b>${code}</b></p>`
+//         });
+//     }
+//     catch (error) {
+//         console.error('Email error:', error);
+//     }
+//     console.log('after email send');
+// };
 
 export const sendVerificationEmail = async (to, code) => {
-    console.log('trying to send an email');
+    console.log('Спроба відправки листа через Resend...');
     try {
-        await transporter.sendMail({
-            from: `"Chimney Store" <${process.env.EMAIL_FROM}>`,
-            to,
-            subject: 'Email Verification Code',
-            html: `<p>Код для підвтердження електронної пошти: <b>${code}</b></p>`
+        const { data, error } = await resend.emails.send({
+            from: 'ДимоHIT <noreply@dymohit.com.ua>',
+            to: [to],
+            subject: 'Код підтвердження — ДимоHIT',
+            html: `
+                <div style="font-family: sans-serif; text-align: center;">
+                    <h2>Вітаємо у ДимоHIT!</h2>
+                    <p>Ваш код для підтвердження електронної пошти:</p>
+                    <h1 style="color: #ff4500;">${code}</h1>
+                    <p>Цей код дійсний протягом 10 хвилин.</p>
+                </div>
+            `
         });
+
+        if (error) {
+            return console.error('Помилка Resend:', error);
+        }
+
+        console.log('Лист успішно відправлено, ID:', data.id);
     }
     catch (error) {
-        console.error('Email error:', error);
+        console.error('Критична помилка пошти:', error);
     }
-    console.log('after email send');
 };
 
 export const sendInfoEmail = async ({to, subject, text}) => {
