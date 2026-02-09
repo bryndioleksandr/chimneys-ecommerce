@@ -83,6 +83,7 @@ export const sendVerificationEmail = async (to, code) => {
     }
 };
 
+
 export const sendInfoEmail = async ({to, subject, text}) => {
     console.log('trying to send an email');
     try {

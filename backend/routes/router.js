@@ -17,6 +17,7 @@ import constructorTwoRouter from "./constructorTwo.js";
 import infoRouter from "./infoPage.js";
 import exchangeRouter from "./dataExchange.js";
 import debugRouter from "./debug.js";
+import {resetUserPassword, updatePassword} from "../controllers/user.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -42,5 +43,7 @@ router.get('/health', (req, res) => {
     res.status(200).send('Server is alive');
 });
 router.use('/debug', debugRouter);
+router.post('/forgot-password', resetUserPassword);
+router.post('/reset-password/:token', updatePassword);
 
 export default router;

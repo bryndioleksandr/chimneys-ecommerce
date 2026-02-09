@@ -9,6 +9,7 @@ import {FaSearch} from "react-icons/fa";
 import { backUrl } from '../../../config/config';
 import {loadCartFromStorage} from "../../../redux/slices/cart";
 import {toast} from "react-toastify";
+import {useSelector} from "../../../redux/store";
 
 const AREAS = [
     {
@@ -91,6 +92,7 @@ export default function ChimneyMapTwo() {
     const [selectedAreaForLinking, setSelectedAreaForLinking] = useState(null);
     const ORIGINAL_WIDTH = 550;
     const ORIGINAL_HEIGHT = 1073;
+    const user = useSelector((state) => state.user.user);
 
     const dispatch = useDispatch();
 
@@ -121,20 +123,20 @@ export default function ChimneyMapTwo() {
         setSelectedArea(areaId);
     };
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
-                if (!res.ok) throw new Error("Products not found");
-                const data = await res.json();
-                setProducts(data);
-            } catch (err) {
-                console.error(err);
-                setProducts(null);
-            }
-        };
-        fetchProducts();
-    }, []);
+    // useEffect(() => {
+    //     const fetchProducts = async () => {
+    //         try {
+    //             const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
+    //             if (!res.ok) throw new Error("Products not found");
+    //             const data = await res.json();
+    //             setProducts(data);
+    //         } catch (err) {
+    //             console.error(err);
+    //             setProducts(null);
+    //         }
+    //     };
+    //     fetchProducts();
+    // }, []);
 
     useEffect(() => {
         const fetchAttachedProduct = async () => {
@@ -168,6 +170,20 @@ export default function ChimneyMapTwo() {
             console.error("Search error:", error);
         }
     };
+
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            return;
+        }
+
+        const delayDebounceFn = setTimeout(() => {
+            handleSearch();
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery]);
+
+
 
     const scaleCoords = (coords) => {
         if (!size.width || !size.height) return coords;
@@ -288,7 +304,7 @@ export default function ChimneyMapTwo() {
                         <p className="not-linked-message">Продукт ще не прив'язаний.</p>
                     )}
 
-                    <button
+                    {user.role === "admin" &&  <button
                         className="secondary-button"
                         onClick={() => {
                             setIsProductModalOpen(true);
@@ -297,7 +313,8 @@ export default function ChimneyMapTwo() {
                         }}
                     >
                         Прив’язати продукт
-                    </button>
+                    </button>}
+
                 </ModalWrapper>
             )}
             {isProductModalOpen && (
@@ -305,35 +322,20 @@ export default function ChimneyMapTwo() {
                     <h3>Виберіть продукт для прив'язки</h3>
 
                     <div
-                        className="headerSearchBarContainer"
+                        className="modalSearchContainer"
                         style={{ marginBottom: 16 }}
                         ref={searchRef}
                     >
-                        <div className="headerSearchBar" style={{ display: 'flex', gap: 8 }}>
+                        <div className="modalSearchContainer">
                             <input
                                 placeholder="Пошук товарів"
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                style={{
-                                    flex: 1,
-                                    padding: '8px 12px',
-                                    borderRadius: 4,
-                                    border: '1px solid #ccc'
-                                }}
                             />
                             <div
-                                className="searchButton"
+                                className="modalSearchButton"
                                 onClick={handleSearch}
-                                style={{
-                                    padding: '8px 12px',
-                                    backgroundColor: '#D14900',
-                                    color: 'white',
-                                    borderRadius: 4,
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
                             >
                                 <FaSearch />
                             </div>

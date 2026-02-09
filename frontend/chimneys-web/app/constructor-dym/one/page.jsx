@@ -4,7 +4,8 @@ import { useRef, useEffect, useState } from 'react';
 import '../style.css';
 import '../../../components/ModalWrapper/modal.css';
 import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
+import {useSelector} from "../../../redux/store";
 import { addItemToCart } from '@/redux/slices/cart';
 import {FaSearch} from "react-icons/fa";
 import { backUrl } from '../../../config/config';
@@ -85,6 +86,7 @@ export default function ChimneyMapOne() {
     const [selectedAreaForLinking, setSelectedAreaForLinking] = useState(null);
     const ORIGINAL_WIDTH = 550;
     const ORIGINAL_HEIGHT = 1073;
+    const user = useSelector((state) => state.user.user);
 
     const dispatch = useDispatch();
 
@@ -115,21 +117,21 @@ export default function ChimneyMapOne() {
         setSelectedArea(areaId);
     };
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                console.log('now fetch');
-                const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
-                if (!res.ok) throw new Error("Products not found");
-                const data = await res.json();
-                setProducts(data);
-            } catch (err) {
-                console.error(err);
-                setProducts(null);
-            }
-        };
-        fetchProducts();
-        }, []);
+    // useEffect(() => {
+    //     const fetchProducts = async () => {
+    //         try {
+    //             console.log('now fetch');
+    //             const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
+    //             if (!res.ok) throw new Error("Products not found");
+    //             const data = await res.json();
+    //             setProducts(data);
+    //         } catch (err) {
+    //             console.error(err);
+    //             setProducts(null);
+    //         }
+    //     };
+    //     fetchProducts();
+    //     }, []);
 
     useEffect(() => {
         const fetchAttachedProduct = async () => {
@@ -162,6 +164,20 @@ export default function ChimneyMapOne() {
             console.error("Search error:", error);
         }
     };
+
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            return;
+        }
+
+        const delayDebounceFn = setTimeout(() => {
+            handleSearch();
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery]);
+
+
 
     const scaleCoords = (coords) => {
         if (!size.width || !size.height) return coords;
@@ -286,7 +302,7 @@ export default function ChimneyMapOne() {
                         <p className="not-linked-message">Продукт ще не прив'язаний.</p>
                     )}
 
-                    <button
+                    {user.role === "admin" &&  <button
                         className="secondary-button"
                         onClick={() => {
                             setIsProductModalOpen(true);
@@ -295,7 +311,7 @@ export default function ChimneyMapOne() {
                         }}
                     >
                         Прив’язати продукт
-                    </button>
+                    </button>}
                 </ModalWrapper>
             )}
             {isProductModalOpen && (
@@ -303,10 +319,10 @@ export default function ChimneyMapOne() {
                     <h3>Виберіть продукт для прив’язки</h3>
 
                     <div
-                        className="headerSearchBarContainer"
+                        className="modalSearchContainer"
                         ref={searchRef}
                     >
-                        <div className="headerSearchBar">
+                        <div className="modalSearchContainer">
                             <input
                                 placeholder="Пошук товарів"
                                 type="text"
@@ -314,7 +330,7 @@ export default function ChimneyMapOne() {
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             <div
-                                className="searchButton"
+                                className="modalSearchButton"
                                 onClick={handleSearch}
                             >
                                 <FaSearch />

@@ -6,12 +6,13 @@ import {setUser, getUser, backUrl} from "../../config/config";
 import {loginUser, registerUser} from "@/services/auth";
 import useEscapeKey from "@/hooks/useEscapeClose";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import { useDispatch } from "@/redux/store";
-import { dispUser } from '@/redux/slices/user';
-import { ToastContainer, toast } from 'react-toastify';
+import {useDispatch} from "@/redux/store";
+import {dispUser} from '@/redux/slices/user';
+import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {ResetPwModal} from "@/components/ResetPwModal";
 
-const AuthModal = ({ isOpen, onClose }) => {
+const AuthModal = ({isOpen, onClose}) => {
     const [isLogin, setIsLogin] = useState(true);
     const dispatch = useDispatch();
     const modalRef = useRef(null);
@@ -27,6 +28,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [showReset, setShowReset] = useState(false);
 
 
     const [isVerifyStep, setIsVerifyStep] = useState(false);
@@ -108,7 +110,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         if (!validateForm()) return;
 
         try {
-            const data = await registerUser({ name, surname, email, password });
+            const data = await registerUser({name, surname, email, password});
             notifySuccess("Перевір код на пошті");
             setIsVerifyStep(true);
         } catch (err) {
@@ -144,9 +146,9 @@ const AuthModal = ({ isOpen, onClose }) => {
         try {
             const res = await fetch(`${backUrl}/verify-email`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 credentials: 'include',
-                body: JSON.stringify({ email, code: verificationCode }),
+                body: JSON.stringify({email, code: verificationCode}),
             });
 
             const data = await res.json();
@@ -162,9 +164,20 @@ const AuthModal = ({ isOpen, onClose }) => {
         }
     };
 
+    const handleShowReset = () => {
+
+    }
+
     return (
         <div className="modal-overlay">
             <div className="modal-content" ref={modalRef}>
+                {showReset ? (
+                        <ResetPwModal
+                            onClose={() => setShowReset(false)}
+                            notifySuccess={notifySuccess}
+                            notifyError={notifyError}
+                        />
+                    ) : ( <>
                 <div className="tabs">
                     <button className={isLogin ? "active" : ""} onClick={() => setIsLogin(true)}>Вхід</button>
                     <button className={!isLogin ? "active" : ""} onClick={() => setIsLogin(false)}>Реєстрація</button>
@@ -188,14 +201,19 @@ const AuthModal = ({ isOpen, onClose }) => {
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                             />
-                            <label className="show-password">
-                                <input
-                                    type="checkbox"
-                                    checked={showPassword}
-                                    onChange={() => setShowPassword(!showPassword)}
-                                />
-                                Показати пароль
-                            </label>
+                            <div className="pw-wrapper">
+                                <label className="show-password">
+                                    <input
+                                        type="checkbox"
+                                        checked={showPassword}
+                                        onChange={() => setShowPassword(!showPassword)}
+                                    />
+                                    Показати пароль
+                                </label>
+                                <button className="reset-password" onClick={() => setShowReset(!showReset)}>
+                                    Відновити пароль
+                                </button>
+                            </div>
                             <button className="auth-btn" onClick={handleLogin}>Увійти</button>
                         </div>
                     ) : isVerifyStep ? (
@@ -248,20 +266,24 @@ const AuthModal = ({ isOpen, onClose }) => {
                                 value={confirmPassword}
                                 onChange={e => setConfirmPassword(e.target.value)}
                             />
-                            <label className="show-password">
-                                <input
-                                    type="checkbox"
-                                    checked={showPassword}
-                                    onChange={() => setShowPassword(!showPassword)}
-                                />
-                                Показати пароль
-                            </label>
+                            <div className="pw-wrapper">
+                                <label className="show-password">
+                                    <input
+                                        type="checkbox"
+                                        checked={showPassword}
+                                        onChange={() => setShowPassword(!showPassword)}
+                                    />
+                                    Показати пароль
+                                </label>
+
+                            </div>
                             <button className="auth-btn" onClick={handleRegister}>Зареєструватися</button>
                         </div>
                     )}
                 </div>
 
-
+                </>
+                    )}
             </div>
             <ToastContainer/>
         </div>
