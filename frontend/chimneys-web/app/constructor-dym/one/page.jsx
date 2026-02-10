@@ -302,7 +302,7 @@ export default function ChimneyMapOne() {
                         <p className="not-linked-message">Продукт ще не прив'язаний.</p>
                     )}
 
-                    {user.role === "admin" &&  <button
+                    {user?.role && user.role === "admin" &&  <button
                         className="secondary-button"
                         onClick={() => {
                             setIsProductModalOpen(true);

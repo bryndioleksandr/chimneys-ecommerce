@@ -2,7 +2,7 @@ import { backUrl } from '../config/config';
 
 export async function getBanners() {
     const res = await fetch(`${backUrl}/banner/banners`, {
-        next: { revalidate: 3600 },
+        next: { revalidate: 3600, tags: ['banners'] },
         credentials: 'include'
     });
     if (!res.ok) return [];
@@ -11,7 +11,7 @@ export async function getBanners() {
 
 export async function getCategories() {
     const res = await fetch(`${backUrl}/category/categories`, {
-        next: { revalidate: 3600 },
+        next: { revalidate: 3600, tags: ['categories'] },
         credentials: 'include'
     });
     if (!res.ok) return [];

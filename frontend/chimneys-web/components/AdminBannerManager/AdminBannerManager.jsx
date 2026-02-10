@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { backUrl } from '../../config/config';
+import axios from "axios";
 
 export default function AdminBannerManager() {
     const [banners, setBanners] = useState([]);
@@ -38,6 +39,7 @@ export default function AdminBannerManager() {
                 credentials: 'include',
             });
 
+            await axios.get('/api/revalidate?tag=banners');
             if (res.ok) {
                 setAlt('');
                 setFile(null);

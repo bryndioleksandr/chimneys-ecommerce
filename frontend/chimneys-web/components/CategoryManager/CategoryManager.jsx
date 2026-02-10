@@ -27,6 +27,7 @@ const CategoryManager = () => {
         if (!confirm('Точно видалити категорію?')) return;
         try {
             await axios.delete(`${backUrl}/category/${id}`, {withCredentials: true});
+            await axios.get('/api/revalidate?tag=categories');
             notifySuccess("Категорію успішно видалено!");
             fetchCategories();
         } catch (error) {
@@ -46,6 +47,7 @@ const CategoryManager = () => {
                 },
                 withCredentials: true,
             });
+            await axios.get('/api/revalidate?tag=categories');
             notifySuccess("Категорію успішно змінено!");
             setEditingCategory(null);
             setNewName('');
