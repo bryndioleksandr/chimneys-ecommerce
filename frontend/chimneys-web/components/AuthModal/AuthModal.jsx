@@ -3,7 +3,7 @@
 import {useEffect, useState, useRef, useCallback} from "react";
 import "./AuthModal.css";
 import {setUser, getUser, backUrl} from "../../config/config";
-import {loginUser, registerUser} from "@/services/auth";
+import {loginUser, registerUser, resendCode} from "@/services/auth";
 import useEscapeKey from "@/hooks/useEscapeClose";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import {useDispatch} from "@/redux/store";
@@ -33,6 +33,7 @@ const AuthModal = ({isOpen, onClose}) => {
 
     const [isVerifyStep, setIsVerifyStep] = useState(false);
     const [verificationCode, setVerificationCode] = useState("");
+    const [timer, setTimer] = useState(0);
 
     const validateForm = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -98,6 +99,8 @@ const AuthModal = ({isOpen, onClose}) => {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+        setIsVerifyStep(false);
+        setTimer(0);
     };
 
     useEffect(() => {
@@ -106,18 +109,42 @@ const AuthModal = ({isOpen, onClose}) => {
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        let interval;
+        if (isVerifyStep && timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [isVerifyStep, timer]);
+
     const handleRegister = async () => {
         if (!validateForm()) return;
 
         try {
-            const data = await registerUser({name, surname, email, password});
-            notifySuccess("Перевір код на пошті");
+            await registerUser({name, surname, email, password});
+
+            notifySuccess("Перевірте код на пошті");
             setIsVerifyStep(true);
+            setTimer(60);
+
         } catch (err) {
-            console.error("Register error", err);
+            console.error("Помилка реєстрації", err);
             notifyError(err.message);
         }
     };
+    const handleResendCode = async () => {
+        try {
+           await resendCode(email);
+            notifySuccess("Перевірте новий код на пошті");
+            setTimer(60);
+        }
+        catch (err) {
+            console.error("Помилка надсилання коду", err);
+            notifyError(err.message);
+        }
+    }
 
     const handleLogin = async () => {
         if (!validateForm()) return;
@@ -164,9 +191,6 @@ const AuthModal = ({isOpen, onClose}) => {
         }
     };
 
-    const handleShowReset = () => {
-
-    }
 
     return (
         <div className="modal-overlay">
@@ -227,6 +251,33 @@ const AuthModal = ({isOpen, onClose}) => {
                                 onChange={(e) => setVerificationCode(e.target.value)}
                             />
                             <button className="auth-btn" onClick={verifyEmailCode}>Підтвердити</button>
+                            <div style={{ marginTop: '15px', textAlign: 'center' }}>
+                                {timer > 0 ? (
+                                    <span style={{ color: '#888', fontSize: '0.9rem' }}>
+                                                Надіслати код повторно через {timer}с
+                                            </span>
+                                ) : (
+                                    <button
+                                        onClick={handleResendCode}
+                                        style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            color: 'var(--primary-color)',
+                                            textDecoration: 'underline',
+                                            cursor: 'pointer',
+                                            fontSize: '0.9rem'
+                                        }}
+                                    >
+                                        Надіслати код повторно
+                                    </button>
+                                )}
+                            </div>
+                            <button
+                                onClick={() => setIsVerifyStep(false)}
+                                style={{ marginTop: '10px', background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', width: '100%' }}
+                            >
+                                Змінити Email
+                            </button>
                         </div>
                     ) : (
                         <div className="register" key="register">
@@ -285,7 +336,6 @@ const AuthModal = ({isOpen, onClose}) => {
                 </>
                     )}
             </div>
-            <ToastContainer/>
         </div>
     );
 };

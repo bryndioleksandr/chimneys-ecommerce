@@ -82,7 +82,9 @@ export const userRegister = async (req, res) => {
 
 
         const userExists = await User.exists({email});
-        if (userExists) return res.json({msg: "This email is already in use"});
+        if (userExists) {
+            return res.status(409).json({msg: "Цей email вже використовується"});
+        }
 
         const salt = await bcrypt.genSalt(10);
         const hashPw = await bcrypt.hash(password, salt);
@@ -111,6 +113,30 @@ export const userRegister = async (req, res) => {
         return res.status(500).json({msg: err.message});
     }
 };
+
+export const resendVerificationCode = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ msg: "Email is required" });
+        }
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const user = await User.findOne({email});
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+        user.emailVerificationCode = verificationCode;
+        user.emailVerificationExpires = Date.now() + 10 * 60 * 1000;
+        await user.save();
+        await sendVerificationEmail(email, verificationCode);
+        return res.status(200).json({ msg: "Verification code resent successfully" });
+    }
+    catch(e) {
+        console.error("Resend code error:", e);
+        return res.status(500).json({msg: e.message});
+    }
+
+}
 
 export const refreshToken = async (req, res) => {
     try {

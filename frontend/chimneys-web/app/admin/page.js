@@ -50,10 +50,7 @@ export default function AdminPage() {
         <AdminGuard>
             <div className="admin-wrapper">
                 <h1>Адмінка магазину</h1>
-                <div className="fetch-bas">
-                    <input type="file" id="xmlFile" accept=".xml" multiple onChange={handleFileChange}/>
-                    <button onClick={handleFetchBasData}>Send</button>
-                </div>
+
                 <p>Додай новий товар або змінюй існуючі!</p>
 
                 <div className="admin-panel">

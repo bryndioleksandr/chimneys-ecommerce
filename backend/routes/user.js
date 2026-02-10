@@ -1,5 +1,5 @@
 import express from 'express';
-import {userRegister, userLogin, refreshToken, userLogout} from "../controllers/user.js";
+import {userRegister, userLogin, refreshToken, userLogout, resendVerificationCode} from "../controllers/user.js";
 import cookieParser from "cookie-parser";
 import {verifyToken} from "../middleware/auth.js";
 import {loginSchema, registerSchema} from "../utils/validation.js";
@@ -11,6 +11,7 @@ userRouter.post("/register", validate(registerSchema), userRegister);
 userRouter.post("/login", validate(loginSchema), userLogin);
 userRouter.post("/refreshToken", refreshToken);
 userRouter.get("/logout", userLogout);
+userRouter.post("/resend-code", resendVerificationCode);
 
 export default userRouter;
 

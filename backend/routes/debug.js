@@ -115,7 +115,7 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 import xml2js from 'xml2js';
 import slugify from "slugify";
 
@@ -133,7 +133,7 @@ const TEMP_DIR = path.join(__dirname, '../temp_1c');
 const basCategory = "6970a4871f522c8c4da273af";
 
 if (!fs.existsSync(TEMP_DIR)) {
-    fs.mkdirSync(TEMP_DIR, { recursive: true });
+    fs.mkdirSync(TEMP_DIR, {recursive: true});
 }
 
 let previewResult = {};
@@ -153,7 +153,7 @@ const asArray = (data) => {
     return [data];
 };
 
-const makeSlug = (name) => slugify(name, { lower: true, strict: true });
+const makeSlug = (name) => slugify(name, {lower: true, strict: true});
 
 const createGroupMap = (groupsNode, map = {}) => {
     const groups = asArray(groupsNode?.Группа);
@@ -182,108 +182,177 @@ const createImportDataMap = (products, groupMap) => {
     return map;
 };
 
-const syncCategoriesPreview = async(node, depth = 0, context = {}, currentTreePointer = previewResult) => {
+const syncCategoriesPreview = async (node, depth = 0, context = {}, currentTreePointer = previewResult) => {
     const groups = asArray(node);
 
     for (const group of groups) {
         const groupName = group.Наименование.trim();
         const basId = group.Ид;
 
-        let newContext = { ...context };
+        let newContext = {...context};
         let nextTreePointer = currentTreePointer;
 
-        if (depth === 0) {  }
-
-        else if (depth === 1) {
+        if (depth === 0) {
+        } else if (depth === 1) {
             const strategy = CATEGORY_STRATEGIES[groupName] || CATEGORY_STRATEGIES["default"];
             newContext.strategy = strategy;
 
             if (strategy === "combine") {
                 newContext.namePrefix = groupName;
-            }
-            else if (strategy === "direct") {
-                currentTreePointer[groupName] = { type: "🔴 CATEGORY (Main)", basId: basId, children: {} };
+            } else if (strategy === "direct") {
+                currentTreePointer[groupName] = {type: "🔴 CATEGORY (Main)", basId: basId, children: {}};
                 const slug = makeSlug(groupName + "-" + basId.slice(6));
 
                 const category = await Category.findOneAndUpdate(
-                    { basGroupId: basId },
-                    { name: groupName, slug: slug, basGroupId: basId },
-                    { upsert: true, new: true }
+                    {basGroupId: basId},
+                    {
+                        $set: {
+                            basGroupId: basId
+                        },
+                        $setOnInsert: {
+                            name: groupName, slug: slug
+                        }
+                    },
+                    {upsert: true, new: true}
                 );
 
-                objsWithIds.push({groupId: basId, obj:{categorySyncId:category._id, subcategorySyncId:null, subsubcategorySyncId:null,}})
+                objsWithIds.push({
+                    groupId: basId,
+                    obj: {categorySyncId: category._id, subcategorySyncId: null, subsubcategorySyncId: null,}
+                })
                 nextTreePointer = currentTreePointer[groupName].children;
                 newContext.categoryId = category._id;
             }
-        }
-
-        else if (depth === 2) {
+        } else if (depth === 2) {
             if (newContext.strategy === "combine") {
                 const combinedName = `${newContext.namePrefix} ${groupName}`;
                 const slug = makeSlug(groupName + "-" + basId.slice(6));
 
                 const category = await Category.findOneAndUpdate(
-                    { basGroupId: basId },
-                    { name: combinedName, slug: slug, basGroupId: basId },
-                    { upsert: true, new: true }
+                    {basGroupId: basId},
+                    {
+                        $set: {
+                            basGroupId: basId
+                        },
+                        $setOnInsert: {
+                            name: combinedName, slug: slug,
+                        }
+                    },
+                    {upsert: true, new: true}
                 );
 
-                objsWithIds.push({groupId: basId, obj:{categorySyncId:category._id, subcategorySyncId:null, subsubcategorySyncId:null,}})
-                currentTreePointer[combinedName] = { type: "🔴 CATEGORY (Combined)", basId: basId, children: {} };
+                objsWithIds.push({
+                    groupId: basId,
+                    obj: {categorySyncId: category._id, subcategorySyncId: null, subsubcategorySyncId: null,}
+                })
+                currentTreePointer[combinedName] = {type: "🔴 CATEGORY (Combined)", basId: basId, children: {}};
                 nextTreePointer = currentTreePointer[combinedName].children;
                 newContext.categoryId = category._id;
-            }
-            else if (newContext.strategy === "direct") {
+            } else if (newContext.strategy === "direct") {
                 if (newContext.categoryId) {
                     const slug = makeSlug(groupName + "-" + basId.slice(6));
-                    currentTreePointer[groupName] = { type: "🟡 SUB-CATEGORY", basId: basId, parentBasId: newContext.categoryId, children: {} };
+                    currentTreePointer[groupName] = {
+                        type: "🟡 SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.categoryId,
+                        children: {}
+                    };
 
                     const subCategory = await SubCategory.findOneAndUpdate(
-                        { basGroupId: basId },
-                        { name: groupName, slug: slug, basGroupId: basId, category: newContext.categoryId },
-                        { upsert: true, new: true }
+                        {basGroupId: basId},
+                        {
+                            $set: {
+                                basGroupId: basId
+                            },
+                            $setOnInsert: {
+                                name: groupName, slug: slug,  category: newContext.categoryId
+                            },
+                        },
+                        {upsert: true, new: true}
                     );
 
-                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:subCategory._id, subsubcategorySyncId:null,}})
+                    objsWithIds.push({
+                        groupId: basId,
+                        obj: {
+                            categorySyncId: newContext.categoryId,
+                            subcategorySyncId: subCategory._id,
+                            subsubcategorySyncId: null,
+                        }
+                    })
                     nextTreePointer = currentTreePointer[groupName].children;
                     newContext.subCategoryId = subCategory._id;
                 }
             }
-        }
-
-        else if (depth === 3) {
+        } else if (depth === 3) {
             if (newContext.strategy === "combine") {
                 if (newContext.categoryId) {
                     const slug = makeSlug(groupName + "-" + basId.slice(6));
-                    currentTreePointer[groupName] = { type: "🟡 SUB-CATEGORY", basId: basId, parentBasId: newContext.categoryId, children: {} };
+                    currentTreePointer[groupName] = {
+                        type: "🟡 SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.categoryId,
+                        children: {}
+                    };
 
                     const subCategory = await SubCategory.findOneAndUpdate(
-                        { basGroupId: basId },
-                        { name: groupName, slug: slug, basGroupId: basId, category: newContext.categoryId },
-                        { upsert: true, new: true }
+                        {basGroupId: basId},
+                        {
+                            $set: {
+                                basGroupId: basId
+                            },
+                            $setOnInsert: {
+                                name: groupName, slug: slug, category: newContext.categoryId
+                            }
+                        },
+                        {upsert: true, new: true}
                     );
 
-                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:subCategory._id, subsubcategorySyncId:null,}})
+                    objsWithIds.push({
+                        groupId: basId,
+                        obj: {
+                            categorySyncId: newContext.categoryId,
+                            subcategorySyncId: subCategory._id,
+                            subsubcategorySyncId: null,
+                        }
+                    })
                     nextTreePointer = currentTreePointer[groupName].children;
                     newContext.subCategoryId = subCategory._id;
                 }
-            }
-            else if (newContext.strategy === "direct") {
+            } else if (newContext.strategy === "direct") {
                 if (newContext.subCategoryId) {
                     const slug = makeSlug(groupName + "-" + basId.slice(6));
-                    currentTreePointer[groupName] = { type: "🟢 SUB-SUB-CATEGORY", basId: basId, parentBasId: newContext.subCategoryId };
+                    currentTreePointer[groupName] = {
+                        type: "🟢 SUB-SUB-CATEGORY",
+                        basId: basId,
+                        parentBasId: newContext.subCategoryId
+                    };
 
                     const subSubCategory = await SubSubCategory.findOneAndUpdate(
-                        { basGroupId: basId },
-                        { name: groupName, slug: slug, basGroupId: basId, subCategory: newContext.subCategoryId },
-                        { upsert: true, new: true }
+                        {basGroupId: basId},
+                        {
+                            $set: {
+                                basGroupId: basId,
+                            },
+                            $setOnInsert: {
+                                name: groupName,
+                                slug: slug,
+                                subCategory: newContext.subCategoryId
+                            }
+                        },
+                        {upsert: true, new: true}
                     );
 
-                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:newContext.subCategoryId, subsubcategorySyncId:subSubCategory._id,}})
+                    objsWithIds.push({
+                        groupId: basId,
+                        obj: {
+                            categorySyncId: newContext.categoryId,
+                            subcategorySyncId: newContext.subCategoryId,
+                            subsubcategorySyncId: subSubCategory._id,
+                        }
+                    })
                 }
             }
-        }
-        else if (depth === 4) {
+        } else if (depth === 4) {
             if (newContext.strategy === "combine") {
                 if (newContext.subCategoryId) {
                     // const slug = makeSlug(groupName);
@@ -297,17 +366,28 @@ const syncCategoriesPreview = async(node, depth = 0, context = {}, currentTreePo
                     };
 
                     const subSubCategory = await SubSubCategory.findOneAndUpdate(
-                        { basGroupId: basId },
+                        {basGroupId: basId},
                         {
-                            name: groupName,
-                            slug: slug,
-                            basGroupId: basId,
-                            subCategory: newContext.subCategoryId
+                            $set: {
+                                basGroupId: basId,
+                            },
+                            $setOnInsert: {
+                                name: groupName,
+                                slug: slug,
+                                subCategory: newContext.subCategoryId
+                            }
                         },
-                        { upsert: true, new: true }
+                        {upsert: true, new: true}
                     );
                     // subsubcategoriesArray.push({basGroupId: basId, subsubcategoryId: subSubCategory._id });
-                    objsWithIds.push({groupId: basId, obj:{categorySyncId: newContext.categoryId, subcategorySyncId:newContext.subCategoryId, subsubcategorySyncId:subSubCategory._id,}})
+                    objsWithIds.push({
+                        groupId: basId,
+                        obj: {
+                            categorySyncId: newContext.categoryId,
+                            subcategorySyncId: newContext.subCategoryId,
+                            subsubcategorySyncId: subSubCategory._id,
+                        }
+                    })
 
                 }
             }
@@ -321,7 +401,7 @@ const syncCategoriesPreview = async(node, depth = 0, context = {}, currentTreePo
 };
 
 
-debugRouter.use(express.raw({ type: '*/*', limit: '100mb' }));
+debugRouter.use(express.raw({type: '*/*', limit: '100mb'}));
 
 debugRouter.all('/', async (req, res) => {
     const mode = req.query.mode;
@@ -365,7 +445,7 @@ debugRouter.all('/', async (req, res) => {
                     fs.promises.readFile(offersPath, 'utf-8')
                 ]);
 
-                const parser = new xml2js.Parser({ explicitArray: false, ignoreAttrs: true });
+                const parser = new xml2js.Parser({explicitArray: false, ignoreAttrs: true});
                 const [resultImport, resultOffers] = await Promise.all([
                     parser.parseStringPromise(importXml),
                     parser.parseStringPromise(offersXml)
@@ -408,18 +488,17 @@ debugRouter.all('/', async (req, res) => {
                         return match;
                     });
 
-                    const baseSlug = slugify(normalizedName, { lower: true, strict: true, trim: true });
-                    const slugBas = `${baseSlug}-${basId.slice(0,8)}`;
+                    const baseSlug = slugify(normalizedName, {lower: true, strict: true, trim: true});
+                    const slugBas = `${baseSlug}-${basId.slice(0, 8)}`;
 
                     const found = objsWithIds.find(item => item.groupId === importData.groupBasId);
                     const obj = found?.obj;
 
                     return {
                         updateOne: {
-                            filter: { basId: basId },
+                            filter: {basId: basId},
                             update: {
                                 $set: {
-                                    name: productName,
                                     price: price,
                                     stock: stock,
                                     productCode: basId,
@@ -427,6 +506,7 @@ debugRouter.all('/', async (req, res) => {
                                     groupBasId: importData.groupBasId,
                                 },
                                 $setOnInsert: {
+                                    name: productName,
                                     slug: slugBas,
                                     category: obj?.categorySyncId || basCategory,
                                     subCategory: obj?.subcategorySyncId || null,

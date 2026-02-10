@@ -30,17 +30,23 @@ export default function ReturnPage() {
 
     const handleSave = async () => {
         try {
-            const res = await fetch(API_URL, {
-                method: "POST",
+            const res = await fetch(`${API_URL}/exchange-return`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ slug: "exchange-return", title, content }),
+                credentials: "include",
+                body: JSON.stringify({ title, content }),
             });
 
             if (!res.ok) {
                 const errorText = await res.text();
-                throw new Error(`Помилка збереження: ${res.status} ${res.statusText} - ${errorText}`);
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    throw new Error(errorJson.message || errorText);
+                } catch {
+                    throw new Error(`Помилка збереження: ${res.status} ${res.statusText}`);
+                }
             }
 
             const updated = await res.json();
@@ -52,6 +58,7 @@ export default function ReturnPage() {
             toast.error("Не вдалося зберегти: " + err.message);
         }
     };
+
 
     if (!page) return <div>Завантаження...</div>;
 

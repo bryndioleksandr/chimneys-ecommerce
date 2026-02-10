@@ -1,31 +1,35 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const baseUrl = 'https://chimneys-shop.com';
-  
+  const baseUrl = 'https://dymohit.com.ua'; // Твій домен
+
   const robotsTxt = `User-agent: *
 Allow: /
 
 # Sitemap
 Sitemap: ${baseUrl}/sitemap.xml
 
-# Disallow admin pages
+# Забороняємо технічні папки
 Disallow: /admin/
 Disallow: /api/
-Disallow: /_next/
-Disallow: /static/
 
-# Allow important pages
-Allow: /
-Allow: /category/
-Allow: /product/
-Allow: /about
-Allow: /contacts
-Allow: /cart
-Allow: /favorites
+# Забороняємо особисті дані
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /favorites
+Disallow: /login
+Disallow: /register
+Disallow: /reset-password
 
-# Crawl delay
-Crawl-delay: 1`;
+# Забороняємо пошук
+Disallow: /search
+Disallow: /*?sort=
+Disallow: /*?filter=
+
+# ВАЖЛИВО: Ми НЕ блокуємо /_next/ та /static/, 
+# бо Google має бачити стилі сайту!
+`;
 
   return new NextResponse(robotsTxt, {
     headers: {

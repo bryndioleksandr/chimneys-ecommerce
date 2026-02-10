@@ -22,7 +22,7 @@ export default function HeaderTop() {
                     <li onClick={() => router.push('/contacts')}>
                         Контактна інформація
                     </li>
-                    <li>
+                    <li onClick={() => router.push('/privacy-policy')}>
                         Угода користувача
                     </li>
                     <li>

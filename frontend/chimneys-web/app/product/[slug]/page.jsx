@@ -51,11 +51,42 @@ export default async function ProductPage({ params }) {
         getProductGroup(product.groupId)
     ]);
 
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        image: product.images?.[0] || '',
+        description: product.description,
+        sku: product.productCode,
+        brand: {
+            '@type': 'Brand',
+            name: 'ДимоHIT'
+        },
+        offers: {
+            '@type': 'Offer',
+            url: `${BASE_URL}/product/${slug}`,
+            priceCurrency: 'UAH',
+            price: product.discountedPrice || product.price,
+            availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        },
+        aggregateRating: product.rating ? {
+            '@type': 'AggregateRating',
+            ratingValue: product.rating,
+            reviewCount: reviews.length || 1
+        } : undefined
+    };
+
     return (
-        <ProductClient
-            product={product}
-            reviews={reviews}
-            productGroups={productGroups}
-        />
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <ProductClient
+                product={product}
+                reviews={reviews}
+                productGroups={productGroups}
+            />
+        </>
     );
 }

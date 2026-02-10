@@ -30,17 +30,23 @@ export default function ContactsPage() {
 
     const handleSave = async () => {
         try {
-            const res = await fetch(API_URL, {
-                method: "POST",
+            const res = await fetch(`${API_URL}/contacts`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ slug: "contacts", title, content }),
+                credentials: "include",
+                body: JSON.stringify({ title, content }),
             });
 
             if (!res.ok) {
                 const errorText = await res.text();
-                throw new Error(`Помилка збереження: ${res.status} ${res.statusText} - ${errorText}`);
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    throw new Error(errorJson.message || errorText);
+                } catch {
+                    throw new Error(`Помилка збереження: ${res.status} ${res.statusText}`);
+                }
             }
 
             const updated = await res.json();

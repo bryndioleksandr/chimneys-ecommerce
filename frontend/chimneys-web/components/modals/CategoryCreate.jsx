@@ -12,7 +12,7 @@ const CategoryForm = () => {
 
         const formData = new FormData();
         formData.append('name', name);
-        formData.append('categoryImage', imgFile); // 'img' має відповідати імені поля у Multer
+        formData.append('categoryImage', imgFile);
 
         try {
             const response = await axios.post(

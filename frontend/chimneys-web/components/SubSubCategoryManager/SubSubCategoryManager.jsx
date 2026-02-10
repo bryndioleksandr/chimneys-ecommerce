@@ -4,12 +4,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { backUrl } from '../../config/config';
 import '../CategoryManager/style.css';
+import {toast} from "react-toastify";
 
 const SubSubCategoryManager = () => {
     const [subsubcategories, setSubSubCategories] = useState([]);
     const [editingSubSubCategory, setEditingSubSubCategory] = useState(null);
     const [newName, setNewName] = useState('');
     const [newImage, setNewImage] = useState(null);
+    const notifySuccess = (msg) => toast.success(msg);
+    const notifyError = (msg) => toast.error(msg);
 
     const fetchSubSubCategories = async () => {
         try {
@@ -24,6 +27,7 @@ const SubSubCategoryManager = () => {
         if (!confirm('Точно видалити категорію?')) return;
         try {
             await axios.delete(`${backUrl}/subsubcategory/${id}`, {withCredentials: true});
+            notifySuccess("Категорію успішно видалено!");
             fetchSubSubCategories();
         } catch (error) {
             console.error('Помилка при видаленні:', error);
@@ -42,7 +46,7 @@ const SubSubCategoryManager = () => {
                 },
                 withCredentials: true,
             });
-
+            notifySuccess("Категорію успішно змінено!");
             setEditingSubSubCategory(null);
             setNewName('');
             setNewImage(null);

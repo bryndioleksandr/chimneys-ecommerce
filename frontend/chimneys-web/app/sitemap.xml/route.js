@@ -1,82 +1,59 @@
 import { NextResponse } from 'next/server';
+// Імпортуй сюди функцію для отримання продуктів з БД, наприклад:
+// import { getAllProducts } from '@/services/products';
 
 export async function GET() {
-  const baseUrl = 'https://chimneys-shop.com';
-  const currentDate = new Date().toISOString().split('T')[0];
+  const baseUrl = 'https://dymohit.com.ua'; // Твій реальний домен
+  const currentDate = new Date().toISOString();
 
-  // Статичні сторінки
+  // 1. Статичні сторінки (ТІЛЬКИ ВАЖЛИВІ)
   const staticPages = [
-    {
-      url: '',
-      changefreq: 'weekly',
-      priority: '1.0'
-    },
-    {
-      url: '/category',
-      changefreq: 'weekly', 
-      priority: '0.8'
-    },
-    {
-      url: '/about',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      url: '/contacts',
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/pay-delivery',
-      changefreq: 'monthly',
-      priority: '0.5'
-    },
-    {
-      url: '/exchange-return',
-      changefreq: 'monthly',
-      priority: '0.5'
-    },
-    {
-      url: '/constructor-dym',
-      changefreq: 'weekly',
-      priority: '0.7'
-    },
-    {
-      url: '/account',
-      changefreq: 'monthly',
-      priority: '0.4'
-    },
-    {
-      url: '/cart',
-      changefreq: 'weekly',
-      priority: '0.6'
-    },
-    {
-      url: '/favorites',
-      changefreq: 'weekly',
-      priority: '0.5'
-    }
+    '', // Головна
+    '/category',
+    '/about',
+    '/contacts',
+    '/pay-delivery',
+    '/exchange-return',
+    '/constructor-dym',
   ];
 
-  // Тут можна додати динамічні сторінки з бази даних
-  // const products = await fetchProducts();
-  // const categories = await fetchCategories();
+  // 2. Динамічні сторінки (Приклад логіки)
+  // const products = await getAllProducts();
+  // const productUrls = products.map(p => `/product/${p.slug}`);
 
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${staticPages.map(page => `
-  <url>
-    <loc>${baseUrl}${page.url}</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
-  </url>`).join('')}
-</urlset>`;
+  let sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
 
-  return new NextResponse(sitemap, {
+  // Додаємо статичні
+  staticPages.forEach(url => {
+    sitemapXML += `
+    <url>
+      <loc>${baseUrl}${url}</loc>
+      <lastmod>${currentDate}</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>0.8</priority>
+    </url>`;
+  });
+
+  // Додаємо динамічні (коли будуть готові)
+  /*
+  productUrls.forEach(url => {
+    sitemapXML += `
+    <url>
+      <loc>${baseUrl}${url}</loc>
+      <lastmod>${currentDate}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>`;
+  });
+  */
+
+  sitemapXML += `</urlset>`;
+
+  return new NextResponse(sitemapXML, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+      'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate'
     }
   });
 }

@@ -46,7 +46,6 @@ export const updateConstructor = async (req, res) => {
     }
 };
 
-// [PUT] /api/constructors/:id/element
 export const updateConstructorElement = async (req, res) => {
     try {
         const { area, product } = req.body;
@@ -82,7 +81,6 @@ export const updateConstructorElement = async (req, res) => {
 };
 
 
-// [GET] /api/constructors/:id
 export const getConstructor = async (req, res) => {
     try {
         const { id } = req.params;
@@ -98,12 +96,11 @@ export const getConstructor = async (req, res) => {
     }
 };
 
-// [GET] /api/constructors/:id/element/:area
 export const getConstructorElement = async (req, res) => {
     try {
         const { area } = req.params;
 
-        const constructor = await ConstructorOne.findOne().populate("products.product").populate("category subCategory subSubCategory");
+        const constructor = await ConstructorOne.findOne().populate("products.product");
 
         if (!constructor) {
             return res.status(404).json({ message: "Constructor not found" });
@@ -123,7 +120,6 @@ export const getConstructorElement = async (req, res) => {
 };
 
 
-// [DELETE] /api/constructors/:id
 export const deleteConstructor = async (req, res) => {
     try {
         const { id } = req.params;
@@ -139,7 +135,6 @@ export const deleteConstructor = async (req, res) => {
     }
 };
 
-// [DELETE] /api/constructors/:id/element/:area
 export const deleteConstructorElement = async (req, res) => {
     try {
         const { area } = req.params;
