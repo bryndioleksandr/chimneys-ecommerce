@@ -62,6 +62,7 @@ export default function AdminBannerManager() {
                 method: 'DELETE',
                 credentials: 'include',
             });
+            await axios.get('/api/revalidate?tag=banners');
             await fetchBanners();
         } catch (err) {
             console.error('Помилка при видаленні банера');
