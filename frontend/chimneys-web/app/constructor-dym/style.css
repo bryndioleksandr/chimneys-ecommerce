@@ -14,7 +14,9 @@
 }
 
 .hover-region:hover {
-    fill: rgba(0, 123, 255, 0.3);
+    /*fill: rgba(0, 123, 255, 0.3);*/
+    fill: color-mix(in srgb, var(--hover-navbtn-color), transparent 60%);
+
     border-radius: 10px;
     cursor: pointer;
 }
@@ -41,7 +43,8 @@
 }
 
 .hover-region:hover {
-    fill: rgba(0, 123, 255, 0.3);
+    /*fill: rgba(0, 123, 255, 0.3);*/
+    fill: color-mix(in srgb, var(--hover-navbtn-color), transparent 60%);
     border-radius: 10px;
     cursor: pointer;
 }
@@ -86,14 +89,6 @@
         font-size: 0.9rem;
     }
 
-    .headerSearchBar {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .headerSearchBar input {
-        width: 100%;
-    }
 
     .searchButton {
         width: 100%;
@@ -184,4 +179,55 @@
 
 .product-linking-item button:hover {
     background-color: var(--hover-navbtn-color);
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 200px;
+    font-family: sans-serif;
+}
+
+.input-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 550px;
+    margin-bottom: 20px;
+}
+
+.styled-input {
+    width: 100%;
+    padding: 10px 35px 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.styled-input:focus {
+    border-color: var(--primary-color, #0070f3);
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+}
+
+.styled-input::-webkit-outer-spin-button,
+.styled-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-suffix {
+    position: absolute;
+    right: 12px;
+    color: #888;
+    font-size: 14px;
+    pointer-events: none;
 }

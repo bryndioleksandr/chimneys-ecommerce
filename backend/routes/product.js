@@ -12,7 +12,7 @@ import {
     searchByCategory, searchByCategoryPaginated,
     searchBySubCategory, searchBySubCategoryPaginated,
     searchBySubSubCategory, searchBySubSubCategoryPaginated,
-    searchProducts,
+    searchProducts, searchProductsInConstructor,
     updateProduct,
     updateRating,
     updateReviews
@@ -45,6 +45,8 @@ productRouter.get('/by-group-id/:groupId', getProductsByGroupId);
 productRouter.get('/by-category-paginated/:categoryid', searchByCategoryPaginated);
 productRouter.get('/by-subcategory-paginated/:subcategoryid', searchBySubCategoryPaginated);
 productRouter.get('/by-subsubcategory-paginated/:subsubcategoryid', searchBySubSubCategoryPaginated);
+productRouter.get('/search-constructor', searchProductsInConstructor);
+
 
 
 

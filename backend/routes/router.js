@@ -18,6 +18,7 @@ import infoRouter from "./infoPage.js";
 import exchangeRouter from "./dataExchange.js";
 import debugRouter from "./debug.js";
 import {resetUserPassword, updatePassword} from "../controllers/user.js";
+import Product from "../models/product.js";
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -45,5 +46,51 @@ router.get('/health', (req, res) => {
 router.use('/debug', debugRouter);
 router.post('/forgot-password', resetUserPassword);
 router.post('/reset-password/:token', updatePassword);
+// router.post('/normalize-products', async (req, res) => {
+//     try {
+//         const products = await Product.find({});
+//         let updatedCount = 0;
+//
+//         const bulkOps = [];
+//
+//         products.forEach((product) => {
+//             let originalName = product.name;
+//             let newName = originalName;
+//
+//             newName = newName.replace(/(\d+),(\d+)/g, '$1.$2');
+//
+//             newName = newName.replace(/(\d+(?:\.\d+)?)\s*[мМ](?!\w)/g, '$1м');
+//
+//             newName = newName.replace(/[фФfF]\s*(\d+)/g, 'Ф$1');
+//
+//             newName = newName.replace(/\s+/g, ' ').trim();
+//
+//             newName = newName.replace(/(45|87|90)\*(?!\d)/g, '$1°');
+//             if (originalName !== newName) {
+//                 bulkOps.push({
+//                     updateOne: {
+//                         filter: { _id: product._id },
+//                         update: { $set: { name: newName } }
+//                     }
+//                 });
+//                 updatedCount++;
+//             }
+//         });
+//
+//         if (bulkOps.length > 0) {
+//             await Product.bulkWrite(bulkOps);
+//         }
+//
+//         res.status(200).json({
+//             message: "Нормалізацію завершено успішно",
+//             totalChecked: products.length,
+//             updatedProducts: updatedCount
+//         });
+//
+//     } catch (error) {
+//         console.error("Помилка нормалізації:", error);
+//         res.status(500).json({ message: "Помилка сервера при нормалізації" });
+//     }
+// })
 
 export default router;

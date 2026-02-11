@@ -158,6 +158,36 @@ export const searchProducts = async (req, res) => {
     }
 };
 
+export const searchProductsInConstructor = async (req, res) => {
+    try {
+        const { searchQuery } = req.query;
+
+        if (!searchQuery) {
+            return res.json([]);
+        }
+
+        const tokens = searchQuery.trim().split(/\s+/);
+        console.log('tokens', tokens);
+
+        const searchConditions = tokens.map(token => {
+            const safeToken = token.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            return { name: { $regex: safeToken, $options: 'i' } };
+        });
+
+        const products = await Product.find({ $and: searchConditions })
+            .select('name price images slug stock productCode category subCategory subSubCategory')
+            .populate('category', 'name slug')
+            .populate('subCategory', 'name slug')
+            .populate('subSubCategory', 'name slug');
+
+        res.status(200).json(products);
+
+    } catch (err) {
+        console.error("Search Error:", err);
+        res.status(500).json({ msg: "Помилка при пошуку товарів" });
+    }
+};
+
 export const getProductBySlug = async (req, res) => {
     try {
         const product = await Product.findOne({ slug: req.params.slug }).populate("category subCategory subSubCategory");
