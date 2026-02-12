@@ -10,6 +10,8 @@ import { backUrl } from '../../../config/config';
 import {loadCartFromStorage} from "../../../redux/slices/cart";
 import {toast} from "react-toastify";
 import {useSelector} from "../../../redux/store";
+import {ConstructorList} from "../../../components/ConstructorList/ConstructorList";
+import axios from "axios";
 
 // const AREAS = [
 //     {
@@ -251,6 +253,7 @@ export default function ChimneyMapTwo() {
 
     const [areaName, setAreaName] = useState("");
     const [chimneyD, setChimneyD] = useState("");
+    const [foundProducts, setFoundProducts] = useState([]);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -276,24 +279,9 @@ export default function ChimneyMapTwo() {
     }, []);
 
     const handlePolygonClick = (areaId, name) => {
-        setSelectedArea(areaId);
         setAreaName(name);
+        setSelectedArea(areaId);
     };
-
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
-    //             if (!res.ok) throw new Error("Products not found");
-    //             const data = await res.json();
-    //             setProducts(data);
-    //         } catch (err) {
-    //             console.error(err);
-    //             setProducts(null);
-    //         }
-    //     };
-    //     fetchProducts();
-    // }, []);
 
     useEffect(() => {
         const fetchAttachedProduct = async () => {
@@ -353,46 +341,56 @@ export default function ChimneyMapTwo() {
             .join(",");
     };
 
-    const handleLinkProduct = async (productId, areaId) => {
-        console.log("Прив'язано продукт:", productId, " || area: ", areaId);
-        if (!productId || !areaId) return;
-
-        try {
-            const res = await fetch(`${backUrl}/constructor-two/constructor/element`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    area: areaId,
-                    product: productId
-                })
+    const smartSearch = async (queryString) => {
+        try{
+            const res = await axios.get(`${backUrl}/products/search-constructor`, {
+                params: {
+                    searchQuery: queryString
+                }
             });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                console.error("Error response:", errorData);
-                toast.error("Не вдалося прив'язати продукт");
-                return;
-            }
-
-            const updatedConstructor = await res.json();
-            console.log("Оновлений конструктор:", updatedConstructor);
-            toast.success("Продукт успішно прив'язано");
-        } catch (error) {
-            console.error("Fetch error:", error);
-            toast.error("Сталася помилка при зверненні до сервера");
-        } finally {
-            setIsProductModalOpen(false);
-            setSelectedAreaForLinking(null);
+            return res.data;
         }
-    };
+        catch(error) {
+            console.log(error);
+            return null;
+        }
+    }
 
-    const handleAddToCart = (product) => {
-        dispatch(addItemToCart(product));
-        setSelectedArea(null);
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!areaName) return;
+            let queryString = '';
+
+            if (areaName === 'Кронштейн' || !chimneyD) queryString = `${areaName}`;
+            else queryString = `${chimneyD} ${areaName}`;
+
+            const products = await smartSearch(queryString);
+
+            console.log('found products:', products);
+
+            if (products && products.length > 0) {
+                const sortedProducts = [...products].sort((a, b) => {
+                    const catA = a.category?.name;
+                    const catB = b.category?.name;
+
+                    if (!catA && catB) return 1;
+
+                    if (catA && !catB) return -1;
+
+                    if (!catA && !catB) return 0;
+
+                    return catA.localeCompare(catB);
+                });
+                setFoundProducts(sortedProducts);
+            } else {
+                setFoundProducts([]);
+            }
+        };
+
+        fetchData();
+
+    }, [selectedArea])
+
 
     const handleChangeDiameter = (diameter) => {
         setChimneyD('Ф' + diameter);
@@ -414,7 +412,7 @@ export default function ChimneyMapTwo() {
                         min="80"
                         max="900"
                         step="10"
-                        placeholder="150"
+                        placeholder="0"
                         className="styled-input"
                         onChange={(e) => handleChangeDiameter(e.target.value)}
                     />
@@ -459,111 +457,21 @@ export default function ChimneyMapTwo() {
                     </svg>
                 )}
             </div>
-            {selectedArea && (
-                <ModalWrapper onClose={() => setSelectedArea(null)}>
-                    {attachedProduct ? (
-                        <div className="product-details">
-                            <img
-                                src={attachedProduct.images[0]}
-                                alt="Product image"
-                                className="product-image"
-                            />
-                            <div className="product-info">
-                                <p className="product-name">{attachedProduct.name}</p>
-                                <p className="product-price">Ціна: {attachedProduct.price} грн</p>
-                                <button
-                                    className="primary-button"
-                                    onClick={() => handleAddToCart(attachedProduct)}
-                                >
-                                    Додати до кошика
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <p className="not-linked-message">Продукт ще не прив'язаний.</p>
-                    )}
-
-                    {user?.role && user.role === "admin" &&  <button
-                        className="secondary-button"
-                        onClick={() => {
-                            setIsProductModalOpen(true);
-                            setSelectedAreaForLinking(selectedArea);
-                            setSelectedArea(null);
-                        }}
-                    >
-                        Прив’язати продукт
-                    </button>}
-
-                </ModalWrapper>
-            )}
-            {isProductModalOpen && (
-                <ModalWrapper onClose={() => setIsProductModalOpen(false)}>
-                    <h3>Виберіть продукт для прив'язки</h3>
-
-                    <div
-                        className="modalSearchContainer"
-                        style={{ marginBottom: 16 }}
-                        ref={searchRef}
-                    >
-                        <div className="modalSearchContainer">
-                            <input
-                                placeholder="Пошук товарів"
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            <div
-                                className="modalSearchButton"
-                                onClick={handleSearch}
-                            >
-                                <FaSearch />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        style={{
-                            display: 'grid',
-                            gap: '16px',
-                            maxHeight: '400px',
-                            overflowY: 'auto',
-                            paddingRight: 8
-                        }}
-                    >
-                        {products.map(product => (
-                            <div
-                                key={product._id}
-                                style={{
-                                    border: '1px solid #ccc',
-                                    borderRadius: 8,
-                                    padding: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 16
-                                }}
-                            >
-                                <img
-                                    src={product.images[0]}
-                                    alt={product.name}
-                                    style={{
-                                        width: 80,
-                                        height: 80,
-                                        objectFit: 'cover',
-                                        borderRadius: 4
-                                    }}
-                                />
-                                <div style={{ flexGrow: 1 }}>
-                                    <h4 style={{ margin: 0 }}>{product.name}</h4>
-                                    <p style={{ margin: 0 }}>{product.price} грн</p>
-                                </div>
-                                <button onClick={() => handleLinkProduct(product._id, selectedAreaForLinking)}>
-                                    Прив'язати
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </ModalWrapper>
-            )}
+                {selectedArea && (
+                    <ModalWrapper onClose={() => setSelectedArea(null)}>
+                        {(foundProducts && foundProducts.length > 0) ?
+                            (
+                                <>
+                                    <h2>{chimneyD.length > 1 ? chimneyD : ''} {areaName}</h2>
+                                    <ConstructorList products={foundProducts}/>
+                                </>)
+                            :
+                            (
+                                <h2>На жаль, не було знайдено необхідних товарів</h2>
+                            )
+                        }
+                    </ModalWrapper>
+                )}
         </div>
     );
 }

@@ -1,16 +1,18 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import {useRef, useEffect, useState} from 'react';
 import '../style.css';
 import '../../../components/ModalWrapper/modal.css';
 import ModalWrapper from '@/components/ModalWrapper/ModalWrapper';
 import {useDispatch} from 'react-redux';
 import {useSelector} from "../../../redux/store";
-import { addItemToCart } from '@/redux/slices/cart';
+import {addItemToCart} from '@/redux/slices/cart';
 import {FaSearch} from "react-icons/fa";
-import { backUrl } from '../../../config/config';
+import {backUrl} from '../../../config/config';
 import {loadCartFromStorage} from "../../../redux/slices/cart";
 import {toast} from "react-toastify";
+import axios from "axios";
+import {ConstructorList} from "../../../components/ConstructorList/ConstructorList";
 
 
 // const AREAS = [
@@ -178,37 +180,37 @@ const AREAS = [
 ];
 
 const AREA_INFO = {
-    1: { name: 'Деталь 1', price: 100 },
-    2: { name: 'Деталь 2', price: 120 },
-    3: { name: 'Деталь 3', price: 90 },
-    4: { name: 'Деталь 4', price: 110 },
-    5: { name: 'Деталь 5', price: 80 },
-    6: { name: 'Деталь 6', price: 95 },
-    7: { name: 'Деталь 7', price: 130 },
-    8: { name: 'Деталь 8', price: 105 },
-    9: { name: 'Деталь 9', price: 115 },
-    10: { name: 'Деталь 10', price: 140 },
-    11: { name: 'Деталь 11', price: 150 },
-    12: { name: 'Деталь 12', price: 160 },
-    13: { name: 'Деталь 13', price: 170 },
-    14: { name: 'Деталь 14', price: 180 },
-    15: { name: 'Деталь 15', price: 190 },
-    16: { name: 'Деталь 16', price: 200 },
-    17: { name: 'Деталь 17', price: 210 },
-    18: { name: 'Деталь 18', price: 220 },
-    19: { name: 'Деталь 19', price: 230 },
-    20: { name: 'Деталь 20', price: 240 },
-    21: { name: 'Деталь 21', price: 250 },
-    22: { name: 'Деталь 22', price: 260 },
-    23: { name: 'Деталь 23', price: 270 },
-    24: { name: 'Деталь 24', price: 280 },
-    25: { name: 'Деталь 25', price: 290 },
-    26: { name: 'Деталь 26', price: 300 },
+    1: {name: 'Деталь 1', price: 100},
+    2: {name: 'Деталь 2', price: 120},
+    3: {name: 'Деталь 3', price: 90},
+    4: {name: 'Деталь 4', price: 110},
+    5: {name: 'Деталь 5', price: 80},
+    6: {name: 'Деталь 6', price: 95},
+    7: {name: 'Деталь 7', price: 130},
+    8: {name: 'Деталь 8', price: 105},
+    9: {name: 'Деталь 9', price: 115},
+    10: {name: 'Деталь 10', price: 140},
+    11: {name: 'Деталь 11', price: 150},
+    12: {name: 'Деталь 12', price: 160},
+    13: {name: 'Деталь 13', price: 170},
+    14: {name: 'Деталь 14', price: 180},
+    15: {name: 'Деталь 15', price: 190},
+    16: {name: 'Деталь 16', price: 200},
+    17: {name: 'Деталь 17', price: 210},
+    18: {name: 'Деталь 18', price: 220},
+    19: {name: 'Деталь 19', price: 230},
+    20: {name: 'Деталь 20', price: 240},
+    21: {name: 'Деталь 21', price: 250},
+    22: {name: 'Деталь 22', price: 260},
+    23: {name: 'Деталь 23', price: 270},
+    24: {name: 'Деталь 24', price: 280},
+    25: {name: 'Деталь 25', price: 290},
+    26: {name: 'Деталь 26', price: 300},
 };
 
 export default function ChimneyMapOne() {
     const imgRef = useRef(null);
-    const [size, setSize] = useState({ width: 0, height: 0 });
+    const [size, setSize] = useState({width: 0, height: 0});
     const [selectedArea, setSelectedArea] = useState(null);
     const [products, setProducts] = useState([]);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -221,6 +223,7 @@ export default function ChimneyMapOne() {
 
     const [areaName, setAreaName] = useState("");
     const [chimneyD, setChimneyD] = useState("");
+    const [foundProducts, setFoundProducts] = useState([]);
 
     const user = useSelector((state) => state.user.user);
 
@@ -236,11 +239,12 @@ export default function ChimneyMapOne() {
         }
     }, []);
 
+
     useEffect(() => {
         const updateSize = () => {
             if (imgRef.current) {
-                const { width, height } = imgRef.current.getBoundingClientRect();
-                setSize({ width, height });
+                const {width, height} = imgRef.current.getBoundingClientRect();
+                setSize({width, height});
             }
         };
 
@@ -250,25 +254,58 @@ export default function ChimneyMapOne() {
     }, []);
 
     const handlePolygonClick = (areaId, name) => {
-        setSelectedArea(areaId);
         setAreaName(name);
+        setSelectedArea(areaId);
     };
 
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             console.log('now fetch');
-    //             const res = await fetch(`${backUrl}/products/products`, {credentials: 'include'});
-    //             if (!res.ok) throw new Error("Products not found");
-    //             const data = await res.json();
-    //             setProducts(data);
-    //         } catch (err) {
-    //             console.error(err);
-    //             setProducts(null);
-    //         }
-    //     };
-    //     fetchProducts();
-    //     }, []);
+    const smartSearch = async (queryString) => {
+        try {
+            const res = await axios.get(`${backUrl}/products/search-constructor`, {
+                params: {
+                    searchQuery: queryString
+                }
+            });
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!areaName) return;
+            let queryString = '';
+            if (areaName === 'Кронштейн' || !chimneyD) queryString = `${areaName}`;
+            else queryString = `${chimneyD} ${areaName}`;
+
+            const products = await smartSearch(queryString);
+
+            console.log('found products:', products);
+
+            if (products && products.length > 0) {
+                const sortedProducts = [...products].sort((a, b) => {
+                    const catA = a.category?.name;
+                    const catB = b.category?.name;
+
+                    if (!catA && catB) return 1;
+
+                    if (catA && !catB) return -1;
+
+                    if (!catA && !catB) return 0;
+
+                    return catA.localeCompare(catB);
+                });
+                setFoundProducts(sortedProducts);
+            } else {
+                setFoundProducts([]);
+            }
+        };
+
+        fetchData();
+
+    }, [selectedArea])
+
 
     useEffect(() => {
         const fetchAttachedProduct = async () => {
@@ -315,7 +352,6 @@ export default function ChimneyMapOne() {
     }, [searchQuery]);
 
 
-
     const scaleCoords = (coords) => {
         if (!size.width || !size.height) return coords;
         const scaleX = size.width / ORIGINAL_WIDTH;
@@ -327,58 +363,15 @@ export default function ChimneyMapOne() {
             .join(",");
     };
 
-
-    const handleLinkProduct = async (productId, areaId) => {
-        console.log("Прив’язано продукт:", productId, " || area: ", areaId);
-        if (!productId || !areaId) return;
-
-        try {
-            const res = await fetch(`${backUrl}/constructor-one/constructor/element`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    area: areaId,
-                    product: productId
-                })
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                console.error("Error response:", errorData);
-                toast.error("Не вдалося прив'язати продукт");
-                return;
-            }
-
-            const updatedConstructor = await res.json();
-            console.log("Оновлений конструктор:", updatedConstructor);
-            toast.success("Продукт успішно прив'язано");
-        } catch (error) {
-            console.error("Fetch error:", error);
-            toast.error("Сталася помилка при зверненні до сервера");
-        } finally {
-            setIsProductModalOpen(false);
-            setSelectedAreaForLinking(null);
-        }
-    };
-
-
-    const handleAddToCart = (product) => {
-        console.log('attached product is: ', product);
-            dispatch(addItemToCart(product));
-            setSelectedArea(null);
-    };
-
     const handleChangeDiameter = (diameter) => {
         setChimneyD('Ф' + diameter);
     }
 
     return (
-        <div style={{ maxWidth: 700, margin: '0 auto' }}>
-            <h2 style={{ marginBottom: 16, textAlign: 'center' }}>
-                Це конструктор одностінного димоходу. Наведіть курсор на елемент, натисніть — і з’явиться вікно з інформацією про деталь. Ви можете додати обрану деталь до кошика.
+        <div style={{maxWidth: 700, margin: '0 auto'}}>
+            <h2 style={{marginBottom: 16, textAlign: 'center'}}>
+                Це конструктор одностінного димоходу. Наведіть курсор на елемент, натисніть — і з’явиться вікно з
+                інформацією про деталь. Ви можете додати обрану деталь до кошика.
             </h2>
             <div className="properties">
                 <label htmlFor="diameter" className="input-label">
@@ -391,14 +384,14 @@ export default function ChimneyMapOne() {
                         min="80"
                         max="900"
                         step="10"
-                        placeholder="150"
+                        placeholder="0"
                         className="styled-input"
                         onChange={(e) => handleChangeDiameter(e.target.value)}
                     />
                     <span className="input-suffix">мм</span>
                 </div>
             </div>
-            <div style={{ position: 'relative', display: 'inline-block' }}>
+            <div style={{position: 'relative', display: 'inline-block'}}>
                 <img
                     ref={imgRef}
                     src="/one_sided.jpg"
@@ -431,7 +424,7 @@ export default function ChimneyMapOne() {
                                 points={scaleCoords(area.coords)}
                                 className="hover-region"
                                 onClick={() => handlePolygonClick(area.id, area.name)}
-                                style={{ cursor: 'pointer' }}
+                                style={{cursor: 'pointer'}}
                             />
                         ))}
                     </svg>
@@ -439,107 +432,20 @@ export default function ChimneyMapOne() {
             </div>
             {selectedArea && (
                 <ModalWrapper onClose={() => setSelectedArea(null)}>
-                    {attachedProduct ? (
-                        <div className="product-details">
-                            <img
-                                src={attachedProduct.images[0]}
-                                alt="Product image"
-                                className="product-image"
-                            />
-                            <div className="product-info">
-                                <p className="product-name">{attachedProduct.name}</p>
-                                <p className="product-price">Ціна: {attachedProduct.price} грн</p>
-                                <button
-                                    className="primary-button"
-                                    onClick={() => handleAddToCart(attachedProduct)}
-                                >
-                                    Додати до кошика
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <p className="not-linked-message">Продукт ще не прив'язаний.</p>
-                    )}
-
-                    {user?.role && user.role === "admin" &&  <button
-                        className="secondary-button"
-                        onClick={() => {
-                            setIsProductModalOpen(true);
-                            setSelectedAreaForLinking(selectedArea);
-                            setSelectedArea(null);
-                        }}
-                    >
-                        Прив’язати продукт
-                    </button>}
-                </ModalWrapper>
-            )}
-            {isProductModalOpen && (
-                <ModalWrapper onClose={() => setIsProductModalOpen(false)}>
-                    <h3>Виберіть продукт для прив’язки</h3>
-
-                    <div
-                        className="modalSearchContainer"
-                        ref={searchRef}
-                    >
-                        <div className="modalSearchContainer">
-                            <input
-                                placeholder="Пошук товарів"
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            <div
-                                className="modalSearchButton"
-                                onClick={handleSearch}
-                            >
-                                <FaSearch />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        style={{
-                            display: 'grid',
-                            gap: '16px',
-                            maxHeight: '400px',
-                            overflowY: 'auto',
-                            paddingRight: 8
-                        }}
-                    >
-                        {products.map(product => (
-                            <div
-                                key={product._id}
-                                style={{
-                                    border: '1px solid #ccc',
-                                    borderRadius: 8,
-                                    padding: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 16
-                                }}
-                            >
-                                <img
-                                    src={product.images[0]}
-                                    alt={product.name}
-                                    style={{
-                                        width: 80,
-                                        height: 80,
-                                        objectFit: 'cover',
-                                        borderRadius: 4
-                                    }}
-                                />
-                                <div style={{ flexGrow: 1 }}>
-                                    <h4 style={{ margin: 0 }}>{product.name}</h4>
-                                    <p style={{ margin: 0 }}>{product.price} грн</p>
-                                </div>
-                                <button onClick={() => handleLinkProduct(product._id, selectedAreaForLinking)}>
-                                    Прив’язати
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+                    {(foundProducts && foundProducts.length > 0) ?
+                        (
+                            <>
+                                <h2>{chimneyD.length > 1 ? chimneyD : ''} {areaName}</h2>
+                                <ConstructorList products={foundProducts}/>
+                            </>)
+                        :
+                        (
+                            <h2>На жаль, не було знайдено необхідних товарів</h2>
+                        )
+                    }
                 </ModalWrapper>
             )}
         </div>
-    );
+    )
+        ;
 }

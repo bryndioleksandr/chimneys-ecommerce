@@ -28,14 +28,16 @@
 
 .close-button {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 0;
+    right: 0;
     background: none;
     border: none;
     font-size: 22px;
     color: var(--text-color);
     cursor: pointer;
     transition: color 0.2s ease;
+    padding: 5px 8px;
+
 }
 
 .close-button:hover {
