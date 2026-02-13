@@ -1,7 +1,20 @@
 import Product from '../models/product.js';
+import mongoose from "mongoose";
 
 export const getFiltersByCategory = async (req, res) => {
-    const { categoryId, subCategoryId, subSubCategoryId } = req.params;
+    let { categoryId, subCategoryId, subSubCategoryId } = req.params;
+    console.log('received:', req.params);
+    if (!categoryId || categoryId === 'undefined' || !mongoose.Types.ObjectId.isValid(categoryId)) {
+        return res.json({ filters: {} });
+    }
+
+    if (subCategoryId === 'undefined' || !mongoose.Types.ObjectId.isValid(subCategoryId)) {
+        subCategoryId = null;
+    }
+
+    if (subSubCategoryId === 'undefined' || !mongoose.Types.ObjectId.isValid(subSubCategoryId)) {
+        subSubCategoryId = null;
+    }
     // if (!subCategoryId) subCategoryId = null;
     // if (!subSubCategoryId) subSubCategoryId = null;
     try {
