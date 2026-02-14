@@ -470,7 +470,7 @@ debugRouter.all('/', async (req, res) => {
 
                 const baseCategory = await Category.findOneAndUpdate(
                     { name: baseCatName },
-                    { $setOnInsert: { name: baseCatName, slug: baseCategorySlug } },
+                    { $setOnInsert: { name: baseCatName, slug: baseCategorySlug, basGroupId: "BAS_IMPORT_ROOT_CATEGORY" } },
                     { new: true, upsert: true }
                 );
 
