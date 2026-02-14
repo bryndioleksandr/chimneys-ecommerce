@@ -168,12 +168,12 @@ export default function Footer() {
 
                         <li>
                             <span className={styles.icon}>📞</span>
-                            <a href="tel:+380981234567">+38 (098) 123-45-67</a>
+                            <a href="tel:+380672335655">(067)233-56-55</a>
                         </li>
 
                         <li>
                             <span className={styles.icon}>📧</span>
-                            <a href="mailto:info@dymohit.com.ua">
+                            <a href="mailto:dymohit2026@gmail.com">
                                 info@dymohit.com.ua
                             </a>
                         </li>
@@ -185,9 +185,9 @@ export default function Footer() {
                     </ul>
                 </div>
 
-                <div className={styles.footerPayment}>
+                <div className={styles.footerSection}>
                     <h4>Приймаємо до оплати</h4>
-                    <div className={styles.paymentIcons}>
+                    <div className={styles.paymentIconsGrid}>
                         <div className={styles["payment-icons-grid"]}>
                             <img src="/Visa.svg.png" alt="Visa" width="50"/>
                             <img src="/Mastercard_Symbol_0.svg" alt="Mastercard" width="50"/>

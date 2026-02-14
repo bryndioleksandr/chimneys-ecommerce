@@ -134,8 +134,8 @@ export default function HeaderMain({categories = []}) {
                         <span>вул. Степана Будного, 37</span>
                     </div>
                     <div className="contacts">
-                        <span>(012) 34-567-89</span>
-                        <span>qwerty123@gmail.com</span>
+                        <span>(067)233-56-55</span>
+                        <span>dymohit2026@gmail.com</span>
                     </div>
                     <div className="schedule">
                         <span><b>Будні:</b> 09:00-18:00</span>
