@@ -130,7 +130,6 @@ const debugRouter = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const TEMP_DIR = path.join(__dirname, '../temp_1c');
-const basCategory = "6970a4871f522c8c4da273af";
 
 if (!fs.existsSync(TEMP_DIR)) {
     fs.mkdirSync(TEMP_DIR, {recursive: true});
@@ -457,14 +456,23 @@ debugRouter.all('/', async (req, res) => {
                 const groupMap = createGroupMap(groupsRoot);
                 const importDataMap = createImportDataMap(productsImport, groupMap);
 
-                if (groupsRoot?.Группа) {
-                    console.log("Generating tree of categories...");
-                    await syncCategoriesPreview(groupsRoot.Группа);
-                    console.log("Categories synced.");
-                }
+                // if (groupsRoot?.Группа) {
+                //     console.log("Generating tree of categories...");
+                //     await syncCategoriesPreview(groupsRoot.Группа);
+                //     console.log("Categories synced.");
+                // }
 
                 const offersList = asArray(resultOffers.КоммерческаяИнформация?.ПакетПредложений?.Предложения?.Предложение);
                 console.log(`📦 Processing ${offersList.length} products...`);
+
+                const baseCatName = "Товари з BAS"
+                const baseCategorySlug = slugify(baseCatName, { lower: true, strict: true });
+
+                const baseCategory = await Category.findOneAndUpdate(
+                    { name: baseCatName },
+                    { $setOnInsert: { name: baseCatName, slug: baseCategorySlug } },
+                    { new: true, upsert: true }
+                );
 
                 const bulkOps = offersList.map(offer => {
                     let price = 0;
@@ -491,8 +499,9 @@ debugRouter.all('/', async (req, res) => {
                     const baseSlug = slugify(normalizedName, {lower: true, strict: true, trim: true});
                     const slugBas = `${baseSlug}-${basId.slice(0, 8)}`;
 
-                    const found = objsWithIds.find(item => item.groupId === importData.groupBasId);
-                    const obj = found?.obj;
+                    // const found = objsWithIds.find(item => item.groupId === importData.groupBasId);
+                    // const obj = found?.obj;
+
 
                     return {
                         updateOne: {
@@ -508,9 +517,10 @@ debugRouter.all('/', async (req, res) => {
                                 $setOnInsert: {
                                     name: productName,
                                     slug: slugBas,
-                                    category: obj?.categorySyncId || basCategory,
-                                    subCategory: obj?.subcategorySyncId || null,
-                                    subSubCategory: obj?.subsubcategorySyncId || null,
+                                    category: baseCategory._id
+                                   // category: obj?.categorySyncId || basCategory,
+                                    // subCategory: obj?.subcategorySyncId || null,
+                                    // subSubCategory: obj?.subsubcategorySyncId || null,
                                 }
                             },
                             upsert: true
