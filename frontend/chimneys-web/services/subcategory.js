@@ -74,9 +74,9 @@ export const searchSubCategoryProducts = async (subCategoryId) => {
     }
 }
 
-export const searchSubCategoryProductsPaginated = async (subCategoryId, page = 1, limit = 12) => {
+export const searchSubCategoryProductsPaginated = async (subCategoryId, page = 1, limit = 12, sort = 'new') => {
     try {
-        const response = await fetch(`${API_BASE}/products/by-subcategory-paginated/${subCategoryId}?page=${page}&limit=${limit}`, {credentials: 'include', next: { revalidate: 60 }});
+        const response = await fetch(`${API_BASE}/products/by-subcategory-paginated/${subCategoryId}?page=${page}&limit=${limit}&sort=${sort}`, {credentials: 'include', next: { revalidate: 60 }});
         if (!response.ok) throw new Error('Failed to fetch products');
 
         const data = await response.json();

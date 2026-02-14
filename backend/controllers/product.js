@@ -360,9 +360,30 @@ export const searchByCategoryPaginated = async (req, res) => {
         const { categoryid } = req.params;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 12;
+        const sortType = req.query.sort || 'new';
         const skip = (page - 1) * limit;
 
-        const products = await Product.find({ category: categoryid, subCategory: null, subSubCategory: null }).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
+        let sortOptions = {};
+        switch (sortType) {
+            case 'cheap':
+                sortOptions = { price: 1 };
+                break;
+            case 'expensive':
+                sortOptions = { price: -1 };
+                break;
+            case 'name_asc':
+                sortOptions = { name: 1 };
+                break;
+            case 'name_desc':
+                sortOptions = { name: -1 };
+                break;
+            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1 }; break;
+            case 'new':
+            default:
+                sortOptions = { createdAt: -1 };
+        }
+
+        const products = await Product.find({ category: categoryid, subCategory: null, subSubCategory: null }).sort(sortOptions).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
         const total = await Product.countDocuments({ category: categoryid, subCategory: null, subSubCategory: null });
         res.json({
             products,
@@ -394,8 +415,29 @@ export const searchBySubCategoryPaginated = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 12;
         const skip = (page - 1) * limit;
+        const sortType = req.query.sort || 'new';
 
-        const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null }).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
+        let sortOptions = {};
+        switch (sortType) {
+            case 'cheap':
+                sortOptions = { price: 1 };
+                break;
+            case 'expensive':
+                sortOptions = { price: -1 };
+                break;
+            case 'name_asc':
+                sortOptions = { name: 1 };
+                break;
+            case 'name_desc':
+                sortOptions = { name: -1 };
+                break;
+            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1 }; break;
+            case 'new':
+            default:
+                sortOptions = { createdAt: -1 };
+        }
+
+        const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null }).sort(sortOptions).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
         const total = await Product.countDocuments({ subCategory: subCategoryId, subSubCategory: null });
         res.json({
             products,
@@ -428,7 +470,29 @@ export const searchBySubSubCategoryPaginated = async (req, res) => {
         const limit = parseInt(req.query.limit) || 12;
         const skip = (page - 1) * limit;
 
-        const products = await Product.find({ subSubCategory: subSubCategoryId }).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
+        const sortType = req.query.sort || 'new';
+
+        let sortOptions = {};
+        switch (sortType) {
+            case 'cheap':
+                sortOptions = { price: 1 };
+                break;
+            case 'expensive':
+                sortOptions = { price: -1 };
+                break;
+            case 'name_asc':
+                sortOptions = { name: 1 };
+                break;
+            case 'name_desc':
+                sortOptions = { name: -1 };
+                break;
+            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1 }; break;
+            case 'new':
+            default:
+                sortOptions = { createdAt: -1 };
+        }
+
+        const products = await Product.find({ subSubCategory: subSubCategoryId }).sort(sortOptions).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
         const total = await Product.countDocuments({  subSubCategory: subSubCategoryId });
         res.json({
             products,

@@ -43,6 +43,7 @@ export default async function SubCategoryPage({ params, searchParams }) {
     const resolvedSearchParams = await searchParams;
     const page = Number(resolvedSearchParams?.page) || 1;
     const limit = 12;
+    const sort = resolvedSearchParams?.sort || 'new';
 
     const [subCatData, parentCatData] = await Promise.all([
         searchOneSubCategoryBySlug(subCategoryName),
@@ -56,7 +57,7 @@ export default async function SubCategoryPage({ params, searchParams }) {
 
     const [productsData, filters, subSubCategories] = await Promise.all([
         //searchSubCategoryProducts(subCategory._id),
-        searchSubCategoryProductsPaginated(subCategory._id, page, limit),
+        searchSubCategoryProductsPaginated(subCategory._id, page, limit, sort),
         getFiltersByCategory(parentCategory?._id, subCategory._id),
         searchSubSubCategoriesBySlug(subCategoryName)
     ]);
@@ -70,6 +71,7 @@ export default async function SubCategoryPage({ params, searchParams }) {
             filters={filters}
             parentCategoryId={parentCategory?._id}
             categoryName={categoryName}
+            initialSort={sort}
         />
     );
 }

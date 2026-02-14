@@ -64,9 +64,9 @@ export const searchCategoryProducts = async (categoryId) => {
     }
 }
 
-export const searchCategoryProductsPaginated = async (categoryId, page = 1, limit = 12) => {
+export const searchCategoryProductsPaginated = async (categoryId, page = 1, limit = 12, sort = 'new') => {
     try {
-        const response = await fetch(`${API_BASE}/products/by-category-paginated/${categoryId}?page=${page}&limit=${limit}`, {credentials: 'include'});
+        const response = await fetch(`${API_BASE}/products/by-category-paginated/${categoryId}?page=${page}&limit=${limit}&sort=${sort}`, {credentials: 'include'});
         if (!response.ok) throw new Error('Failed to fetch products');
         return await response.json();
     } catch (error) {

@@ -6,6 +6,7 @@ import FiltersPanel from "../FiltersPanel/FiltersPanel";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Pagination from "../Pagination/Pagination";
 import "../../app/category/category.css";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 const SubSubCategoryClient = ({
                                   initialProducts,
@@ -13,34 +14,33 @@ const SubSubCategoryClient = ({
                                   subSubCategory,
                                   filters,
                                   categoryName,
-                                  subCategoryName
+                                  subCategoryName,
+                                    initialSort
                               }) => {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
     const [products, setProducts] = useState(initialProducts);
-    const [sortOption, setSortOption] = useState("default");
+
+    const [sortOption, setSortOption] = useState(initialSort || "new");
 
     useEffect(() => {
         setProducts(initialProducts);
-    }, [initialProducts]);
+        setSortOption(initialSort || "new");
+    }, [initialProducts, initialSort]);
 
-    const getSortedProducts = () => {
-        let sorted = [...products];
-        switch (sortOption) {
-            case "price-asc":
-                sorted.sort((a, b) => a.price - b.price);
-                break;
-            case "price-desc":
-                sorted.sort((a, b) => b.price - a.price);
-                break;
-            case "rating-desc":
-                sorted.sort((a, b) => b.rating - a.rating);
-                break;
-            case "newest":
-                sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                break;
-            default:
-                break;
-        }
-        return sorted;
+    const handleSortChange = (e) => {
+        const newSortValue = e.target.value;
+        setSortOption(newSortValue);
+
+        const params = new URLSearchParams(searchParams);
+
+        params.set("sort", newSortValue);
+
+        params.set("page", "1");
+
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     const breadcrumbsItems = [
@@ -72,29 +72,23 @@ const SubSubCategoryClient = ({
                 <h1>{subSubCategory.name}</h1>
 
                 <div className="sort-options-container">
-                    <span className="sort-label">Сортувати:</span>
-                    <div className="sort-options">
-                        <button onClick={() => setSortOption("default")}
-                                className={sortOption === "default" ? "active" : ""}>За замовчуванням
-                        </button>
-                        <button onClick={() => setSortOption("price-asc")}
-                                className={sortOption === "price-asc" ? "active" : ""}>Від найдешевших
-                        </button>
-                        <button onClick={() => setSortOption("price-desc")}
-                                className={sortOption === "price-desc" ? "active" : ""}>Від найдорожчих
-                        </button>
-                        <button onClick={() => setSortOption("rating-desc")}
-                                className={sortOption === "rating-desc" ? "active" : ""}>Найпопулярніші
-                        </button>
-                        <button onClick={() => setSortOption("newest")}
-                                className={sortOption === "newest" ? "active" : ""}>Новинки
-                        </button>
-                    </div>
+                    <select
+                        id="sortSelect"
+                        value={sortOption}
+                        onChange={handleSortChange}
+                        className="sort-select"
+                    >
+                        <option value="new">Новинки (За замовчуванням)</option>
+                        <option value="cheap">Від найдешевших</option>
+                        <option value="expensive">Від найдорожчих</option>
+                        <option value="popular">Популярні</option>
+                        <option value="name_asc">За назвою (А-Я)</option>
+                    </select>
                 </div>
 
                 <ul className="product-list">
                     {products.length > 0 ? (
-                        getSortedProducts().map((product) => (
+                        products.map((product) => (
                             <ProductCard key={product._id} product={product}/>
                         ))
                     ) : (

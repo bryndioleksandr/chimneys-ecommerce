@@ -38,7 +38,8 @@ export default async function CategoryPage({ params, searchParams }) {
     const { categoryName } = await params;
     const resolvedSearchParams = await searchParams;
     const page = Number(resolvedSearchParams?.page) || 1;
-    const limit = 12;
+    const limit = Number(resolvedSearchParams?.limit) || 12;
+    const sort = resolvedSearchParams?.sort || 'new';
 
     const categoryData = await searchCategoryBySlug(categoryName);
     const currentCat = categoryData[0];
@@ -50,7 +51,7 @@ export default async function CategoryPage({ params, searchParams }) {
     const [subcategories, productsData, filtersData] = await Promise.all([
         searchSubCategoriesBySlug(categoryName),
         // searchCategoryProducts(currentCat._id),
-        searchCategoryProductsPaginated(currentCat._id, page, limit),
+        searchCategoryProductsPaginated(currentCat._id, page, limit, sort),
         getFiltersByCategory(currentCat._id)
     ]);
 
@@ -61,6 +62,7 @@ export default async function CategoryPage({ params, searchParams }) {
             subcategories={subcategories}
             category={currentCat}
             filtersData={filtersData}
+            initialSort={sort}
         />
     );
 }
