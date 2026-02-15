@@ -6,6 +6,8 @@ import { searchSubSubCategoriesBySlug } from '@/services/subsubcategory';
 import ReactDOM from 'react-dom';
 import {toast} from "react-toastify";
 import "./edit.css";
+import { useRouter } from "next/navigation";
+
 
 let globalCategoriesCache = null;
 
@@ -32,6 +34,8 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
     const [subCategories, setSubCategories] = useState([]);
     const [subSubCategories, setSubSubCategories] = useState([]);
     const [loadingCats, setLoadingCats] = useState(false);
+
+    const router = useRouter();
 
     useEffect(() => {
         if (!product) return;
@@ -145,6 +149,7 @@ const EditProductModal = ({isOpen, onClose, product, onSave}) => {
             toast.success('Продукт оновлено');
             onSave(res.data);
             onClose();
+            router.refresh();
         } catch (err) {
             console.error('Помилка при оновленні:', err);
             toast.error('Помилка при оновленні продукту');

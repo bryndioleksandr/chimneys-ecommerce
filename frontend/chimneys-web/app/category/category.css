@@ -374,9 +374,15 @@
 }
 .sort-options-container {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
     gap: 10px;
     margin-bottom: 20px;
+    align-items: end;
+}
+
+.select-sort-wrapper {
+    flex: 1;
 }
 
 .sort-label {
@@ -539,5 +545,13 @@
          margin:0;
      }
 
+    /*.sort-options-container {*/
+    /*    flex-direction: column;*/
+    /*    align-items: center;*/
+    /*   */
+    /*}*/
+    .sort-options-container > * {
+        flex: 1;
+    }
     }
 

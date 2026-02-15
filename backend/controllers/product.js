@@ -366,21 +366,21 @@ export const searchByCategoryPaginated = async (req, res) => {
         let sortOptions = {};
         switch (sortType) {
             case 'cheap':
-                sortOptions = { price: 1 };
+                sortOptions = { price: 1, _id: 1 };
                 break;
             case 'expensive':
-                sortOptions = { price: -1 };
+                sortOptions = { price: -1, _id: 1 };
                 break;
             case 'name_asc':
-                sortOptions = { name: 1 };
+                sortOptions = { name: 1, _id: 1 };
                 break;
             case 'name_desc':
-                sortOptions = { name: -1 };
+                sortOptions = { name: -1, _id: 1 };
                 break;
-            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1 }; break;
+            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1, _id: 1 }; break;
             case 'new':
             default:
-                sortOptions = { createdAt: -1 };
+                sortOptions = { createdAt: -1, _id: 1 };
         }
 
         const products = await Product.find({ category: categoryid, subCategory: null, subSubCategory: null }).sort(sortOptions).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
@@ -420,21 +420,21 @@ export const searchBySubCategoryPaginated = async (req, res) => {
         let sortOptions = {};
         switch (sortType) {
             case 'cheap':
-                sortOptions = { price: 1 };
+                sortOptions = { price: 1, _id: 1 };
                 break;
             case 'expensive':
-                sortOptions = { price: -1 };
+                sortOptions = { price: -1, _id: 1 };
                 break;
             case 'name_asc':
-                sortOptions = { name: 1 };
+                sortOptions = { name: 1, _id: 1 };
                 break;
             case 'name_desc':
-                sortOptions = { name: -1 };
+                sortOptions = { name: -1, _id: 1 };
                 break;
-            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1 }; break;
+            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1, _id: 1 }; break;
             case 'new':
             default:
-                sortOptions = { createdAt: -1 };
+                sortOptions = { createdAt: -1, _id: 1 };
         }
 
         const products = await Product.find({ subCategory: subCategoryId, subSubCategory: null }).sort(sortOptions).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();
@@ -463,6 +463,27 @@ export const searchBySubSubCategory = async (req, res) => {
     }
 };
 
+export const updateManyProductsCategories = async (req, res) => {
+    try {
+        console.log('back update');
+        const { productIds, categoryId, subCategoryId, subSubCategoryId } = req.body;
+        console.log('data',  productIds, categoryId, subCategoryId, subSubCategoryId);
+        await Product.updateMany(
+            { _id: { $in: productIds } },
+            {
+                category: categoryId,
+                subCategory: subCategoryId,
+                subSubCategory: subSubCategoryId
+            }
+        );
+        res.status(200).json({ success: true });
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+}
+
 export const searchBySubSubCategoryPaginated = async (req, res) => {
     try {
         const subSubCategoryId = new mongoose.Types.ObjectId(req.params.subsubcategoryid);
@@ -475,21 +496,21 @@ export const searchBySubSubCategoryPaginated = async (req, res) => {
         let sortOptions = {};
         switch (sortType) {
             case 'cheap':
-                sortOptions = { price: 1 };
+                sortOptions = { price: 1, _id: 1 };
                 break;
             case 'expensive':
-                sortOptions = { price: -1 };
+                sortOptions = { price: -1, _id: 1 };
                 break;
             case 'name_asc':
-                sortOptions = { name: 1 };
+                sortOptions = { name: 1, _id: 1 };
                 break;
             case 'name_desc':
-                sortOptions = { name: -1 };
+                sortOptions = { name: -1, _id: 1 };
                 break;
-            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1 }; break;
+            case 'popular': sortOptions = {  purchaseCount: -1, rating: -1, _id: 1 }; break;
             case 'new':
             default:
-                sortOptions = { createdAt: -1 };
+                sortOptions = { createdAt: -1, _id: 1 };
         }
 
         const products = await Product.find({ subSubCategory: subSubCategoryId }).sort(sortOptions).skip(skip).limit(limit).populate('category subCategory subSubCategory').exec();

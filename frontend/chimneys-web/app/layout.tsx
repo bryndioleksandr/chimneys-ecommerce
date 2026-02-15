@@ -74,6 +74,7 @@ const mainFont = Inter({
     variable: '--font-main',
 });
 
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const categories = await getCategories();
     return (

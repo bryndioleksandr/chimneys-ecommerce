@@ -13,9 +13,11 @@ import {deleteProductRequest} from "@/services/product";
 import EditProductModal from "../modals/ProductEdit";
 import ProductCloneModal from "@/components/modals/ProductClone";
 import {toast} from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const ProductCard = ({product}) => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const [userId, setUserId] = useState(null);
     const [role, setUserRole] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,6 +122,7 @@ const ProductCard = ({product}) => {
                                 <button style={{backgroundColor: "#C80106"}} onClick={() => {
                                     if (confirm("Ви впевнені, що хочете видалити цей товар?")) {
                                         deleteProductRequest(product._id);
+                                        router.refresh();
                                     }
                                 }}>Видалити
                                 </button>

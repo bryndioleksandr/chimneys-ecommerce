@@ -68,3 +68,24 @@ export async function getProductGroup(groupId) {
         return [];
     }
 }
+
+export const updateCategoriesMany = async (productIds, categoryId, subCategoryId, subSubCategoryId) => {
+    try {
+        const response = await axios.put(
+            `${API_BASE}/products/update-categories`,
+            {
+                productIds,
+                categoryId,
+                subCategoryId: subCategoryId || null,
+                subSubCategoryId: subSubCategoryId || null
+            },
+            {
+                withCredentials: true
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error updating product categories:", error);
+        throw error;
+    }
+}

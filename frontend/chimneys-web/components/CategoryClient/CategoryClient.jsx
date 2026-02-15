@@ -125,14 +125,18 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import React, {useState, useEffect} from "react";
+import {useRouter, useSearchParams, usePathname} from "next/navigation";
 import Link from "next/link";
 import ProductCard from "../ProductCard/ProductCard";
 import FiltersPanel from "../FiltersPanel/FiltersPanel";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Pagination from "../Pagination/Pagination";
 import "../../app/category/category.css";
+import {useSelector} from "react-redux";
+import {useDispatch} from "../../redux/store";
+import {clearProductSelection, toggleProductSelection} from "../../redux/slices/adminProducts";
+import {ProductsActions} from "../ProductsActions/ProductsActions";
 
 const CategoryClient = ({
                             initialProducts,
@@ -145,11 +149,19 @@ const CategoryClient = ({
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const dispatch = useDispatch();
+
+    const user = useSelector(state => state.user.user);
+    const {productIds} = useSelector(state => state.adminProducts);
 
     const [products, setProducts] = useState(initialProducts);
     const [sortOption, setSortOption] = useState(initialSort || "new");
     const [limit, setLimit] = useState(Number(pagination?.limit) || 12);
-    const [selectedIds, setSelectedIds] = useState([]);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     useEffect(() => {
         setProducts(initialProducts);
@@ -168,7 +180,7 @@ const CategoryClient = ({
 
         params.set("page", "1");
 
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        router.push(`${pathname}?${params.toString()}`, {scroll: false});
     };
 
     const handleLimitChange = (e) => {
@@ -179,12 +191,20 @@ const CategoryClient = ({
         params.set("limit", newLimit);
         params.set("page", "1");
 
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        router.push(`${pathname}?${params.toString()}`, {scroll: false});
     };
 
     const handleSubcategoryClick = (subcategory) => {
         router.push(`/category/${category.slug}/${subcategory.slug}`);
     };
+
+    const handleCheckboxChange = (id) => {
+       dispatch(toggleProductSelection(id))
+    };
+
+    const handleClearSelection = () => {
+        dispatch(clearProductSelection());
+    }
 
     return (
         <div className="category-page-wrapper">
@@ -199,7 +219,7 @@ const CategoryClient = ({
             </aside>
 
             <main className="content-section">
-                <Breadcrumbs items={[{ label: category?.name, href: null }]} />
+                <Breadcrumbs items={[{label: category?.name, href: null}]}/>
                 <h1>{category.name}</h1>
 
                 <ul className="subcategory-list">
@@ -214,7 +234,7 @@ const CategoryClient = ({
                                     className="category-card-incomp"
                                     onClick={() => handleSubcategoryClick(subcategory)}
                                 >
-                                    <img src={subcategory.img} alt={subcategory.name} />
+                                    <img src={subcategory.img} alt={subcategory.name}/>
                                     <p className="p-incomp">{subcategory.name}</p>
                                 </li>
                             </Link>
@@ -223,6 +243,7 @@ const CategoryClient = ({
 
                 <div>
                     <div className="sort-options-container">
+                        <div className="select-sort-wrapper">
                         <select
                             id="sortSelect"
                             value={sortOption}
@@ -235,43 +256,48 @@ const CategoryClient = ({
                             <option value="popular">Популярні</option>
                             <option value="name_asc">За назвою (А-Я)</option>
                         </select>
-                    </div>
-                    <div className="select-wrapper">
-                        <label htmlFor="limitSelect" style={{ marginRight: '5px' }}>Показати по:</label>
-                        <select
-                            id="limitSelect"
-                            value={limit}
-                            onChange={handleLimitChange}
-                            className="sort-select"
-                        >
-                            <option value="12">12</option>
-                            <option value="24">24</option>
-                            <option value="48">48</option>
-                            <option value="100">100</option>
-                            <option value="3000">Усі товари</option>
-                        </select>
+                        </div>
+                        <div className="select-limit-wrapper">
+                            <label htmlFor="limitSelect" style={{marginRight: '5px'}}>Показати по:</label>
+                            <select
+                                id="limitSelect"
+                                value={limit}
+                                onChange={handleLimitChange}
+                                className="sort-select"
+                            >
+                                <option value="12">12</option>
+                                <option value="24">24</option>
+                                <option value="48">48</option>
+                                <option value="100">100</option>
+                                {isMounted && user?.role === "admin" && <option value="3000">Усі товари</option>}
+                            </select>
+                        </div>
+                        {/*//ProductsActions*/}
+                        {isMounted && user?.role === "admin" && productIds && productIds.length > 0 && (<button className='sort-select' onClick={handleClearSelection}>Очистити вибрані товари</button>)}
+                        {isMounted && user?.role === "admin" && productIds && productIds.length > 0 && <ProductsActions selectedIds={productIds} />}
                     </div>
 
                     <ul className="product-list">
                         {products.length > 0 ? (
                             products.map((product) => (
-                                // <div key={product._id} style={{ position: 'relative' }}>
-                                //     <div style={{
-                                //         position: 'absolute',
-                                //         top: '10px',
-                                //         left: '10px',
-                                //         zIndex: 10,
-                                //         transform: 'scale(1.5)'
-                                //     }}>
-                                //         <input
-                                //             type="checkbox"
-                                //             checked={selectedIds.includes(product._id)}
-                                //             // onChange={() => toggleProductSelection(product._id)}
-                                //             style={{ cursor: 'pointer', width: '20px', height: '20px' }}
-                                //         />
-                                //     </div>
-                                <ProductCard key={product._id} product={product} />
-                                // </div>
+                                <div key={product._id} style={{ position: 'relative' }}>
+                                    {isMounted && user?.role === "admin" &&
+                                        <div style={{
+                                        position: 'absolute',
+                                        top: '10px',
+                                        left: '10px',
+                                        zIndex: 10,
+                                        transform: 'scale(1.5)'
+                                    }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={productIds.includes(product._id)}
+                                            onChange={() => handleCheckboxChange(product._id)}
+                                            style={{ cursor: 'pointer', width: '20px', height: '20px' }}
+                                        />
+                                    </div> }
+                                <ProductCard key={product._id} product={product}/>
+                                </div>
                             ))
                         ) : (
                             <p>Товарів не знайдено ;(</p>
